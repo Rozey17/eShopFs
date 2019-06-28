@@ -13,3 +13,7 @@ type Address =
       ZipAndCity: String250
       StateOrProvince: String250
       Country: String250 }
+
+type Basket =
+    { Id: BasketId
+      Lines: OrderLine list }

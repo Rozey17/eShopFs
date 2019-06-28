@@ -1,22 +1,16 @@
 module eShop.Domain.Basket.CreateBasket.PublicTypes
 
-open System
+open eShop.Infrastructure.FSharp
+open eShop.Infrastructure.Db
 open eShop.Domain.Shared.Command
-open eShop.Domain.Shared.Types
+open eShop.Domain.Basket.CommonTypes
 
 // input
-type CreateBasketCommand = Command<BasketId>
+type CreateBasketCommand = Command<Unit>
 
 // success output
-type BasketCreated = BasketId
-type CreateBasketEvent =
-    | Created of BasketCreated
-
-// error output
-type DatabaseError = DatabaseError of Exception
-type CreateBasketError =
-    | Database of DatabaseError
+type BasketCreated = Basket
 
 // workflow
 type CreateBasket =
-    CreateBasketCommand -> Async<Result<CreateBasketEvent list, CreateBasketError>>
+    CreateBasketCommand -> AsyncResult<BasketCreated, DbError>

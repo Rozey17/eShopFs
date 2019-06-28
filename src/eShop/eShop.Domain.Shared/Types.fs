@@ -13,7 +13,7 @@ module String250 =
 type BasketId = private BasketId of Guid
 module BasketId =
     let value (BasketId v) = v
-    let create = BasketId (Guid.NewGuid())
+    let create () = BasketId (Guid.NewGuid())
 
 /// Id of a product
 type ProductId = private ProductId of Guid
@@ -25,7 +25,7 @@ module ProductId =
 type UnitQuantity = private UnitQuantity of int
 module UnitQuantity =
     let value (UnitQuantity v) = v
-    let create v =
+    let create =
         ConstrainedType.createNumber UnitQuantity 0 1000
 
 /// Constrained to be a decimal between 0.0 and 1000.00

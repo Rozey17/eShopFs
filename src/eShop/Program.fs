@@ -9,6 +9,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
+open eShop.Domain.Basket.CreateBasket.Api
 
 
 // ---------------------------------
@@ -40,6 +41,9 @@ let webApp =
             (choose [
                 GET >=> choose [
                     route "/hello" >=> handleGetHello
+                ]
+                POST >=> choose [
+                    route "/baskets" >=> createBasketApi
                 ]
             ])
         setStatusCode 404 >=> text "Not Found" ]
