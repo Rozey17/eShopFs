@@ -23,10 +23,8 @@ let createBasketApi (next: HttpFunc) (ctx: HttpContext) =
         let! result = workflow cmd
         match result with
         | Ok e ->
-            let dto = BasketCreatedDTO.fromDomain e |> box
-            let key = "Basket"
-            let res = [(key, dto)] |> dict
-            return! json res next ctx
+            let dto = e |> BasketCreatedDTO.fromDomain
+            return! json dto next ctx
         | Error err ->
             let dto = err |> DbError.fromDomain
             return! json dto next ctx

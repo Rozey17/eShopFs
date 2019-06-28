@@ -8,7 +8,10 @@ type BasketCreatedDTO =
     { Id: Guid }
 module BasketCreatedDTO =
     let fromDomain (e: BasketCreated) =
-        { Id = e.Id |> BasketId.value }
+        let dto =
+            { Id = e.Id |> BasketId.value }
+        let key = "Basket"
+        [(key, dto)] |> dict
 
 type CreateBasketErrorDTO =
     { Code: string
