@@ -1,0 +1,13 @@
+.fake/
+.vs/
+obj/
+bin/
+packages/
+paket-files/
+release.cmd
+release.sh
+.idea/
+*.DotSettings.user
+deploy
+.vscode/
+.ionide/
