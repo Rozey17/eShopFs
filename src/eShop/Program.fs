@@ -1,7 +1,8 @@
 module eShop.App
 
 open System
-open System.IO
+open FSharp.Control.Tasks.V2.ContextInsensitive
+open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Cors.Infrastructure
 open Microsoft.AspNetCore.Hosting
@@ -9,59 +10,38 @@ open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
 
+
 // ---------------------------------
 // Models
 // ---------------------------------
 
+[<CLIMutable>]
 type Message =
     {
         Text : string
     }
 
-// ---------------------------------
-// Views
-// ---------------------------------
-
-module Views =
-    open GiraffeViewEngine
-
-    let layout (content: XmlNode list) =
-        html [] [
-            head [] [
-                title []  [ encodedText "eShop" ]
-                link [ _rel  "stylesheet"
-                       _type "text/css"
-                       _href "/main.css" ]
-            ]
-            body [] content
-        ]
-
-    let partial () =
-        h1 [] [ encodedText "eShop" ]
-
-    let index (model : Message) =
-        [
-            partial()
-            p [] [ encodedText model.Text ]
-        ] |> layout
+let handleGetHello =
+    fun (next : HttpFunc) (ctx : HttpContext) ->
+        task {
+            let response = {
+                Text = "Hello world, from Giraffe 2!"
+            }
+            return! json response next ctx
+        }
 
 // ---------------------------------
 // Web app
 // ---------------------------------
 
-let indexHandler (name : string) =
-    let greetings = sprintf "Hello %s, from Giraffe!" name
-    let model     = { Text = greetings }
-    let view      = Views.index model
-    htmlView view
-
 let webApp =
     choose [
-        GET >=>
-            choose [
-                route "/" >=> indexHandler "world"
-                routef "/hello/%s" indexHandler
-            ]
+        subRoute "/api"
+            (choose [
+                GET >=> choose [
+                    route "/hello" >=> handleGetHello
+                ]
+            ])
         setStatusCode 404 >=> text "Not Found" ]
 
 // ---------------------------------
@@ -87,7 +67,7 @@ let configureApp (app : IApplicationBuilder) =
     (match env.IsDevelopment() with
     | true  -> app.UseDeveloperExceptionPage()
     | false -> app.UseGiraffeErrorHandler errorHandler)
-        .UseHttpsRedirection()
+        //.UseHttpsRedirection()
         .UseCors(configureCors)
         .UseStaticFiles()
         .UseGiraffe(webApp)
@@ -103,12 +83,8 @@ let configureLogging (builder : ILoggingBuilder) =
 
 [<EntryPoint>]
 let main _ =
-    let contentRoot = Directory.GetCurrentDirectory()
-    let webRoot     = Path.Combine(contentRoot, "WebRoot")
     WebHostBuilder()
         .UseKestrel()
-        .UseContentRoot(contentRoot)
-        .UseWebRoot(webRoot)
         .Configure(Action<IApplicationBuilder> configureApp)
         .ConfigureServices(configureServices)
         .ConfigureLogging(configureLogging)

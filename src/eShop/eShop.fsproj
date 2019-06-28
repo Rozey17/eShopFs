@@ -13,15 +13,15 @@
     <Compile Include="eShop.Infrastructure.FSharp\Result.fs" />
     <Compile Include="eShop.Domain.Shared\ConstrainedType.fs" />
     <Compile Include="eShop.Domain.Shared\Types.fs" />
+    <Compile Include="eShop.Domain.Shared\Command.fs" />
     <Compile Include="eShop.Domain.Basket\CommonTypes.fs" />
+    <Compile Include="eShop.Domain.Basket\CreateBasket.PublicTypes.fs" />
+    <Compile Include="eShop.Domain.Basket\CreateBasket.Api.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="WebRoot\**\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <Import Project="..\..\.paket\Paket.Restore.targets" />
