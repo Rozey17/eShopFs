@@ -2,9 +2,17 @@
 
 ## Build and test the application
 
+### Linux
+
+```
+$ chmod +x ./scripts/install.sh
+$ ./scripts/install.sh
+```
+
 ### Windows
 
-Run the `build.bat` script in order to restore, build and test (if you've selected to include tests) the application:
+Run the `build.bat` script in order to restore, build and test (if you've
+selected to include tests) the application:
 
 ```
 > .\scripts\install.bat
