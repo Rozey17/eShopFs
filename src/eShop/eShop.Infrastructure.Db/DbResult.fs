@@ -1,7 +1,6 @@
 [<AutoOpen>]
 module eShop.Infrastructure.Db.DbResult
 
-open System
 open eShop.Infrastructure.FSharp
 
 type DbReadError =
@@ -9,7 +8,7 @@ type DbReadError =
     | MissingRecord of string
 
 type DbError =
-    | Exception of Exception
+    | Exception of exn
     | Read of DbReadError
 
 type DbResult<'a> = AsyncResult<'a, DbError>

@@ -19,4 +19,4 @@ type CreateBasketErrorDTO =
 module internal DbError =
     let fromDomain _ : CreateBasketErrorDTO =
         { Code = "500"
-          Message = "Unknown Error" }
+          Message = "Unknown error" }

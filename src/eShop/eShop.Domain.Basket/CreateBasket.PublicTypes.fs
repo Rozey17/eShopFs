@@ -6,7 +6,7 @@ open eShop.Domain.Shared.Command
 open eShop.Domain.Basket.CommonTypes
 
 // input
-type CreateBasketCommand = Command<Unit>
+type CreateBasketCommand = Command<unit>
 
 // success output
 type BasketCreated = Basket

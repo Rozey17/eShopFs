@@ -1,2 +1,4 @@
 Microsoft.AspNetCore.App
 Giraffe
+Dapper
+Npgsql
