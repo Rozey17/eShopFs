@@ -7,3 +7,4 @@ nuget Microsoft.AspNetCore.App 2.2.5
 nuget Giraffe 3.6.0
 nuget Dapper 1.60.6
 nuget Npgsql 4.0.7
+nuget Giraffe.Razor 4.0.0

@@ -1,6 +1,7 @@
 module eShop.App
 
 open System
+open System.IO
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Builder
@@ -9,7 +10,24 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
-open eShop.Domain.Basket.CreateBasket.Api
+open eShop.Domain.Conference.Conference.CreateConference.Web
+
+[<AutoOpen>]
+module Middleware =
+
+    open Microsoft.AspNetCore.Mvc.Razor
+    open Microsoft.Extensions.FileProviders
+
+    type IServiceCollection with
+        member this.AddRazorEngine =
+            this.Configure<RazorViewEngineOptions>(
+                fun (options : RazorViewEngineOptions) ->
+                    options.ViewLocationFormats.Clear()
+                    options.ViewLocationFormats.Add("/Domain.Conference.Conference/{1}/{0}.cshtml")
+                )
+                .AddMvc()
+            |> ignore
+            this.AddAntiforgery()
 
 
 // ---------------------------------
@@ -37,16 +55,14 @@ let handleGetHello =
 
 let webApp =
     choose [
-        subRoute "/api"
-            (choose [
-                GET >=> choose [
-                    route "/hello" >=> handleGetHello
-                ]
-                POST >=> choose [
-                    route "/baskets" >=> createBasketApi
-                ]
-            ])
-        setStatusCode 404 >=> text "Not Found" ]
+        GET >=>
+            choose [
+                route  "/conferences/create" >=> renderCreateReferenceView
+            ]
+        POST >=>
+            choose [
+            ]
+        text "Not Found" |> RequestErrors.notFound ]
 
 // ---------------------------------
 // Error handler
@@ -60,25 +76,15 @@ let errorHandler (ex : Exception) (logger : ILogger) =
 // Config and Main
 // ---------------------------------
 
-let configureCors (builder : CorsPolicyBuilder) =
-    builder.WithOrigins("http://localhost:8080")
-           .AllowAnyMethod()
-           .AllowAnyHeader()
-           |> ignore
-
 let configureApp (app : IApplicationBuilder) =
-    let env = app.ApplicationServices.GetService<IHostingEnvironment>()
-    (match env.IsDevelopment() with
-    | true  -> app.UseDeveloperExceptionPage()
-    | false -> app.UseGiraffeErrorHandler errorHandler)
-        //.UseHttpsRedirection()
-        .UseCors(configureCors)
-        .UseStaticFiles()
-        .UseGiraffe(webApp)
+    app.UseGiraffeErrorHandler(errorHandler)
+       .UseStaticFiles()
+       .UseMvc()
+       .UseGiraffe webApp
 
 let configureServices (services : IServiceCollection) =
-    services.AddCors()    |> ignore
-    services.AddGiraffe() |> ignore
+    services.AddRazorEngine |> ignore
+
 
 let configureLogging (builder : ILoggingBuilder) =
     builder.AddFilter(fun l -> l.Equals LogLevel.Error)
@@ -87,8 +93,12 @@ let configureLogging (builder : ILoggingBuilder) =
 
 [<EntryPoint>]
 let main _ =
+    let contentRoot = Directory.GetCurrentDirectory()
+    let webRoot     = Path.Combine(contentRoot, "WebRoot")
+
     WebHostBuilder()
         .UseKestrel()
+        .UseWebRoot(webRoot)
         .Configure(Action<IApplicationBuilder> configureApp)
         .ConfigureServices(configureServices)
         .ConfigureLogging(configureLogging)
