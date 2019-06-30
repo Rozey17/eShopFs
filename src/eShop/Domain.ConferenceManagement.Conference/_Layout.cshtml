@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <title>@ViewBag.Title</title>
+  <link rel="stylesheet" type="text/css" href="/style.css" media="all">
+  <script src="/jquery-1.7.2.min.js"></script>
+  @RenderSection("Head", required: false)
+</head>
+
+<body class="page page_green @(ViewBag.PageType ?? "page_create-conf")">
+  <nav>
+    <div class="page__wrapper quick">
+      <ul class="quick__list">
+        <li class="quick__item quick__item_bold">
+          <a href="/">Contoso Conference Management System</a>
+        </li>
+      </ul>
+      @RenderSection("Navigation", required: false)
+    </div>
+  </nav>
+
+  @RenderSection("PageNavigation", required: false)
+
+  @RenderBody()
+
+  <div class="footer">
+    <footer>
+      <a class="footer__logo" href="#"><img src="/footer/footer__logo.png" alt="Microsoft® pattern & practices" title=""></a>
+      <div class="footer__content">
+        <p>Powered by&nbsp;Contoso Conference Managament System, CQRS Journey Project, Microsoft patterns &amp;&nbsp;practices.<br />
+          <span class="footer__disclaimer">This is a sample application for learning purposes, not a production system!</span><br /> All Rights Reserved, 2012. <a href="#">Terms of&nbsp;Service</a>. <a href="#">Privacy Policy</a>.
+        </p>
+        <p>Contact the <a href="#">Host</a> for event and ticket information.</p>
+      </div>
+    </footer>
+  </div>
+  @RenderSection("Scripts", required: false)
+</body>
+
+</html>

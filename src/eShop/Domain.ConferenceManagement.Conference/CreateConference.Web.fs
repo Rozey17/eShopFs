@@ -1,4 +1,4 @@
-module eShop.Domain.Conference.Conference.CreateConference.Web
+module eShop.Domain.ConferenceManagement.Conference.CreateConference.Web
 
 open Giraffe.Razor
 

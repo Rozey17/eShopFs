@@ -25,20 +25,25 @@
     <Compile Include="eShop.Domain.Basket\CreateBasket.Db.fs" />
     <Compile Include="eShop.Domain.Basket\CreateBasket.DTOs.fs" />
     <Compile Include="eShop.Domain.Basket\CreateBasket.Api.fs" />
-    <Compile Include="Domain.Conference.Conference\CreateConference.Web.fs" />
-    <Content Include="Domain.Conference.Conference\CreateConference.cshtml" />
+    <Content Include="Domain.ConferenceManagement.Conference\_ViewStart.cshtml" />
+    <Content Include="Domain.ConferenceManagement.Conference\_Layout.cshtml" />
+    <Compile Include="Domain.ConferenceManagement.Conference\CreateConference.Web.fs" />
+    <Content Include="Domain.ConferenceManagement.Conference\CreateConference.cshtml" />
+    <Content Include="Domain.ConferencePublic\_ViewStart.cshtml" />
+    <Content Include="Domain.ConferencePublic\_Layout.cshtml" />
+    <Compile Include="Domain.ConferencePublic\DisplayConference.Web.fs" />
+    <Content Include="Domain.ConferencePublic\DisplayConference.cshtml" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="Domain.Conference.Conference\*.cshtml">
+    <Content Include="Domain.ConferenceManagement.Conference\*.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Watch Include="**\*.cshtml" Exclude="bin\**\*" />
+    <Content Include="Domain.ConferencePublic\*.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <Import Project="..\..\.paket\Paket.Restore.targets" />

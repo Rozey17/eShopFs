@@ -5,25 +5,25 @@ open System.IO
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Builder
-open Microsoft.AspNetCore.Cors.Infrastructure
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
-open eShop.Domain.Conference.Conference.CreateConference.Web
+open eShop.Domain.ConferenceManagement.Conference.CreateConference.Web
+open eShop.Domain.ConferencePublic.DisplayConference.Web
 
 [<AutoOpen>]
 module Middleware =
 
     open Microsoft.AspNetCore.Mvc.Razor
-    open Microsoft.Extensions.FileProviders
 
     type IServiceCollection with
         member this.AddRazorEngine =
             this.Configure<RazorViewEngineOptions>(
                 fun (options : RazorViewEngineOptions) ->
                     options.ViewLocationFormats.Clear()
-                    options.ViewLocationFormats.Add("/Domain.Conference.Conference/{1}/{0}.cshtml")
+                    options.ViewLocationFormats.Add("/Domain.ConferenceManagement.Conference/{1}/{0}.cshtml")
+                    options.ViewLocationFormats.Add("/Domain.ConferencePublic/{1}/{0}.cshtml")
                 )
                 .AddMvc()
             |> ignore
@@ -58,6 +58,9 @@ let webApp =
         GET >=>
             choose [
                 route  "/conferences/create" >=> renderCreateReferenceView
+
+                // TODO: change route
+                route  "/conferences/display" >=> renderDisplayConferenceView
             ]
         POST >=>
             choose [
