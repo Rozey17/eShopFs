@@ -25,10 +25,10 @@
     <Compile Include="eShop.Domain.Basket\CreateBasket.Db.fs" />
     <Compile Include="eShop.Domain.Basket\CreateBasket.DTOs.fs" />
     <Compile Include="eShop.Domain.Basket\CreateBasket.Api.fs" />
-    <Content Include="Domain.ConferenceManagement.Conference\_ViewStart.cshtml" />
-    <Content Include="Domain.ConferenceManagement.Conference\_Layout.cshtml" />
-    <Compile Include="Domain.ConferenceManagement.Conference\CreateConference.Web.fs" />
-    <Content Include="Domain.ConferenceManagement.Conference\CreateConference.cshtml" />
+    <Content Include="Domain.ConferenceManagement\_ViewStart.cshtml" />
+    <Content Include="Domain.ConferenceManagement\_Layout.cshtml" />
+    <Compile Include="Domain.ConferenceManagement\CreateConference.Web.fs" />
+    <Content Include="Domain.ConferenceManagement\CreateConference.cshtml" />
     <Content Include="Domain.ConferencePublic\_ViewStart.cshtml" />
     <Content Include="Domain.ConferencePublic\_Layout.cshtml" />
     <Compile Include="Domain.ConferencePublic\DisplayConference.Web.fs" />
@@ -38,7 +38,7 @@
 
   <ItemGroup>
     <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="Domain.ConferenceManagement.Conference\*.cshtml">
+    <Content Include="Domain.ConferenceManagement\*.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Domain.ConferencePublic\*.cshtml">

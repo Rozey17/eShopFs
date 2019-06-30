@@ -9,7 +9,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
-open eShop.Domain.ConferenceManagement.Conference.CreateConference.Web
+open eShop.Domain.ConferenceManagement.CreateConference.Web
 open eShop.Domain.ConferencePublic.DisplayConference.Web
 
 [<AutoOpen>]
@@ -22,7 +22,7 @@ module Middleware =
             this.Configure<RazorViewEngineOptions>(
                 fun (options : RazorViewEngineOptions) ->
                     options.ViewLocationFormats.Clear()
-                    options.ViewLocationFormats.Add("/Domain.ConferenceManagement.Conference/{1}/{0}.cshtml")
+                    options.ViewLocationFormats.Add("/Domain.ConferenceManagement/{1}/{0}.cshtml")
                     options.ViewLocationFormats.Add("/Domain.ConferencePublic/{1}/{0}.cshtml")
                 )
                 .AddMvc()
