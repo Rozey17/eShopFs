@@ -12,7 +12,8 @@ type Command<'data> =
       Metadata: CommandMetadata }
 
 module Command =
-    let createCommand data =
+
+    let create data =
         let id = Guid.NewGuid()
         { Data = data
           Id = id
