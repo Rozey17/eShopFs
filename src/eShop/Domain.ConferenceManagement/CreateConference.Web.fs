@@ -31,7 +31,7 @@ let renderCreateReferenceView next ctx =
           Location = ""
           TwitterSearch = ""
           Description = ""
-          StartDate = DateTime.UtcNow
-          EndDate = DateTime.UtcNow.AddDays(1.) }
+          StartDate = DateTime.Now
+          EndDate = DateTime.Now.AddDays(1.) }
     razorHtmlView "CreateConference" (Some viewModel) None None next ctx
 
