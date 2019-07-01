@@ -1,7 +1,6 @@
 module internal eShop.Domain.ConferenceManagement.CreateConference.Implementation
 
 open eShop.Infrastructure.FSharp
-open eShop.Infrastructure.Db
 open eShop.Domain.Shared
 open eShop.Domain.ConferenceManagement.Common
 
@@ -20,6 +19,20 @@ type ValidatedConferenceInfo =
       StartDate: Date
       EndDate: Date
       Owner: OwnerInfo }
+module ValidatedConferenceInfo =
+
+    let toConferenceInfoWith id accessCode validatedInfo =
+        { Id = id
+          AccessCode = accessCode |> GeneratedAndNotEditable
+          Name = validatedInfo.Name
+          Description = validatedInfo.Description
+          Location = validatedInfo.Location
+          Tagline = validatedInfo.Tagline
+          Slug = validatedInfo.Slug |> NotEditable
+          TwitterSearch = validatedInfo.TwitterSearch
+          StartDate = validatedInfo.StartDate
+          EndDate = validatedInfo.EndDate
+          Owner = validatedInfo.Owner }
 
 type CheckSlugExists = UniqueSlug -> Async<bool>
 
@@ -28,44 +41,50 @@ type ValidateConferenceInfo =
      -> UnvalidatedConferenceInfo                              // input
      -> AsyncResult<ValidatedConferenceInfo, ValidationError>  // output
 
+// insert
+type InsertConferenceIntoDb = Conference -> Async<unit>
+
+// create events
+type CreateEvents = Conference -> CreateConferenceEvent list
+
 // -----
 // impl
 // -----
 let validateConferenceInfo: ValidateConferenceInfo =
-    fun checkSlugExists conference ->
+    fun checkSlugExists unvalidatedInfo ->
         asyncResult {
             let! ownerName =
-                conference.OwnerName
+                 unvalidatedInfo.OwnerName
                 |> String250.create "OwnerName"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! ownerEmail =
-                conference.OwnerEmail
+                 unvalidatedInfo.OwnerEmail
                 |> EmailAddress.create "OwnerEmail"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! name =
-                conference.Name
+                 unvalidatedInfo.Name
                 |> String250.create "Name"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! description =
-                conference.Description
+                 unvalidatedInfo.Description
                 |> NotEmptyString.create "Description"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! location =
-                conference.Location
+                 unvalidatedInfo.Location
                 |> String250.create "Location"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! tagline =
-                conference.Tagline
+                 unvalidatedInfo.Tagline
                 |> String250.createOption "Tagline"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! slug =
-                conference.Slug
+                 unvalidatedInfo.Slug
                 |> UniqueSlug.create "Slug"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
@@ -74,22 +93,22 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 |> checkSlugExists
                 |> AsyncResult.ofAsync
             do! if slugExisted then
-                    Error (ValidationError "Slug is already taken.")
+                    Error (ValidationError "Slug is already taken")
                 else
                     Ok ()
                 |> AsyncResult.ofResult
             let! twitterSearch =
-                conference.TwitterSearch
+                 unvalidatedInfo.TwitterSearch
                 |> String250.createOption "TwitterSearch"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! startDate =
-                conference.StartDate
+                 unvalidatedInfo.StartDate
                 |> Date.create "StartDate"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! endDate =
-                conference.EndDate
+                 unvalidatedInfo.EndDate
                 |> Date.create "EndDate"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
@@ -99,7 +118,7 @@ let validateConferenceInfo: ValidateConferenceInfo =
                     Ok ()
                 |> AsyncResult.ofResult
 
-            let validatedConferenceInfo: ValidatedConferenceInfo =
+            let validatedInfo: ValidatedConferenceInfo =
                 { Name = name
                   Description = description
                   Location = location
@@ -112,5 +131,43 @@ let validateConferenceInfo: ValidateConferenceInfo =
                       { Name = ownerName
                         Email = ownerEmail } }
 
-            return validatedConferenceInfo
+            return validatedInfo
+        }
+
+let createConferenceCreatedEvent (conference: Conference) : ConferenceCreated = conference
+
+let createEvents: CreateEvents =
+    fun conference ->
+        let conferenceCreated =
+            conference
+            |> createConferenceCreatedEvent
+            |> CreateConferenceEvent.ConferenceCreated
+
+        [
+            yield conferenceCreated
+        ]
+
+let createConference
+    checkSlugExists            // dependency
+    insertConferenceIntoDb     // dependency
+    : CreateConference =       // definition of function
+
+    fun command ->             // input
+        asyncResult {
+            let! validatedInfo =
+                validateConferenceInfo checkSlugExists command.Data
+                |> AsyncResult.mapError CreateConferenceError.Validation
+
+            let id = ConferenceId.generate()
+            let accessCode = AccessCode.generate()
+            let conferenceInfo =
+                validatedInfo
+                |> ValidatedConferenceInfo.toConferenceInfoWith id accessCode
+            let conference = Conference(Info=conferenceInfo, CanDeleteSeat=true)
+
+            do! insertConferenceIntoDb conference
+                |> AsyncResult.ofAsync
+
+            let events = conference |> createEvents
+            return events
         }

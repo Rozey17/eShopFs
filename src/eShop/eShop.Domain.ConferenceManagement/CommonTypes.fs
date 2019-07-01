@@ -41,9 +41,9 @@ type ConferenceInfo =
       AccessCode: GeneratedAndNotEditable<AccessCode>
       Owner: OwnerInfo }
 
-type WasEverPublished = bool
+type WasNeverPublished = bool
 
-type Conference = Conference of Info:ConferenceInfo * CanNotDeleteSeat:WasEverPublished
+type Conference = Conference of Info:ConferenceInfo * CanDeleteSeat:WasNeverPublished
 
 module Date =
     let value (Date v) = v

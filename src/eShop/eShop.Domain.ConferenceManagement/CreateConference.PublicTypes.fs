@@ -21,7 +21,7 @@ type UnvalidatedConferenceInfo =
 type CreateConferenceCommand = Command<UnvalidatedConferenceInfo>
 
 // success output
-type ConferenceCreated = ConferenceCreated of Conference
+type ConferenceCreated = Conference
 type CreateConferenceEvent =
     | ConferenceCreated of ConferenceCreated
 
