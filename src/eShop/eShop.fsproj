@@ -27,6 +27,7 @@
     <Compile Include="eShop.Domain.Basket\CreateBasket.Api.fs" />
     <Content Include="Domain.ConferenceManagement\_ViewStart.cshtml" />
     <Content Include="Domain.ConferenceManagement\_Layout.cshtml" />
+    <Compile Include="Domain.ConferenceManagement\CreateConference.ViewModel.fs" />
     <Compile Include="Domain.ConferenceManagement\CreateConference.Web.fs" />
     <Content Include="Domain.ConferenceManagement\CreateConference.cshtml" />
     <Content Include="Domain.ConferencePublic\_ViewStart.cshtml" />
@@ -44,6 +45,10 @@
     <Content Include="Domain.ConferencePublic\*.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Watch Include="**\*.cshtml" Exclude="bin\**\*" />
   </ItemGroup>
 
   <Import Project="..\..\.paket\Paket.Restore.targets" />
