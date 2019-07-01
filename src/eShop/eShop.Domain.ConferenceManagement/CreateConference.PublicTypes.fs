@@ -22,6 +22,7 @@ type UnvalidatedConference =
 type CreateConferenceCommand = Command<UnvalidatedConference>
 
 // success output (event list)
+// here we only have ONE event
 type ConferenceCreated = ConferenceCreated of Conference
 
 // error output
