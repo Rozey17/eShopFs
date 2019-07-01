@@ -35,13 +35,14 @@ let webApp =
     choose [
         GET >=>
             choose [
-                route  "/conferences/create" >=> renderCreateReferenceView
+                route  "/conferences/create" >=> renderCreateConferenceView
 
                 // TODO: change route
                 route  "/conferences/display" >=> renderDisplayConferenceView
             ]
         POST >=>
             choose [
+                route  "/conferences/create" >=> createConference
             ]
         text "Not Found" |> RequestErrors.notFound ]
 

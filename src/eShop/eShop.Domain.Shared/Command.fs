@@ -1,4 +1,4 @@
-module eShop.Domain.Shared.Command
+namespace eShop.Domain.Shared
 
 open System
 
@@ -11,10 +11,11 @@ type Command<'data> =
       Id: Guid
       Metadata: CommandMetadata }
 
-let createCommand data =
-    let id = Guid.NewGuid()
-    { Data = data
-      Id = id
-      Metadata =
-          { CausationId = id
-            CorrelationId = id } }
+module Command =
+    let createCommand data =
+        let id = Guid.NewGuid()
+        { Data = data
+          Id = id
+          Metadata =
+              { CausationId = id
+                CorrelationId = id } }

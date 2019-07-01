@@ -1,5 +1,4 @@
-[<AutoOpen>]
-module eShop.Infrastructure.Db.DbResult
+namespace eShop.Infrastructure.Db
 
 open eShop.Infrastructure.FSharp
 

@@ -1,4 +1,4 @@
-@model eShop.Domain.ConferenceManagement.CreateConference.Web.CreateConferenceViewModel
+@model eShop.Domain.ConferenceManagement.CreateConference.ConferenceFormDto
 
 @{
     ViewBag.Title = "Create Conference";
@@ -36,7 +36,7 @@
           <fieldset class="content">
             <div class="form">
               <div class="form__fieldset">
-                @Html.LabelFor(model => model.Name, "Title:*")
+                @Html.LabelFor(model => model.Name, "Name:*")
                 <div class="form__field">
                   @Html.TextBoxFor(model => model.Name)
                 </div>

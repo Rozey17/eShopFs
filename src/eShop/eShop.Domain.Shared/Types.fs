@@ -1,4 +1,4 @@
-module eShop.Domain.Shared.Types
+namespace eShop.Domain.Shared
 
 open System
 
@@ -8,6 +8,8 @@ module String250 =
     let value (String250 v) = v
     let create fieldName =
         ConstrainedType.createString fieldName String250 250
+    let createOption fieldName =
+        ConstrainedType.createStringOption fieldName String250 250
 
 /// Constrained to be not null or empty
 type NotEmptyString = private NotEmptyString of string

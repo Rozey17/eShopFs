@@ -1,8 +1,8 @@
-module eShop.Domain.ConferenceManagement.CommonTypes
+namespace eShop.Domain.ConferenceManagement.Common
 
 open System
 open System.Text.RegularExpressions
-open eShop.Domain.Shared.Types
+open eShop.Domain.Shared
 
 /// Constrained range from DateTime.Now to DateTime.Now + 1 year
 type Date = private Date of DateTime
@@ -62,17 +62,17 @@ module ConferenceId =
 
 module UniqueSlug =
     let value (UniqueSlug v) = v
-    let create str =
+    let create fieldName str =
         if String.IsNullOrEmpty str then
-            Error "slug must not be null or empty"
+            Error (sprintf "%s must not be null or empty" fieldName)
         else if str.Length > 250 then
-            Error "slug must not be more than 250 chars"
+            Error (sprintf "%s must not be more than 250 chars" fieldName)
         else if not (Regex.IsMatch(str, @"^\w+$")) then
-            Error "slug has invalid format"
+            Error (sprintf "%s has invalid format" fieldName)
         else
             Ok (UniqueSlug str)
 
 module AccessCode =
     let value (AccessCode v) = v
     let generate () =
-        "abcdef" // TODO: replace real logic
+        AccessCode "abcdef" // TODO: replace real logic

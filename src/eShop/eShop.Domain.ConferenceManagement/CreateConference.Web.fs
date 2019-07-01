@@ -7,20 +7,7 @@ open Microsoft.AspNetCore.Mvc.ModelBinding
 open Giraffe
 open Giraffe.Razor
 
-[<CLIMutable>]
-type CreateConferenceViewModel =
-    { OwnerName: string
-      OwnerEmail: string
-      Slug: string
-      Name: string
-      Tagline: string
-      Location: string
-      TwitterSearch: string
-      Description: string
-      StartDate: DateTime
-      EndDate: DateTime }
-
-let renderCreateReferenceView next ctx =
+let renderCreateConferenceView next ctx =
     let viewModel =
         { OwnerName = ""
           OwnerEmail = ""
@@ -34,3 +21,12 @@ let renderCreateReferenceView next ctx =
           EndDate = DateTime.Now.AddDays(1.) }
     razorHtmlView "CreateConference" (Some viewModel) None None next ctx
 
+let createConference next (ctx: HttpContext) =
+    task {
+        let! conferenceForm = ctx.BindFormAsync<ConferenceFormDto>()
+        let unvalidatedConference = conferenceForm |> ConferenceFormDto.toUnvalidatedConferenceInfo
+        let validated = Implementation.validateConferenceInfo unvalidatedConference
+        printfn "%A" validated
+
+        return! razorHtmlView "CreateConference" (Some conferenceForm) None None next ctx
+    }
