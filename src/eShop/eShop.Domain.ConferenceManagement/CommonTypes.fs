@@ -11,7 +11,7 @@ type Date = private Date of DateTime
 type ConferenceId = private ConferenceId of Guid
 
 /// Slug has a specific format, no more than 250 chars, not null
-type Slug = private Slug of string
+type UniqueSlug = private UniqueSlug of string
 
 /// Access code is a generated string of 6 chars
 type AccessCode = private AccessCode of string
@@ -34,7 +34,7 @@ type ConferenceInfo =
       Description: NotEmptyString
       Location: String250
       Tagline: String250 option
-      Slug: NotEditable<Slug>
+      Slug: NotEditable<UniqueSlug>
       TwitterSearch: String250 option
       StartDate: Date
       EndDate: Date
@@ -60,8 +60,8 @@ module ConferenceId =
     let generate () =
         ConferenceId (Guid.NewGuid())
 
-module ConferenceSlug =
-    let value (Slug v) = v
+module UniqueSlug =
+    let value (UniqueSlug v) = v
     let create str =
         if String.IsNullOrEmpty str then
             Error "slug must not be null or empty"
@@ -70,7 +70,7 @@ module ConferenceSlug =
         else if not (Regex.IsMatch(str, @"^\w+$")) then
             Error "slug has invalid format"
         else
-            Ok (Slug str)
+            Ok (UniqueSlug str)
 
 module AccessCode =
     let value (AccessCode v) = v
