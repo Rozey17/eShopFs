@@ -19,6 +19,7 @@ type ValidatedConferenceInfo =
       StartDate: Date
       EndDate: Date
       Owner: OwnerInfo }
+
 module ValidatedConferenceInfo =
 
     let toConferenceInfoWith id accessCode validatedInfo =

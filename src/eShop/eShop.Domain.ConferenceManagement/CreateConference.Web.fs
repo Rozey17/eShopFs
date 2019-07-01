@@ -45,8 +45,6 @@ let createConference next (ctx: HttpContext) =
         let workflow = Implementation.createConference checkSlugExists insertConferenceIntoDb
         let! result = workflow cmd
 
-        printfn "%A" result
-
         match result with
         | Ok events ->
             return! razorHtmlView "CreateConference" (Some form) None None next ctx
