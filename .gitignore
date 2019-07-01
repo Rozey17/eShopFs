@@ -11,3 +11,5 @@ release.sh
 deploy
 .vscode/
 .ionide/
+*.user
+launchSettings.json
