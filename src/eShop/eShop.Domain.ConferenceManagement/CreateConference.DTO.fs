@@ -19,7 +19,7 @@ module internal ConferenceFormDTO =
 
     /// Used when importing an Conference Form from outside world into the domain
     let toUnvalidatedConferenceInfo (dto: ConferenceFormDTO) =
-        let domainObj: UnvalidatedConference =
+        let domainObj: UnvalidatedConferenceInfo =
             { OwnerName = dto.OwnerName
               OwnerEmail = dto.OwnerEmail
               Slug = dto.Slug

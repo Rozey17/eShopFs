@@ -4,7 +4,6 @@ open System.Collections.Generic
 open System.Data
 open System.Dynamic
 open Dapper
-open eShop.Infrastructure.Db
 open eShop.Infrastructure.FSharp
 
 let private mapToExpando (map: Map<string, _>) =
@@ -30,18 +29,12 @@ let executeAsync (connection: IDbConnection) (sql: string) =
     connection.ExecuteAsync(sql)
     |> Async.AwaitTask
 
-let parametrizedExecuteAsync (connection: IDbConnection) (sql: string) (param: obj) : DbResult<unit> =
+let parametrizedExecuteAsync (connection: IDbConnection) (sql: string) (param: obj) =
     async {
-        try
-            do!
-                connection.ExecuteAsync(sql, param)
-                |> Async.AwaitTask
-                |> Async.Ignore
-
-            return (Ok ())
-
-        with exn ->
-            return (Error (Exception exn))
+        do!
+            connection.ExecuteAsync(sql, param)
+            |> Async.AwaitTask
+            |> Async.Ignore
     }
 
 let mapParametrizedExecuteAsync connection sql param =

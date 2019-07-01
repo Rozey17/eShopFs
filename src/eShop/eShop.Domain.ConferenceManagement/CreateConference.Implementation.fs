@@ -1,10 +1,15 @@
 module internal eShop.Domain.ConferenceManagement.CreateConference.Implementation
 
 open eShop.Infrastructure.FSharp
+open eShop.Infrastructure.Db
 open eShop.Domain.Shared
 open eShop.Domain.ConferenceManagement.Common
 
+// -----
 // types
+// -----
+
+// validate
 type ValidatedConferenceInfo =
     { Name: String250
       Description: NotEmptyString
@@ -15,59 +20,84 @@ type ValidatedConferenceInfo =
       StartDate: Date
       EndDate: Date
       Owner: OwnerInfo }
-type ValidateConferenceInfo =
-    UnvalidatedConference -> Result<ValidatedConferenceInfo, ValidationError>
 
+type CheckSlugExists = UniqueSlug -> Async<bool>
+
+type ValidateConferenceInfo =
+    CheckSlugExists                                            // dependency
+     -> UnvalidatedConferenceInfo                              // input
+     -> AsyncResult<ValidatedConferenceInfo, ValidationError>  // output
+
+// -----
 // impl
+// -----
 let validateConferenceInfo: ValidateConferenceInfo =
-    fun conference ->
-        result {
+    fun checkSlugExists conference ->
+        asyncResult {
             let! ownerName =
                 conference.OwnerName
                 |> String250.create "OwnerName"
-                |> Result.mapError ValidationError
+                |> AsyncResult.ofResult
+                |> AsyncResult.mapError ValidationError
             let! ownerEmail =
                 conference.OwnerEmail
                 |> EmailAddress.create "OwnerEmail"
-                |> Result.mapError ValidationError
+                |> AsyncResult.ofResult
+                |> AsyncResult.mapError ValidationError
             let! name =
                 conference.Name
                 |> String250.create "Name"
-                |> Result.mapError ValidationError
+                |> AsyncResult.ofResult
+                |> AsyncResult.mapError ValidationError
             let! description =
                 conference.Description
                 |> NotEmptyString.create "Description"
-                |> Result.mapError ValidationError
+                |> AsyncResult.ofResult
+                |> AsyncResult.mapError ValidationError
             let! location =
                 conference.Location
                 |> String250.create "Location"
-                |> Result.mapError ValidationError
+                |> AsyncResult.ofResult
+                |> AsyncResult.mapError ValidationError
             let! tagline =
                 conference.Tagline
                 |> String250.createOption "Tagline"
-                |> Result.mapError ValidationError
-            // TODO: query db to check unique
+                |> AsyncResult.ofResult
+                |> AsyncResult.mapError ValidationError
             let! slug =
                 conference.Slug
                 |> UniqueSlug.create "Slug"
-                |> Result.mapError ValidationError
+                |> AsyncResult.ofResult
+                |> AsyncResult.mapError ValidationError
+            let! slugExisted =
+                slug
+                |> checkSlugExists
+                |> AsyncResult.ofAsync
+            do! if slugExisted then
+                    Error (ValidationError "Slug is already taken.")
+                else
+                    Ok ()
+                |> AsyncResult.ofResult
             let! twitterSearch =
                 conference.TwitterSearch
                 |> String250.createOption "TwitterSearch"
-                |> Result.mapError ValidationError
+                |> AsyncResult.ofResult
+                |> AsyncResult.mapError ValidationError
             let! startDate =
                 conference.StartDate
                 |> Date.create "StartDate"
-                |> Result.mapError ValidationError
+                |> AsyncResult.ofResult
+                |> AsyncResult.mapError ValidationError
             let! endDate =
                 conference.EndDate
                 |> Date.create "EndDate"
-                |> Result.mapError ValidationError
-            do!
-                if startDate > endDate then
+                |> AsyncResult.ofResult
+                |> AsyncResult.mapError ValidationError
+            do! if startDate > endDate then
                     Error (ValidationError "StartDate can not come after EndDate")
                 else
                     Ok ()
+                |> AsyncResult.ofResult
 
             let validatedConferenceInfo: ValidatedConferenceInfo =
                 { Name = name

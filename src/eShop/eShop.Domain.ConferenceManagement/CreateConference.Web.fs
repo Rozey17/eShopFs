@@ -8,7 +8,7 @@ open Giraffe
 open Giraffe.Razor
 
 let renderCreateConferenceView next ctx =
-    let viewModel =
+    let form =
         { OwnerName = ""
           OwnerEmail = ""
           Slug = ""
@@ -19,12 +19,12 @@ let renderCreateConferenceView next ctx =
           Description = ""
           StartDate = DateTime.Now
           EndDate = DateTime.Now.AddDays(1.) }
-    razorHtmlView "CreateConference" (Some viewModel) None None next ctx
+    razorHtmlView "CreateConference" (Some form) None None next ctx
 
 let createConference next (ctx: HttpContext) =
     task {
-        let! conferenceForm = ctx.BindFormAsync<ConferenceFormDTO>()
-        let unvalidatedConferenceInfo = conferenceForm |> ConferenceFormDTO.toUnvalidatedConferenceInfo
+        let! form = ctx.BindFormAsync<ConferenceFormDTO>()
+        let unvalidatedInfo = form |> ConferenceFormDTO.toUnvalidatedConferenceInfo
 
-        return! razorHtmlView "CreateConference" (Some conferenceForm) None None next ctx
+        return! razorHtmlView "CreateConference" (Some form) None None next ctx
     }

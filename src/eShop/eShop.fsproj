@@ -14,7 +14,6 @@
     <Compile Include="eShop.Infrastructure.FSharp\Result.fs" />
     <Compile Include="eShop.Infrastructure.FSharp\Async.fs" />
     <Compile Include="eShop.Infrastructure.FSharp\AsyncResult.fs" />
-    <Compile Include="eShop.Infrastructure.Db\DbResult.fs" />
     <Compile Include="eShop.Infrastructure.Db\Dapper.fs" />
     <Compile Include="eShop.Domain.Shared\ConstrainedType.fs" />
     <Compile Include="eShop.Domain.Shared\Types.fs" />

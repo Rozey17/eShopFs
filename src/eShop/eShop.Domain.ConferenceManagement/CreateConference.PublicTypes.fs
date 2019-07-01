@@ -2,12 +2,11 @@ namespace eShop.Domain.ConferenceManagement.CreateConference
 
 open System
 open eShop.Infrastructure.FSharp
-open eShop.Infrastructure.Db
 open eShop.Domain.Shared
 open eShop.Domain.ConferenceManagement.Common
 
 // input
-type UnvalidatedConference =
+type UnvalidatedConferenceInfo =
     { OwnerName: string
       OwnerEmail: string
       Slug: string
@@ -19,19 +18,18 @@ type UnvalidatedConference =
       StartDate: DateTime
       EndDate: DateTime }
 
-type CreateConferenceCommand = Command<UnvalidatedConference>
+type CreateConferenceCommand = Command<UnvalidatedConferenceInfo>
 
-// success output (event list)
-// here we only have ONE event
+// success output
 type ConferenceCreated = ConferenceCreated of Conference
+type CreateConferenceEvent =
+    | ConferenceCreated of ConferenceCreated
 
 // error output
 type ValidationError = ValidationError of string
-
 type CreateConferenceError =
     | Validation of ValidationError
-    | Database of DbError
 
 // workflow
 type CreateConference =
-    CreateConferenceCommand -> AsyncResult<ConferenceCreated, CreateConferenceError>
+    CreateConferenceCommand -> AsyncResult<CreateConferenceEvent list, CreateConferenceError>
