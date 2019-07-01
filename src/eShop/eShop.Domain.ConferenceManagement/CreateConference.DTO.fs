@@ -3,7 +3,7 @@ namespace eShop.Domain.ConferenceManagement.CreateConference
 open System
 
 [<CLIMutable>]
-type ConferenceFormDto =
+type ConferenceFormDTO =
     { OwnerName: string
       OwnerEmail: string
       Slug: string
@@ -15,10 +15,10 @@ type ConferenceFormDto =
       StartDate: DateTime
       EndDate: DateTime }
 
-module internal ConferenceFormDto =
+module internal ConferenceFormDTO =
 
     /// Used when importing an Conference Form from outside world into the domain
-    let toUnvalidatedConferenceInfo (dto: ConferenceFormDto) =
+    let toUnvalidatedConferenceInfo (dto: ConferenceFormDTO) =
         let domainObj: UnvalidatedConference =
             { OwnerName = dto.OwnerName
               OwnerEmail = dto.OwnerEmail

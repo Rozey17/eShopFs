@@ -23,10 +23,8 @@ let renderCreateConferenceView next ctx =
 
 let createConference next (ctx: HttpContext) =
     task {
-        let! conferenceForm = ctx.BindFormAsync<ConferenceFormDto>()
-        let unvalidatedConference = conferenceForm |> ConferenceFormDto.toUnvalidatedConferenceInfo
-        let validated = Implementation.validateConferenceInfo unvalidatedConference
-        printfn "%A" validated
+        let! conferenceForm = ctx.BindFormAsync<ConferenceFormDTO>()
+        let unvalidatedConferenceInfo = conferenceForm |> ConferenceFormDTO.toUnvalidatedConferenceInfo
 
         return! razorHtmlView "CreateConference" (Some conferenceForm) None None next ctx
     }
