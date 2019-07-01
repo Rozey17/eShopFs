@@ -19,6 +19,14 @@ module NotEmptyString =
         else
             Ok (NotEmptyString str)
 
+/// An email address
+type EmailAddress = private EmailAddress of string
+module EmailAddress =
+    let value (EmailAddress v) = v
+    let create fieldName =
+        let pattern = @"[\w-]+(\.?[\w-])*\@[\w-]+(\.[\w-]+)+"
+        ConstrainedType.createLike fieldName EmailAddress pattern
+
 /// Id of a basket
 type BasketId = private BasketId of Guid
 module BasketId =
