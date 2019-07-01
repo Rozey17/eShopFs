@@ -46,8 +46,10 @@ let createConference next (ctx: HttpContext) =
         let! result = workflow cmd
 
         match result with
-        | Ok events ->
+        | Ok [ (ConferenceCreated event) ] ->
             return! razorHtmlView "CreateConference" (Some form) None None next ctx
-        | Error error ->
+        | Error (Validation error) ->
             return! razorHtmlView "CreateConference" (Some form) None None next ctx
+        | _ ->
+            return! text "Unknown error" next ctx
     }
