@@ -60,7 +60,11 @@ input[type=number] {
     -webkit-border-radius: 0;
 }
 
-
+input[type=text],
+input[type=password],
+textarea {
+    box-sizing : border-box;
+}
 
 /* Styles for validation helpers
 -----------------------------------------------------------*/

@@ -2,8 +2,6 @@ module eShop.App
 
 open System
 open System.IO
-open FSharp.Control.Tasks.V2.ContextInsensitive
-open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
@@ -22,32 +20,12 @@ module Middleware =
             this.Configure<RazorViewEngineOptions>(
                 fun (options : RazorViewEngineOptions) ->
                     options.ViewLocationFormats.Clear()
-                    options.ViewLocationFormats.Add("/Domain.ConferenceManagement/{1}/{0}.cshtml")
-                    options.ViewLocationFormats.Add("/Domain.ConferencePublic/{1}/{0}.cshtml")
+                    options.ViewLocationFormats.Add("/eShop.Domain.ConferenceManagement/{1}/{0}.cshtml")
+                    options.ViewLocationFormats.Add("/eShop.Domain.ConferencePublic/{1}/{0}.cshtml")
                 )
                 .AddMvc()
             |> ignore
             this.AddAntiforgery()
-
-
-// ---------------------------------
-// Models
-// ---------------------------------
-
-[<CLIMutable>]
-type Message =
-    {
-        Text : string
-    }
-
-let handleGetHello =
-    fun (next : HttpFunc) (ctx : HttpContext) ->
-        task {
-            let response = {
-                Text = "Hello world, from Giraffe 2!"
-            }
-            return! json response next ctx
-        }
 
 // ---------------------------------
 // Web app

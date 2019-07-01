@@ -5,8 +5,7 @@ open System.Text.RegularExpressions
 
 /// Create a constrained string using the constructor provided
 /// Return Error if input is null, empty, or length > maxLen
-let createString ctor maxLen str =
-    let fieldName = ctor.ToString()
+let createString fieldName ctor maxLen str =
     if String.IsNullOrEmpty str then
         Error (sprintf "%s must not be null or empty" fieldName)
     else if str.Length > maxLen then
@@ -14,8 +13,7 @@ let createString ctor maxLen str =
     else
         Ok (ctor str)
 
-let createStringOption ctor maxLen str =
-    let fieldName = ctor.ToString()
+let createStringOption fieldName ctor maxLen str =
     if String.IsNullOrEmpty str then
         Ok None
     else if str.Length > maxLen then
@@ -25,8 +23,7 @@ let createStringOption ctor maxLen str =
 
 /// Create a constrained number using the constructor provided
 /// Return Error if input is less than minVal or more than maxVal
-let inline createNumber ctor minVal maxVal v =
-    let fieldName = ctor.ToString()
+let inline createNumber fieldName ctor minVal maxVal v =
     if v < minVal then
         Error (sprintf "%s: Must not be less than %A" fieldName minVal)
     else if v > maxVal then
@@ -36,8 +33,7 @@ let inline createNumber ctor minVal maxVal v =
 
 /// Create a constrained decimal<USD> using the constructor provided
 /// Return Error if input is less than minVal or more than maxVal
-let createCurrency<[<Measure>] 'currency, 'a> ctor minVal maxVal (d: decimal<'currency>) : Result<'a, string> =
-    let fieldName = ctor.ToString()
+let createCurrency<[<Measure>] 'currency, 'a> fieldName ctor minVal maxVal (d: decimal<'currency>) : Result<'a, string> =
     if d < minVal then
         Error (sprintf "%s: Must not be less than %M" fieldName minVal)
     else if d > maxVal then
@@ -47,8 +43,7 @@ let createCurrency<[<Measure>] 'currency, 'a> ctor minVal maxVal (d: decimal<'cu
 
 /// Create a constrained string using the constructor provided
 /// Return Error if input is null. empty, or does not match the regex pattern
-let createLike ctor pattern str =
-    let fieldName = ctor.ToString()
+let createLike fieldName ctor pattern str =
     if String.IsNullOrEmpty str then
         Error (sprintf "%s: Must not be null or empty" fieldName)
     else if Regex.IsMatch(str, pattern) then

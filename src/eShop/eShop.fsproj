@@ -25,24 +25,25 @@
     <Compile Include="eShop.Domain.Basket\CreateBasket.Db.fs" />
     <Compile Include="eShop.Domain.Basket\CreateBasket.DTOs.fs" />
     <Compile Include="eShop.Domain.Basket\CreateBasket.Api.fs" />
-    <Content Include="Domain.ConferenceManagement\_ViewStart.cshtml" />
-    <Content Include="Domain.ConferenceManagement\_Layout.cshtml" />
-    <Compile Include="Domain.ConferenceManagement\CreateConference.ViewModel.fs" />
-    <Compile Include="Domain.ConferenceManagement\CreateConference.Web.fs" />
-    <Content Include="Domain.ConferenceManagement\CreateConference.cshtml" />
-    <Content Include="Domain.ConferencePublic\_ViewStart.cshtml" />
-    <Content Include="Domain.ConferencePublic\_Layout.cshtml" />
-    <Compile Include="Domain.ConferencePublic\DisplayConference.Web.fs" />
-    <Content Include="Domain.ConferencePublic\DisplayConference.cshtml" />
+    <Content Include="eShop.Domain.ConferenceManagement\_ViewStart.cshtml" />
+    <Content Include="eShop.Domain.ConferenceManagement\_Layout.cshtml" />
+    <Compile Include="eShop.Domain.ConferenceManagement\CommonTypes.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.ViewModel.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Web.fs" />
+    <Content Include="eShop.Domain.ConferenceManagement\CreateConference.cshtml" />
+    <Content Include="eShop.Domain.ConferencePublic\_ViewStart.cshtml" />
+    <Content Include="eShop.Domain.ConferencePublic\_Layout.cshtml" />
+    <Compile Include="eShop.Domain.ConferencePublic\DisplayConference.Web.fs" />
+    <Content Include="eShop.Domain.ConferencePublic\DisplayConference.cshtml" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="Domain.ConferenceManagement\*.cshtml">
+    <Content Include="eShop.Domain.ConferenceManagement\*.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Domain.ConferencePublic\*.cshtml">
+    <Content Include="eShop.Domain.ConferencePublic\*.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

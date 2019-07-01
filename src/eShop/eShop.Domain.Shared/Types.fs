@@ -6,8 +6,18 @@ open System
 type String250 = private String250 of string
 module String250 =
     let value (String250 v) = v
-    let create =
-        ConstrainedType.createString String250 250
+    let create fieldName =
+        ConstrainedType.createString fieldName String250 250
+
+/// Constrained to be not null or empty
+type NotEmptyString = private NotEmptyString of string
+module NotEmptyString =
+    let value (NotEmptyString v) = v
+    let create fieldName str =
+        if String.IsNullOrEmpty str then
+            Error (sprintf "%s must not be null or empty" fieldName)
+        else
+            Ok (NotEmptyString str)
 
 /// Id of a basket
 type BasketId = private BasketId of Guid
@@ -25,12 +35,12 @@ module ProductId =
 type UnitQuantity = private UnitQuantity of int
 module UnitQuantity =
     let value (UnitQuantity v) = v
-    let create =
-        ConstrainedType.createNumber UnitQuantity 0 1000
+    let create fieldName =
+        ConstrainedType.createNumber fieldName UnitQuantity 0 1000
 
 /// Constrained to be a decimal between 0.0 and 1000.00
 type Price = private Price of decimal
 module Price =
     let value (Price v) = v
-    let create =
-        ConstrainedType.createNumber Price 0.M 1000M
+    let create fieldName =
+        ConstrainedType.createNumber fieldName Price 0.M 1000M
