@@ -29,7 +29,7 @@ type OwnerInfo =
 
 /// Conference info
 type ConferenceInfo =
-    { Id: NotEditable<ConferenceId>
+    { Id: ConferenceId
       Name: String250
       Description: NotEmptyString
       Location: String250

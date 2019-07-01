@@ -28,7 +28,6 @@
     <Content Include="eShop.Domain.ConferenceManagement\_ViewStart.cshtml" />
     <Content Include="eShop.Domain.ConferenceManagement\_Layout.cshtml" />
     <Compile Include="eShop.Domain.ConferenceManagement\CommonTypes.fs" />
-    <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.ViewModel.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Web.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\CreateConference.cshtml" />
     <Content Include="eShop.Domain.ConferencePublic\_ViewStart.cshtml" />

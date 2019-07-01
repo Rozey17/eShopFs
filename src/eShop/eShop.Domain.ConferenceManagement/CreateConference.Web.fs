@@ -20,7 +20,6 @@ type CreateConferenceViewModel =
       StartDate: DateTime
       EndDate: DateTime }
 
-
 let renderCreateReferenceView next ctx =
     let viewModel =
         { OwnerName = ""
