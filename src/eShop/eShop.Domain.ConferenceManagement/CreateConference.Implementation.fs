@@ -73,22 +73,22 @@ let validateConferenceInfo: ValidateConferenceInfo =
     fun checkSlugExists unvalidatedInfo ->
         asyncResult {
             let! ownerName =
-                 unvalidatedInfo.OwnerName
+                unvalidatedInfo.OwnerName
                 |> String250.create "OwnerName"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! ownerEmail =
-                 unvalidatedInfo.OwnerEmail
+                unvalidatedInfo.OwnerEmail
                 |> EmailAddress.create "OwnerEmail"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! name =
-                 unvalidatedInfo.Name
+                unvalidatedInfo.Name
                 |> String250.create "Name"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! description =
-                 unvalidatedInfo.Description
+                unvalidatedInfo.Description
                 |> NotEmptyString.create "Description"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
@@ -98,12 +98,12 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! tagline =
-                 unvalidatedInfo.Tagline
+                unvalidatedInfo.Tagline
                 |> String250.createOption "Tagline"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! slug =
-                 unvalidatedInfo.Slug
+                unvalidatedInfo.Slug
                 |> UniqueSlug.create "Slug"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
@@ -112,17 +112,17 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 |> AsyncResult.mapError ValidationError
                 |> AsyncResult.ignore
             let! twitterSearch =
-                 unvalidatedInfo.TwitterSearch
+                unvalidatedInfo.TwitterSearch
                 |> String250.createOption "TwitterSearch"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! startDate =
-                 unvalidatedInfo.StartDate
+                unvalidatedInfo.StartDate
                 |> Date.create "StartDate"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! endDate =
-                 unvalidatedInfo.EndDate
+                unvalidatedInfo.EndDate
                 |> Date.create "EndDate"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
