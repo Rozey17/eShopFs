@@ -27,13 +27,13 @@ let renderCreateConferenceView next ctx =
 // post
 let checkSlugExists: Implementation.CheckSlugExists =
     fun _ ->
-        asyncResult {
+        async {
             return true
         }
 
 let insertConferenceIntoDb: Implementation.InsertConferenceIntoDb =
     fun _ ->
-        asyncResult {
+        async {
             return ()
         }
 
@@ -51,8 +51,6 @@ let createConference next (ctx: HttpContext) =
             return! razorHtmlView "CreateConference" (Some form) None None next ctx
         | Error (Validation error) ->
             return! razorHtmlView "CreateConference" (Some form) None None next ctx
-        | Error (Database exn) ->
-            return! text "Internal Error" next ctx
         | _ ->
             return! text "Unknown Error" next ctx
     }

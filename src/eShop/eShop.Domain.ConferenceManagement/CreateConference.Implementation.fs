@@ -35,7 +35,7 @@ module ValidatedConferenceInfo =
           EndDate = validatedInfo.EndDate
           Owner = validatedInfo.Owner }
 
-type CheckSlugExists = UniqueSlug -> AsyncResult<bool, exn>
+type CheckSlugExists = UniqueSlug -> Async<bool>
 
 type ValidateConferenceInfo =
     CheckSlugExists                                            // dependency
@@ -43,7 +43,7 @@ type ValidateConferenceInfo =
      -> AsyncResult<ValidatedConferenceInfo, ValidationError>  // output
 
 // insert
-type InsertConferenceIntoDb = Conference -> AsyncResult<unit, exn>
+type InsertConferenceIntoDb = Conference -> Async<unit>
 
 // create events
 type CreateEvents = Conference -> CreateConferenceEvent list
@@ -54,13 +54,10 @@ type CreateEvents = Conference -> CreateConferenceEvent list
 let validateSlugExists (checkSlugExists: CheckSlugExists) (slug: UniqueSlug) =
     async {
         let! existed = checkSlugExists slug
-        match existed with
-        | Ok false ->
-            return Ok slug
-        | Ok true ->
+        if existed then
             return Error "Slug is already taken"
-        | Error _ ->
-            return Error "Database error"
+        else
+            return Ok slug
     }
 
 let validateDateOrder (startDate: Date) (endDate: Date) =
@@ -162,11 +159,11 @@ let createEvents: CreateEvents =
         ]
 
 let createConference
-    checkSlugExists            // dependency
-    insertConferenceIntoDb     // dependency
-    : CreateConference =       // definition of function
+    (checkSlugExists: CheckSlugExists)                 // dependency
+    (insertConferenceIntoDb: InsertConferenceIntoDb)   // dependency
+    : CreateConference =                               // definition of function
 
-    fun command ->             // input
+    fun command ->                                     // input
         asyncResult {
             let! validatedInfo =
                 validateConferenceInfo checkSlugExists command.Data
@@ -180,7 +177,7 @@ let createConference
             let conference = Conference(Info=conferenceInfo, CanDeleteSeat=true)
 
             do! insertConferenceIntoDb conference
-                |> AsyncResult.mapError CreateConferenceError.Database
+                |> AsyncResult.ofAsync
 
             let events = conference |> createEvents
             return events
