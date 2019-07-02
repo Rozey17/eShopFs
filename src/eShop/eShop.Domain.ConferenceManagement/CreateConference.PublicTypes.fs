@@ -27,8 +27,10 @@ type CreateConferenceEvent =
 
 // error output
 type ValidationError = ValidationError of string
+
 type CreateConferenceError =
     | Validation of ValidationError
+    | Database of exn
 
 // workflow
 type CreateConference =

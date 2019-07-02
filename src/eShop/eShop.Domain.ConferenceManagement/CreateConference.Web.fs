@@ -6,6 +6,7 @@ open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc.ModelBinding
 open Giraffe
 open Giraffe.Razor
+open eShop.Infrastructure.FSharp
 open eShop.Domain.Shared
 
 // get
@@ -26,13 +27,13 @@ let renderCreateConferenceView next ctx =
 // post
 let checkSlugExists: Implementation.CheckSlugExists =
     fun _ ->
-        async {
+        asyncResult {
             return true
         }
 
 let insertConferenceIntoDb: Implementation.InsertConferenceIntoDb =
     fun _ ->
-        async {
+        asyncResult {
             return ()
         }
 
@@ -50,6 +51,8 @@ let createConference next (ctx: HttpContext) =
             return! razorHtmlView "CreateConference" (Some form) None None next ctx
         | Error (Validation error) ->
             return! razorHtmlView "CreateConference" (Some form) None None next ctx
+        | Error (Database exn) ->
+            return! text "Internal Error" next ctx
         | _ ->
-            return! text "Unknown error" next ctx
+            return! text "Unknown Error" next ctx
     }

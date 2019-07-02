@@ -35,7 +35,7 @@ module ValidatedConferenceInfo =
           EndDate = validatedInfo.EndDate
           Owner = validatedInfo.Owner }
 
-type CheckSlugExists = UniqueSlug -> Async<bool>
+type CheckSlugExists = UniqueSlug -> AsyncResult<bool, exn>
 
 type ValidateConferenceInfo =
     CheckSlugExists                                            // dependency
@@ -43,7 +43,7 @@ type ValidateConferenceInfo =
      -> AsyncResult<ValidatedConferenceInfo, ValidationError>  // output
 
 // insert
-type InsertConferenceIntoDb = Conference -> Async<unit>
+type InsertConferenceIntoDb = Conference -> AsyncResult<unit, exn>
 
 // create events
 type CreateEvents = Conference -> CreateConferenceEvent list
@@ -51,6 +51,24 @@ type CreateEvents = Conference -> CreateConferenceEvent list
 // -----
 // impl
 // -----
+let validateSlugExists (checkSlugExists: CheckSlugExists) (slug: UniqueSlug) =
+    async {
+        let! existed = checkSlugExists slug
+        match existed with
+        | Ok false ->
+            return Ok slug
+        | Ok true ->
+            return Error "Slug is already taken"
+        | Error _ ->
+            return Error "Database error"
+    }
+
+let validateDateOrder (startDate: Date) (endDate: Date) =
+    if startDate > endDate then
+        Error "StartDate can not come after EndDate"
+    else
+        Ok (startDate, endDate)
+
 let validateConferenceInfo: ValidateConferenceInfo =
     fun checkSlugExists unvalidatedInfo ->
         asyncResult {
@@ -89,15 +107,10 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 |> UniqueSlug.create "Slug"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
-            let! slugExisted =
-                slug
-                |> checkSlugExists
-                |> AsyncResult.ofAsync
-            do! if slugExisted then
-                    Error (ValidationError "Slug is already taken")
-                else
-                    Ok ()
-                |> AsyncResult.ofResult
+            do! slug
+                |> validateSlugExists checkSlugExists
+                |> AsyncResult.mapError ValidationError
+                |> AsyncResult.ignore
             let! twitterSearch =
                  unvalidatedInfo.TwitterSearch
                 |> String250.createOption "TwitterSearch"
@@ -113,11 +126,11 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 |> Date.create "EndDate"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
-            do! if startDate > endDate then
-                    Error (ValidationError "StartDate can not come after EndDate")
-                else
-                    Ok ()
+            do! (startDate, endDate)
+                ||> validateDateOrder
                 |> AsyncResult.ofResult
+                |> AsyncResult.mapError ValidationError
+                |> AsyncResult.ignore
 
             let validatedInfo: ValidatedConferenceInfo =
                 { Name = name
@@ -167,7 +180,7 @@ let createConference
             let conference = Conference(Info=conferenceInfo, CanDeleteSeat=true)
 
             do! insertConferenceIntoDb conference
-                |> AsyncResult.ofAsync
+                |> AsyncResult.mapError CreateConferenceError.Database
 
             let events = conference |> createEvents
             return events
