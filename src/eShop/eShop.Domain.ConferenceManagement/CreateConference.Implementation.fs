@@ -93,7 +93,7 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! location =
-                 unvalidatedInfo.Location
+                unvalidatedInfo.Location
                 |> String250.create "Location"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
