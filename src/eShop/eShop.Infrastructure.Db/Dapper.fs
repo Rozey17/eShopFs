@@ -4,7 +4,6 @@ open System.Collections.Generic
 open System.Data
 open System.Dynamic
 open Dapper
-open eShop.Infrastructure.FSharp
 
 let private mapToExpando (map: Map<string, string>) =
     let expando = ExpandoObject()
@@ -24,6 +23,18 @@ let parametrizedQueryAsync<'Result> (connection: IDbConnection) (sql: string) (p
 let mapParametrizedQueryAsync<'Result> connection sql param : Async<'Result seq> =
     let expando = mapToExpando param
     parametrizedQueryAsync connection sql expando
+
+let tryParametrizedQuerySingleAsync<'Result> (connection: IDbConnection) (sql: string) (param: obj) : Async<'Result option> =
+    async {
+        let! result =
+            connection.QuerySingleOrDefaultAsync<'Result>(sql, param)
+            |> Async.AwaitTask
+
+        if isNull (box result) then
+            return None
+        else
+            return Some result
+    }
 
 let parametrizedQuerySingleAsync<'Result> (connection: IDbConnection) (sql: string) (param: obj) : Async<'Result> =
     connection.QuerySingleAsync<'Result>(sql, param)

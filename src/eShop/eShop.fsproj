@@ -21,14 +21,14 @@
     <Content Include="eShop.Domain.ConferenceManagement\_ViewStart.cshtml" />
     <Content Include="eShop.Domain.ConferenceManagement\_Layout.cshtml" />
     <Compile Include="eShop.Domain.ConferenceManagement\CommonTypes.fs" />
-    <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Database.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.PublicTypes.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Implementation.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.DTOs.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Database.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Web.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\CreateConference.cshtml" />
-    <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Database.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.DTOs.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Database.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Web.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\ConferenceDetails.cshtml" />
     <Content Include="eShop.Domain.ConferencePublic\_ViewStart.cshtml" />
