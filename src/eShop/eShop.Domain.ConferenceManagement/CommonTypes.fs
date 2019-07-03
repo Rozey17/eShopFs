@@ -76,3 +76,14 @@ module AccessCode =
     let value (AccessCode v) = v
     let generate () =
         AccessCode "abcdef" // TODO: replace real logic
+
+module NotEditableUniqueSlug =
+    let value (NotEditable (UniqueSlug v)) = v
+    let create fieldName str =
+        UniqueSlug.create fieldName str
+        |> Result.map NotEditable
+
+module GeneratedAndNotEditableAccessCode =
+    let value (GeneratedAndNotEditable (AccessCode v)) = v
+    let generate () =
+        AccessCode.generate() |> GeneratedAndNotEditable

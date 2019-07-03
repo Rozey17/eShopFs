@@ -14,7 +14,7 @@ type ValidatedConferenceInfo =
       Description: NotEmptyString
       Location: String250
       Tagline: String250 option
-      Slug: UniqueSlug
+      Slug: NotEditable<UniqueSlug>
       TwitterSearch: String250 option
       StartDate: Date
       EndDate: Date
@@ -24,18 +24,18 @@ module ValidatedConferenceInfo =
 
     let toConferenceInfoWith id accessCode validatedInfo =
         { Id = id
-          AccessCode = accessCode |> GeneratedAndNotEditable
+          AccessCode = accessCode
           Name = validatedInfo.Name
           Description = validatedInfo.Description
           Location = validatedInfo.Location
           Tagline = validatedInfo.Tagline
-          Slug = validatedInfo.Slug |> NotEditable
+          Slug = validatedInfo.Slug
           TwitterSearch = validatedInfo.TwitterSearch
           StartDate = validatedInfo.StartDate
           EndDate = validatedInfo.EndDate
           Owner = validatedInfo.Owner }
 
-type CheckSlugExists = UniqueSlug -> Async<bool>
+type CheckSlugExists = NotEditable<UniqueSlug> -> Async<bool>
 
 type ValidateConferenceInfo =
     CheckSlugExists                                            // dependency
@@ -51,7 +51,7 @@ type CreateEvents = Conference -> CreateConferenceEvent list
 // -----
 // impl
 // -----
-let validateSlugExists (checkSlugExists: CheckSlugExists) (slug: UniqueSlug) =
+let validateSlugExists (checkSlugExists: CheckSlugExists) slug =
     async {
         let! existed = checkSlugExists slug
         if existed then
@@ -101,7 +101,7 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 |> AsyncResult.mapError ValidationError
             let! slug =
                 unvalidatedInfo.Slug
-                |> UniqueSlug.create "Slug"
+                |> NotEditableUniqueSlug.create "Slug"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             do! slug
@@ -170,7 +170,7 @@ let createConference
                 |> AsyncResult.mapError CreateConferenceError.Validation
 
             let id = ConferenceId.generate()
-            let accessCode = AccessCode.generate()
+            let accessCode = GeneratedAndNotEditableAccessCode.generate()
             let conferenceInfo =
                 validatedInfo
                 |> ValidatedConferenceInfo.toConferenceInfoWith id accessCode

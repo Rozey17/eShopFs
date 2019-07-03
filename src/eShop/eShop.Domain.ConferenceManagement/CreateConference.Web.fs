@@ -6,8 +6,9 @@ open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc.ModelBinding
 open Giraffe
 open Giraffe.Razor
-open eShop.Infrastructure.FSharp
+open Npgsql
 open eShop.Domain.Shared
+open eShop.Domain.ConferenceManagement.Database
 
 // get
 let renderCreateConferenceView next ctx =
@@ -24,26 +25,19 @@ let renderCreateConferenceView next ctx =
           EndDate = DateTime.Now.AddDays(1.) }
     razorHtmlView "CreateConference" (Some form) None None next ctx
 
-// post
-let checkSlugExists: Implementation.CheckSlugExists =
-    fun _ ->
-        async {
-            return true
-        }
-
-let insertConferenceIntoDb: Implementation.InsertConferenceIntoDb =
-    fun _ ->
-        async {
-            return ()
-        }
-
 let createConference next (ctx: HttpContext) =
     task {
+        let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"
+        use connection = new NpgsqlConnection(connStr)
+
         let! form = ctx.BindFormAsync<ConferenceFormDTO>()
         let unvalidatedInfo = form |> ConferenceFormDTO.toUnvalidatedConferenceInfo
 
         let cmd = Command.create unvalidatedInfo
+        let checkSlugExists = DatabaseImplementation.checkSlugExists connection
+        let insertConferenceIntoDb = DatabaseImplementation.insertConferenceIntoDb connection
         let workflow = Implementation.createConference checkSlugExists insertConferenceIntoDb
+
         let! result = workflow cmd
 
         match result with

@@ -22,6 +22,7 @@
     <Content Include="eShop.Domain.ConferenceManagement\_Layout.cshtml" />
     <Compile Include="eShop.Domain.ConferenceManagement\CommonTypes.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\Database.DTOs.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\Database.Implementation.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.PublicTypes.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Implementation.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.DTOs.fs" />
