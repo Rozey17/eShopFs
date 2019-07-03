@@ -25,6 +25,7 @@ let renderCreateConferenceView next ctx =
           EndDate = DateTime.Now.AddDays(1.) }
     razorHtmlView "CreateConference" (Some form) None None next ctx
 
+// post
 let createConference next (ctx: HttpContext) =
     task {
         let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"
