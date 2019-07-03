@@ -1,0 +1,2 @@
+module eShop.Domain.ConferenceManagement.ConferenceDetails.Database
+

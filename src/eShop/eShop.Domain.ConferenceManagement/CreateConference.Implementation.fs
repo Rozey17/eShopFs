@@ -172,7 +172,7 @@ let createConference
             let conferenceInfo =
                 validatedInfo
                 |> ValidatedConferenceInfo.toConferenceInfoWith id accessCode
-            let conference = Conference(info=conferenceInfo, canDeleteSeat=true)
+            let conference = UnpublishedConference(info=conferenceInfo, canDeleteSeat=true)
 
             do! insertConferenceIntoDb conference
                 |> AsyncResult.ofAsync

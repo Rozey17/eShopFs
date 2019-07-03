@@ -8,7 +8,6 @@ open Giraffe
 open Giraffe.Razor
 open Npgsql
 open eShop.Domain.Shared
-open eShop.Domain.ConferenceManagement.Database
 
 // get
 let renderCreateConferenceView next ctx =
@@ -35,8 +34,8 @@ let createConference next (ctx: HttpContext) =
         let unvalidatedInfo = form |> ConferenceFormDTO.toUnvalidatedConferenceInfo
         let cmd = Command.create unvalidatedInfo
 
-        let checkSlugExists = DatabaseImplementation.checkSlugExists connection
-        let insertConferenceIntoDb = DatabaseImplementation.insertConferenceIntoDb connection
+        let checkSlugExists = Database.checkSlugExists connection
+        let insertConferenceIntoDb = Database.insertConferenceIntoDb connection
         let workflow = Implementation.createConference checkSlugExists insertConferenceIntoDb
 
         let! result = workflow cmd
