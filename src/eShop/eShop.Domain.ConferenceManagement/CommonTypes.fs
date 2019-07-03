@@ -43,7 +43,7 @@ type ConferenceInfo =
 
 type WasNeverPublished = bool
 
-type Conference = Conference of Info:ConferenceInfo * CanDeleteSeat:WasNeverPublished
+type Conference = Conference of info:ConferenceInfo * canDeleteSeat:WasNeverPublished
 
 module Date =
     let value (Date v) = v
