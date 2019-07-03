@@ -32,8 +32,8 @@ let createConference next (ctx: HttpContext) =
 
         let! form = ctx.BindFormAsync<ConferenceFormDTO>()
         let unvalidatedInfo = form |> ConferenceFormDTO.toUnvalidatedConferenceInfo
-
         let cmd = Command.create unvalidatedInfo
+
         let checkSlugExists = DatabaseImplementation.checkSlugExists connection
         let insertConferenceIntoDb = DatabaseImplementation.insertConferenceIntoDb connection
         let workflow = Implementation.createConference checkSlugExists insertConferenceIntoDb
