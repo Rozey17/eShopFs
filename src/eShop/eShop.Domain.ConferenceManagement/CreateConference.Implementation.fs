@@ -57,14 +57,14 @@ let validateSlugExists (checkSlugExists: CheckSlugExists) slug =
         if existed then
             return Error "Slug is already taken"
         else
-            return Ok slug
+            return Ok ()
     }
 
 let validateDateOrder (startDate: Date) (endDate: Date) =
     if startDate > endDate then
         Error "StartDate can not come after EndDate"
     else
-        Ok (startDate, endDate)
+        Ok ()
 
 let validateConferenceInfo: ValidateConferenceInfo =
     fun checkSlugExists unvalidatedInfo ->
@@ -107,7 +107,6 @@ let validateConferenceInfo: ValidateConferenceInfo =
             do! slug
                 |> validateSlugExists checkSlugExists
                 |> AsyncResult.mapError ValidationError
-                |> AsyncResult.ignore
             let! twitterSearch =
                 unvalidatedInfo.TwitterSearch
                 |> String250.createOption "TwitterSearch"
@@ -127,7 +126,6 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 ||> validateDateOrder
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
-                |> AsyncResult.ignore
 
             let validatedInfo: ValidatedConferenceInfo =
                 { Name = name
