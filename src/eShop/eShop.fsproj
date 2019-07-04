@@ -18,33 +18,29 @@
     <Compile Include="eShop.Domain.Shared\ConstrainedType.fs" />
     <Compile Include="eShop.Domain.Shared\Types.fs" />
     <Compile Include="eShop.Domain.Shared\Command.fs" />
-    <None Include="eShop.Domain.ConferenceManagement\_Layout.cshtml" />
-    <None Include="eShop.Domain.ConferenceManagement\_ViewStart.cshtml" />
+    <Content Include="eShop.Domain.ConferenceManagement\_Layout.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="eShop.Domain.ConferenceManagement\_ViewStart.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.ConferenceManagement\CommonTypes.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.PublicTypes.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Impl.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.DTOs.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Db.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Web.fs" />
-    <None Include="eShop.Domain.ConferenceManagement\CreateConference.cshtml" />
+    <Content Include="eShop.Domain.ConferenceManagement\CreateConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.DTOs.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Db.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Web.fs" />
-    <None Include="eShop.Domain.ConferenceManagement\ConferenceDetails.cshtml" />
-    <Content Include="eShop.Domain.ConferencePublic\_ViewStart.cshtml" />
-    <Content Include="eShop.Domain.ConferencePublic\_Layout.cshtml" />
+    <Content Include="eShop.Domain.ConferenceManagement\ConferenceDetails.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="eShop.Domain.ConferencePublic\_ViewStart.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="eShop.Domain.ConferencePublic\_Layout.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.ConferencePublic\DisplayConference.Web.fs" />
-    <Content Include="eShop.Domain.ConferencePublic\DisplayConference.cshtml" />
+    <Content Include="eShop.Domain.ConferencePublic\DisplayConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Watch Include="**\*.cshtml" Exclude="bin\**\*" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="**\*.cshtml;WebRoot\**\*" Exclude="bin\**\*">
+    <Content Include="WebRoot\**\*" Exclude="bin\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
