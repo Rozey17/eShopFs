@@ -1,8 +1,6 @@
 module eShop.Domain.ConferenceManagement.CreateConference.Db
 
 open System
-open System.Data
-open Dapper
 open eShop.Infrastructure
 open eShop.Domain.Shared
 open eShop.Domain.ConferenceManagement.Common
