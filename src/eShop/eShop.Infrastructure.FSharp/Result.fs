@@ -1,4 +1,4 @@
-namespace eShop.Infrastructure.FSharp
+namespace eShop.Infrastructure
 
 [<RequireQualifiedAccess>]  // RequireQualifiedAccess forces the `Result.xxx` prefix to be used
 module Result =

@@ -14,23 +14,23 @@
     <Compile Include="eShop.Infrastructure.FSharp\Result.fs" />
     <Compile Include="eShop.Infrastructure.FSharp\Async.fs" />
     <Compile Include="eShop.Infrastructure.FSharp\AsyncResult.fs" />
-    <Compile Include="eShop.Infrastructure.Db\Dapper.fs" />
+    <Compile Include="eShop.Infrastructure.Db\Db.fs" />
     <Compile Include="eShop.Domain.Shared\ConstrainedType.fs" />
     <Compile Include="eShop.Domain.Shared\Types.fs" />
     <Compile Include="eShop.Domain.Shared\Command.fs" />
-    <Content Include="eShop.Domain.ConferenceManagement\_ViewStart.cshtml" />
-    <Content Include="eShop.Domain.ConferenceManagement\_Layout.cshtml" />
+    <None Include="eShop.Domain.ConferenceManagement\_Layout.cshtml" />
+    <None Include="eShop.Domain.ConferenceManagement\_ViewStart.cshtml" />
     <Compile Include="eShop.Domain.ConferenceManagement\CommonTypes.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.PublicTypes.fs" />
-    <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Implementation.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Impl.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.DTOs.fs" />
-    <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Database.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Db.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Web.fs" />
-    <Content Include="eShop.Domain.ConferenceManagement\CreateConference.cshtml" />
+    <None Include="eShop.Domain.ConferenceManagement\CreateConference.cshtml" />
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.DTOs.fs" />
-    <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Database.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Db.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Web.fs" />
-    <Content Include="eShop.Domain.ConferenceManagement\ConferenceDetails.cshtml" />
+    <None Include="eShop.Domain.ConferenceManagement\ConferenceDetails.cshtml" />
     <Content Include="eShop.Domain.ConferencePublic\_ViewStart.cshtml" />
     <Content Include="eShop.Domain.ConferencePublic\_Layout.cshtml" />
     <Compile Include="eShop.Domain.ConferencePublic\DisplayConference.Web.fs" />
@@ -39,17 +39,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="eShop.Domain.ConferenceManagement\*.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="eShop.Domain.ConferencePublic\*.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Watch Include="**\*.cshtml" Exclude="bin\**\*" />
   </ItemGroup>
 
   <ItemGroup>
-    <Watch Include="**\*.cshtml" Exclude="bin\**\*" />
+    <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="**\*.cshtml;WebRoot\**\*" Exclude="bin\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <Import Project="..\..\.paket\Paket.Restore.targets" />

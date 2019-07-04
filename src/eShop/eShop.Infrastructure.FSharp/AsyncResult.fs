@@ -1,4 +1,4 @@
-namespace eShop.Infrastructure.FSharp
+namespace eShop.Infrastructure
 
 type AsyncResult<'Success, 'Failure> =
     Async<Result<'Success, 'Failure>>

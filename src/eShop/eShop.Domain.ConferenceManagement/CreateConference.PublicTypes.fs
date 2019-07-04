@@ -1,7 +1,7 @@
 namespace eShop.Domain.ConferenceManagement.CreateConference
 
 open System
-open eShop.Infrastructure.FSharp
+open eShop.Infrastructure
 open eShop.Domain.Shared
 open eShop.Domain.ConferenceManagement.Common
 

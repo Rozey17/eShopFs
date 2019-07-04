@@ -1,6 +1,6 @@
-module internal eShop.Domain.ConferenceManagement.CreateConference.Implementation
+module eShop.Domain.ConferenceManagement.CreateConference.Impl
 
-open eShop.Infrastructure.FSharp
+open eShop.Infrastructure
 open eShop.Domain.Shared
 open eShop.Domain.ConferenceManagement.Common
 

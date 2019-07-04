@@ -1,4 +1,4 @@
-namespace eShop.Infrastructure.FSharp
+namespace eShop.Infrastructure
 
 /// The `Validation` type is the same as the `Result` type but with a *list* for failures
 /// rather than a single value. This allows `Validation` types to be combined

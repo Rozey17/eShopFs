@@ -20,8 +20,9 @@ let renderCreateConferenceView next ctx =
           Location = ""
           TwitterSearch = ""
           Description = ""
-          StartDate = DateTime.Now
-          EndDate = DateTime.Now.AddDays(1.) }
+          StartDate = DateTime.Now.AddDays(1.)
+          EndDate = DateTime.Now.AddDays(2.) }
+
     razorHtmlView "CreateConference" (Some form) None None next ctx
 
 // post
@@ -34,9 +35,9 @@ let createConference next (ctx: HttpContext) =
         let unvalidatedInfo = form |> ConferenceFormDTO.toUnvalidatedConferenceInfo
         let cmd = Command.create unvalidatedInfo
 
-        let checkSlugExists = Database.checkSlugExists connection
-        let insertConferenceIntoDb = Database.insertConferenceIntoDb connection
-        let workflow = Implementation.createConference checkSlugExists insertConferenceIntoDb
+        let checkSlugExists = Db.checkSlugExists connection
+        let insertConferenceIntoDb = Db.insertConferenceIntoDb connection
+        let workflow = Impl.createConference checkSlugExists insertConferenceIntoDb
 
         let! result = workflow cmd
 

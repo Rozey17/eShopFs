@@ -1,7 +1,7 @@
-module eShop.Domain.ConferenceManagement.ConferenceDetails.Database
+module eShop.Domain.ConferenceManagement.ConferenceDetails.Db
 
 open System
-open eShop.Infrastructure.Db
+open eShop.Infrastructure
 open eShop.Domain.ConferenceManagement.Common
 
 type ReadParam =
@@ -45,7 +45,7 @@ let readConferenceDetails connection slug accessCode =
     let param = { Slug = slug; AccessCode = accessCode }
 
     async {
-        let! result = Dapper.tryParametrizedQuerySingleAsync<ReadResult> connection sql param
+        let! result = Db.tryParameterizedQuerySingleAsync<ReadResult> connection sql param
         match result with
         | None ->
             return None

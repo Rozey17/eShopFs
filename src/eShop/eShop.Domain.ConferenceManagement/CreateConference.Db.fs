@@ -1,7 +1,9 @@
-module internal eShop.Domain.ConferenceManagement.CreateConference.Database
+module eShop.Domain.ConferenceManagement.CreateConference.Db
 
 open System
-open eShop.Infrastructure.Db
+open System.Data
+open Dapper
+open eShop.Infrastructure
 open eShop.Domain.Shared
 open eShop.Domain.ConferenceManagement.Common
 
@@ -45,7 +47,8 @@ module ConferenceDTO =
           IsPublished = publised }
 
 let insertConferenceIntoDb connection conference =
-    let sql = @"
+    let sql =
+        """
         insert into
             conference
             (
@@ -80,9 +83,10 @@ let insertConferenceIntoDb connection conference =
                 @OwnerEmail,
                 @CanDeleteSeat,
                 @IsPublished
-            )"
+            )
+        """
     let dto = ConferenceDTO.fromDomain conference
-    Dapper.parametrizedExecuteAsync connection sql dto
+    Db.parameterizedExecuteAsync connection sql dto
 
 let checkSlugExists connection (slug: NotEditable<UniqueSlug>) =
     let sql = @"
@@ -93,4 +97,4 @@ let checkSlugExists connection (slug: NotEditable<UniqueSlug>) =
                     where slug = @Slug
                )"
     let slug = slug |> NotEditableUniqueSlug.value
-    Dapper.mapParametrizedQuerySingleAsync<bool> connection sql (Map ["Slug", slug])
+    Db.mapParameterizedQuerySingleAsync<bool> connection sql (Map ["Slug", slug])

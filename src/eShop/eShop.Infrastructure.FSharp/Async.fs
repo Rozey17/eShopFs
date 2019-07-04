@@ -1,4 +1,4 @@
-namespace eShop.Infrastructure.FSharp
+namespace eShop.Infrastructure
 
 [<RequireQualifiedAccess>]
 module Async =

@@ -1,4 +1,4 @@
-module eShop.Infrastructure.Db.Dapper
+module eShop.Infrastructure.Db
 
 open System.Collections.Generic
 open System.Data
@@ -16,15 +16,15 @@ let queryAsync<'Result> (connection: IDbConnection) (sql: string) : Async<'Resul
     connection.QueryAsync<'Result>(sql)
     |> Async.AwaitTask
 
-let parametrizedQueryAsync<'Result> (connection: IDbConnection) (sql: string) (param: obj) : Async<'Result seq> =
+let parameterizedQueryAsync<'Result> (connection: IDbConnection) (sql: string) (param: _) : Async<'Result seq> =
     connection.QueryAsync<'Result>(sql, param)
     |> Async.AwaitTask
 
-let mapParametrizedQueryAsync<'Result> connection sql param : Async<'Result seq> =
+let mapParameterizedQueryAsync<'Result> connection sql param : Async<'Result seq> =
     let expando = mapToExpando param
-    parametrizedQueryAsync connection sql expando
+    parameterizedQueryAsync connection sql expando
 
-let tryParametrizedQuerySingleAsync<'Result> (connection: IDbConnection) (sql: string) (param: obj) : Async<'Result option> =
+let tryParameterizedQuerySingleAsync<'Result> (connection: IDbConnection) (sql: string) (param: _) : Async<'Result option> =
     async {
         let! result =
             connection.QuerySingleOrDefaultAsync<'Result>(sql, param)
@@ -36,24 +36,24 @@ let tryParametrizedQuerySingleAsync<'Result> (connection: IDbConnection) (sql: s
             return Some result
     }
 
-let parametrizedQuerySingleAsync<'Result> (connection: IDbConnection) (sql: string) (param: obj) : Async<'Result> =
+let parameterizedQuerySingleAsync<'Result> (connection: IDbConnection) (sql: string) (param: _) : Async<'Result> =
     connection.QuerySingleAsync<'Result>(sql, param)
     |> Async.AwaitTask
 
-let mapParametrizedQuerySingleAsync<'Result> connection sql param: Async<'Result> =
+let mapParameterizedQuerySingleAsync<'Result> connection sql param: Async<'Result> =
     let expando = mapToExpando param
-    parametrizedQuerySingleAsync connection sql expando
+    parameterizedQuerySingleAsync connection sql expando
 
 let executeAsync (connection: IDbConnection) (sql: string) =
     connection.ExecuteAsync(sql)
     |> Async.AwaitTask
     |> Async.Ignore
 
-let parametrizedExecuteAsync (connection: IDbConnection) (sql: string) (param: obj) =
+let parameterizedExecuteAsync (connection: IDbConnection) (sql: string) (param: _) =
     connection.ExecuteAsync(sql, param)
     |> Async.AwaitTask
     |> Async.Ignore
 
-let mapParametrizedExecuteAsync connection sql param =
+let mapParameterizedExecuteAsync connection sql param =
     let expando = mapToExpando param
-    parametrizedExecuteAsync connection sql expando
+    parameterizedExecuteAsync connection sql expando

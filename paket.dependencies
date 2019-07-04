@@ -1,7 +1,6 @@
-source https://www.nuget.org/api/v2
-
-framework: netcoreapp2.2
+source https://api.nuget.org/v3/index.json
 storage: none
+framework: netcoreapp2.2
 
 nuget Microsoft.AspNetCore.App 2.2.5
 nuget Giraffe 3.6.0
