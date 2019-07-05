@@ -22,6 +22,8 @@
     <Content Include="eShop.Domain.ConferenceManagement\_ViewStart.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="eShop.Domain.ConferenceManagement\_Navigation.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.ConferenceManagement\CommonTypes.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\Home.Web.fs" />
+    <Content Include="eShop.Domain.ConferenceManagement\Home.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.PublicTypes.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Impl.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.DTOs.fs" />

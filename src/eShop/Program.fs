@@ -7,6 +7,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
+open eShop.Domain.ConferenceManagement.Home.Web
 open eShop.Domain.ConferenceManagement.ConferenceDetails.Web
 open eShop.Domain.ConferenceManagement.CreateConference.Web
 open eShop.Domain.ConferencePublic.DisplayConference.Web
@@ -36,6 +37,7 @@ let webApp =
     choose [
         GET >=>
             choose [
+                route  "/conferences"            >=> renderHomeView
                 route  "/conferences/create"     >=> renderCreateConferenceView
                 route  "/conferences/details"    >=> renderConferenceDetailsView
 
