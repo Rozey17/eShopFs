@@ -29,7 +29,8 @@ let renderConferenceDetailsView next (ctx: HttpContext) =
             let! dto = Db.ReadConferenceDetails.query connection slug accessCode
             match dto with
             | Some dto ->
-                return! razorHtmlView "ConferenceDetails" (Some dto) None None next ctx
+                let viewData = dict [("Slug", box dto.Slug); ("AccessCode", box dto.AccessCode)]
+                return! razorHtmlView "ConferenceDetails" (Some dto) (Some viewData) None next ctx
             | None ->
                 return! text "not found" next ctx
         | Error _ ->

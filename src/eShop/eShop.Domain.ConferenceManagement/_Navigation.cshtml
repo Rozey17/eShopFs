@@ -1,0 +1,29 @@
+@{
+  Func<string, string> RenderIfActive = actionName =>
+  {
+    var action = ViewContext.RouteData.Values["action"].ToString();
+    if (action == actionName)
+      return "menu__item_active";
+    else
+      return null;
+  };
+}
+
+<div class="page__menu menu">
+  <ul class="menu__list">
+    <li class="menu__item">
+      <a class="menu__back" href="/conferences"></a>
+    </li>
+    <li class="menu__item @RenderIfActive("ConferenceDetails")">
+      <a href="/conferences/details?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]">Conference details</a>
+    </li>
+    <li class="menu__item @RenderIfActive("ConferenceSeats")">
+      <a href="/conferences/seats?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]">Seat types</a>
+    </li>
+    <li class="menu__item @RenderIfActive("ConferenceOrders")">
+      <a href="/conferences/registrations?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]">Registrations</a>
+    </li>
+  </ul>
+</div>
+
+

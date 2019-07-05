@@ -1,5 +1,18 @@
 @model eShop.Domain.ConferenceManagement.ConferenceDetails.ConferenceDetailsDTO
 
+@{
+    ViewBag.Title = "My Conference";
+    ViewBag.PageType = "page_create-conf";
+}
+
+@section Navigation {
+    <div class="quick__login">@Model.OwnerName</div>
+}
+
+@section PageNavigation {
+    @Html.Partial("_Navigation")
+}
+
 <h1 class="page__head page__wrapper page_create-conf">
   Conference details
 </h1>
@@ -87,14 +100,14 @@
         </fieldset>
 
         <div class="nav content-main__nav">
-          <a class="nav__left" href="/conferences/edit?slug=@Model.Slug&access_code=@Model.AccessCode">Edit</a>
+          <a class="nav__left" href="/conferences/edit?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]">Edit</a>
           @{ var action = Model.IsPublished ? "Unpublish" : "Publish"; }
-          <form action="/conferences/@action?slug=@Model.Slug&access_code=@Model.AccessCode" method="POST">
+          <form action="/conferences/@action?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]" method="POST">
             <button type="submit" class="nav__right">
               @action
             </button>
           </form>
-          <a class="nav__right" style="margin-right: 40px;" href="/conferences/seats?slug=@Model.Slug&access_code=@Model.AccessCode">
+          <a class="nav__right" style="margin-right: 40px;" href="/conferences/seats?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]">
             Configure seats
           </a>
         </div>
