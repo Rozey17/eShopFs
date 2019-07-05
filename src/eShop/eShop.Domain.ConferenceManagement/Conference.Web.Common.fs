@@ -14,13 +14,13 @@ module Web =
             let accessCode = ctx.TryGetQueryStringValue "access_code" |> Option.defaultValue ""
             (slug, accessCode)
 
-        let validateParam (slug, accessCode) =
+        let validate (slug, accessCode) =
             result {
                 let! slug = slug |> NotEditableUniqueSlug.create "Slug"
                 let! accessCode = accessCode |> GeneratedAndNotEditableAccessCode.create "AccessCode"
                 return (slug, accessCode)
             }
 
-        let validateContext ctx =
+        let validateParam ctx =
             let param = getParam ctx
-            validateParam param
+            validate param

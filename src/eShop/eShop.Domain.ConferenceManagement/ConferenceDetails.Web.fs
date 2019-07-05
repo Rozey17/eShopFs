@@ -14,7 +14,7 @@ let renderConferenceDetailsView next (ctx: HttpContext) =
         let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"
         use connection = new NpgsqlConnection(connStr)
 
-        match Web.Common.validateContext ctx with
+        match Web.Common.validateParam ctx with
         | Ok (slug, accessCode) ->
             let! dto = Db.ReadConferenceDetails.query connection slug accessCode
             match dto with
