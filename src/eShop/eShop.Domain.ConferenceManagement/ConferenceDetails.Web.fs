@@ -16,6 +16,7 @@ let parseParams slugStr accessCodeStr =
         return (slug, accessCode)
     }
 
+// get
 let renderConferenceDetailsView next (ctx: HttpContext) =
     task {
         let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"

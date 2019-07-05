@@ -52,9 +52,9 @@ module Date =
 
     let create fieldName dt =
         if dt < DateTime.Now then
-            Error (sprintf "%s must not happen in the past" fieldName)
+            Error (sprintf "%s: must not happen in the past" fieldName)
         else if dt > DateTime.Now.AddYears(1) then
-            Error (sprintf "%s is too far in the future" fieldName)
+            Error (sprintf "%s: is too far in the future" fieldName)
         else
             Ok (Date dt)
 
@@ -69,11 +69,11 @@ module UniqueSlug =
 
     let create fieldName str =
         if String.IsNullOrEmpty str then
-            Error (sprintf "%s must not be null or empty" fieldName)
+            Error (sprintf "%s: must not be null or empty" fieldName)
         else if str.Length > 250 then
-            Error (sprintf "%s must not be more than 250 chars" fieldName)
+            Error (sprintf "%s: must not be more than 250 chars" fieldName)
         else if not (Regex.IsMatch(str, @"^\w+$")) then
-            Error (sprintf "%s has invalid format" fieldName)
+            Error (sprintf "%s: has invalid format" fieldName)
         else
             Ok (UniqueSlug str)
 
@@ -98,6 +98,6 @@ module GeneratedAndNotEditableAccessCode =
 
     let create fieldName (str: string) =
         if str.Length <> 6 then
-            Error (sprintf "%s has invalid format" fieldName)
+            Error (sprintf "%s: has invalid format" fieldName)
         else
             Ok (GeneratedAndNotEditable (AccessCode str))

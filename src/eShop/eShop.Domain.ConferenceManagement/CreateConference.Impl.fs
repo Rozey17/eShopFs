@@ -71,12 +71,12 @@ let validateConferenceInfo: ValidateConferenceInfo =
         asyncResult {
             let! ownerName =
                 unvalidatedInfo.OwnerName
-                |> String250.create "OwnerName"
+                |> String250.create "Owner Name"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! ownerEmail =
                 unvalidatedInfo.OwnerEmail
-                |> EmailAddress.create "OwnerEmail"
+                |> EmailAddress.create "Owner Email"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! name =
@@ -109,17 +109,17 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 |> AsyncResult.mapError ValidationError
             let! twitterSearch =
                 unvalidatedInfo.TwitterSearch
-                |> String250.createOption "TwitterSearch"
+                |> String250.createOption "Twitter Search"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! startDate =
                 unvalidatedInfo.StartDate
-                |> Date.create "StartDate"
+                |> Date.create "Start Date"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! endDate =
                 unvalidatedInfo.EndDate
-                |> Date.create "EndDate"
+                |> Date.create "End Date"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             do! (startDate, endDate)

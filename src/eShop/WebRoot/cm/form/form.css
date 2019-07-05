@@ -59,6 +59,7 @@
 	}
 .form__field pre {
 	box-sizing: border-box;
+	white-space: pre-wrap;
 	width: 100%;
 	margin: 0 0 0 0;
 	text-align: left;

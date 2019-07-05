@@ -8,6 +8,7 @@ open Giraffe
 open Giraffe.Razor
 open Npgsql
 open eShop.Domain.Shared
+open eShop.Domain.ConferenceManagement.Common
 
 // get
 let renderCreateConferenceView: HttpHandler =
@@ -42,10 +43,19 @@ let createConference next (ctx: HttpContext) =
         let! result = workflow cmd
 
         match result with
-        | Ok [ (ConferenceCreated event) ] ->
-            return! razorHtmlView "CreateConference" (Some form) None None next ctx
-        | Error (Validation error) ->
-            return! razorHtmlView "CreateConference" (Some form) None None next ctx
+        | Ok [ (ConferenceCreated (UnpublishedConference(info, _))) ] ->
+            let slug = info.Slug |> NotEditableUniqueSlug.value
+            let accessCode = info.AccessCode |> GeneratedAndNotEditableAccessCode.value
+            let url = sprintf "/conferences/details?slug=%s&access_code=%s" slug accessCode
+
+            return! redirectTo false url next ctx
+
+        | Error (Validation (ValidationError error)) ->
+            let modelState = ModelStateDictionary()
+            modelState.AddModelError("", error)
+
+            return! razorHtmlView "CreateConference" (Some form) None (Some modelState) next ctx
+
         | _ ->
             return! text "Unknown Error" next ctx
     }

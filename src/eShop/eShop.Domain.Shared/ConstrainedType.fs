@@ -7,9 +7,9 @@ open System.Text.RegularExpressions
 /// Return Error if input is null, empty, or length > maxLen
 let createString fieldName ctor maxLen str =
     if String.IsNullOrEmpty str then
-        Error (sprintf "%s must not be null or empty" fieldName)
+        Error (sprintf "%s: must not be null or empty" fieldName)
     else if str.Length > maxLen then
-        Error (sprintf "%s must not be more than %i chars" fieldName maxLen)
+        Error (sprintf "%s: must not be more than %i chars" fieldName maxLen)
     else
         Ok (ctor str)
 
@@ -17,7 +17,7 @@ let createStringOption fieldName ctor maxLen str =
     if String.IsNullOrEmpty str then
         Ok None
     else if str.Length > maxLen then
-        Error (sprintf "%s must not be more than %i chars" fieldName maxLen)
+        Error (sprintf "%s: must not be more than %i chars" fieldName maxLen)
     else
         Ok (Some (ctor str))
 
