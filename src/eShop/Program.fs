@@ -10,6 +10,7 @@ open Giraffe
 open eShop.Domain.ConferenceManagement.Home.Web
 open eShop.Domain.ConferenceManagement.ConferenceDetails.Web
 open eShop.Domain.ConferenceManagement.CreateConference.Web
+open eShop.Domain.ConferenceManagement.LocateConference.Web
 open eShop.Domain.ConferencePublic.DisplayConference.Web
 
 [<AutoOpen>]
@@ -40,6 +41,7 @@ let webApp =
                 route  "/conferences"            >=> renderHomeView
                 route  "/conferences/create"     >=> renderCreateConferenceView
                 route  "/conferences/details"    >=> renderConferenceDetailsView
+                route  "/conferences/locate"     >=> renderLocateConferenceView
 
                 // TODO: change route
                 route  "/conferences/display"    >=> renderDisplayConferenceView
