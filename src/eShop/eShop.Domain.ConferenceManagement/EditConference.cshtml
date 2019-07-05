@@ -1,0 +1,111 @@
+@model eShop.Domain.ConferenceManagement.ConferenceDetails.ConferenceDetailsDTO
+
+@{
+    ViewBag.Title = "Edit Conference";
+    ViewBag.PageType = "page_create-conf";
+}
+
+@section Navigation {
+    <div class="quick__login">@Model.OwnerName</div>
+}
+
+@section PageNavigation {
+    @Html.Partial("_Navigation")
+}
+
+<h1 class="page__head page__wrapper">
+  Edit conference
+</h1>
+<div class="page__content">
+  <div class="page__wrapper content-main_create-conf">
+    @using (Html.BeginForm())
+    {
+      @Html.ValidationSummary(false)
+      <div class="content-main__wrapper">
+        <div class="content-main__main">
+          <div class="content-main__header">Owner information</div>
+          <fieldset class="content">
+            <div class="form__fieldset">
+              <label>Name:</label>
+              <div class="form__field">
+                <pre>@Model.OwnerName</pre>
+              </div>
+            </div>
+            <div class="form__fieldset">
+              <label>Email address:</label>
+              <div class="form__field">
+                <pre>@Model.OwnerEmail</pre>
+              </div>
+            </div>
+            <div class="form__fieldset">
+              <label>Access Code:</label>
+              <div class="form__field">
+                <pre>@Model.AccessCode</pre>
+              </div>
+            </div>
+            <div class="g-clear"></div>
+          </fieldset>
+
+          <div class="content-main__header">Conference information</div>
+          <fieldset class="content">
+            <div class="form">
+              <div class="form__fieldset">
+                @Html.LabelFor(model => model.Name, "Title:*")
+                <div class="form__field">
+                  @Html.TextBoxFor(model => model.Name)
+                </div>
+              </div>
+              <div class="form__fieldset">
+                @Html.LabelFor(model => model.Tagline, "Tagline:")
+                <div class="form__field">
+                  @Html.TextBoxFor(model => model.Tagline)
+                </div>
+              </div>
+              <div class="form__fieldset">
+                <label>Slug/conference code:</label>
+                <div class="form__field">
+                  <pre>@Model.Slug</pre>
+                </div>
+              </div>
+              <div class="form__fieldset">
+                @Html.LabelFor(model => model.Location, "Location:*")
+                <div class="form__field">
+                  @Html.TextBoxFor(model => model.Location)
+                </div>
+              </div>
+              <div class="form__fieldset">
+                @Html.LabelFor(model => model.TwitterSearch, "Twitter search:")
+                <div class="form__field">
+                  @Html.TextBoxFor(model => model.TwitterSearch)
+                </div>
+              </div>
+              <div class="form__fieldset form__fieldset_textarea">
+                @Html.LabelFor(model => model.Description, "Description:*")
+                <div class="form__field">
+                  @Html.TextAreaFor(model => model.Description)
+                </div>
+              </div>
+              <div class="g-clear"></div>
+            </div>
+            <div class="form">
+              <div class="form__fieldset">
+                @Html.LabelFor(model => model.StartDate, "Start date:*")
+                @Html.Hidden("StartDate", Model.StartDate.ToString("yyyy/MM/dd"), new { @class="inline-datepicker" })
+              </div>
+              <div class="form__fieldset">
+                @Html.LabelFor(model => model.EndDate, "End date:*")
+                @Html.Hidden("EndDate", Model.EndDate.ToString("yyyy/MM/dd"), new { @class="inline-datepicker" })
+              </div>
+              <div class="g-clear"></div>
+            </div>
+          </fieldset>
+          <div class="nav content-main__nav">
+            <a class="nav__left" href="/conferences/details?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]">Cancel</a>
+            <button type="submit" class="nav__right">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="g-clear"></div>
+    }
+  </div>
+</div>

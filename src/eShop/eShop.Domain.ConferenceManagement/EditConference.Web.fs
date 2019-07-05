@@ -1,15 +1,14 @@
-module eShop.Domain.ConferenceManagement.ConferenceDetails.Web
+module eShop.Domain.ConferenceManagement.EditConference.Web
 
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Microsoft.AspNetCore.Http
 open Giraffe
 open Giraffe.Razor
 open Npgsql
-open eShop.Infrastructure
 open eShop.Domain.ConferenceManagement
+open eShop.Domain.ConferenceManagement.ConferenceDetails
 
-// get
-let renderConferenceDetailsView next (ctx: HttpContext) =
+let renderEditConferenceView next (ctx: HttpContext) =
     task {
         let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"
         use connection = new NpgsqlConnection(connStr)
@@ -20,7 +19,7 @@ let renderConferenceDetailsView next (ctx: HttpContext) =
             match dto with
             | Some dto ->
                 let viewData = dict [("Slug", box dto.Slug); ("AccessCode", box dto.AccessCode)]
-                return! razorHtmlView "ConferenceDetails" (Some dto) (Some viewData) None next ctx
+                return! razorHtmlView "EditConference" (Some dto) (Some viewData) None next ctx
 
             | None ->
                 return! text "not found" next ctx

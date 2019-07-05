@@ -10,6 +10,7 @@ open Giraffe
 open eShop.Domain.ConferenceManagement.Home.Web
 open eShop.Domain.ConferenceManagement.ConferenceDetails.Web
 open eShop.Domain.ConferenceManagement.CreateConference.Web
+open eShop.Domain.ConferenceManagement.EditConference.Web
 open eShop.Domain.ConferenceManagement.LocateConference.Web
 open eShop.Domain.ConferencePublic.DisplayConference.Web
 
@@ -42,6 +43,7 @@ let webApp =
                 route  "/conferences/create"     >=> renderCreateConferenceView
                 route  "/conferences/details"    >=> renderConferenceDetailsView
                 route  "/conferences/locate"     >=> renderLocateConferenceView
+                route  "/conferences/edit"       >=> renderEditConferenceView
 
                 // TODO: change route
                 route  "/conferences/display"    >=> renderDisplayConferenceView
@@ -50,6 +52,7 @@ let webApp =
             choose [
                 route  "/conferences/create"     >=> createConference
                 route  "/conferences/locate"     >=> locateConference
+                route  "/conferences/edit"       >=> locateConference
             ]
         text "Not Found" |> RequestErrors.notFound ]
 
