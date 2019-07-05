@@ -1,27 +1,10 @@
 module eShop.Domain.ConferenceManagement.CreateConference.Db
 
-open System
 open eShop.Infrastructure
 open eShop.Domain.Shared
 open eShop.Domain.ConferenceManagement.Common
 
 module InsertConferenceIntoDb =
-
-    type ConferenceDbDTO =
-        { Id: Guid
-          Name: string
-          Description: string
-          Location: string
-          Tagline: string
-          Slug: string
-          TwitterSearch: string
-          StartDate: DateTime
-          EndDate: DateTime
-          AccessCode: string
-          OwnerName: string
-          OwnerEmail: string
-          CanDeleteSeat: bool
-          IsPublished: bool }
 
     module ConferenceDbDTO =
 
@@ -31,20 +14,20 @@ module InsertConferenceIntoDb =
                 | PublisedConference info -> info, true, false
                 | UnpublishedConference (info, canDeleteSeat) -> info, false, canDeleteSeat
 
-            { Id = info.Id |> ConferenceId.value
-              Name = info.Name |> String250.value
-              Description = info.Description |> NotEmptyString.value
-              Location = info.Location |> String250.value
-              Tagline = info.Tagline |> Option.map String250.value |> Option.defaultValue null
-              Slug = info.Slug |> NotEditableUniqueSlug.value
-              TwitterSearch = info.TwitterSearch |> Option.map String250.value |> Option.defaultValue null
-              StartDate = info.StartDate |> Date.value
-              EndDate = info.EndDate |> Date.value
-              AccessCode = info.AccessCode |> GeneratedAndNotEditableAccessCode.value
-              OwnerName = info.Owner.Name |> String250.value
-              OwnerEmail = info.Owner.Email |> EmailAddress.value
-              CanDeleteSeat = canDeleteSeat
-              IsPublished = publised }
+            {| Id = info.Id |> ConferenceId.value
+               Name = info.Name |> String250.value
+               Description = info.Description |> NotEmptyString.value
+               Location = info.Location |> String250.value
+               Tagline = info.Tagline |> Option.map String250.value |> Option.defaultValue null
+               Slug = info.Slug |> NotEditableUniqueSlug.value
+               TwitterSearch = info.TwitterSearch |> Option.map String250.value |> Option.defaultValue null
+               StartDate = info.StartDate |> Date.value
+               EndDate = info.EndDate |> Date.value
+               AccessCode = info.AccessCode |> GeneratedAndNotEditableAccessCode.value
+               OwnerName = info.Owner.Name |> String250.value
+               OwnerEmail = info.Owner.Email |> EmailAddress.value
+               CanDeleteSeat = canDeleteSeat
+               IsPublished = publised |}
 
     let execute connection conference =
         let sql =
@@ -99,4 +82,5 @@ module CheckSlugExists =
                         where slug = @Slug
                    )"
         let slug = slug |> NotEditableUniqueSlug.value
-        Db.mapParameterizedQuerySingleAsync<bool> connection sql (Map ["Slug", slug])
+        let param = {| Slug = slug |}
+        Db.parameterizedQuerySingleAsync<bool> connection sql param

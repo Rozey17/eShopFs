@@ -16,7 +16,7 @@
     <Compile Include="eShop.Infrastructure.FSharp\AsyncResult.fs" />
     <Compile Include="eShop.Infrastructure.Db\Db.fs" />
     <Compile Include="eShop.Domain.Shared\ConstrainedType.fs" />
-    <Compile Include="eShop.Domain.Shared\Types.fs" />
+    <Compile Include="eShop.Domain.Shared\CommonTypes.fs" />
     <Compile Include="eShop.Domain.Shared\Command.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\_Layout.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="eShop.Domain.ConferenceManagement\_ViewStart.cshtml" CopyToOutputDirectory="PreserveNewest" />
