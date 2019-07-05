@@ -49,6 +49,7 @@ type Conference =
 
 module Date =
     let value (Date v) = v
+
     let create fieldName dt =
         if dt < DateTime.Now then
             Error (sprintf "%s must not happen in the past" fieldName)
@@ -59,11 +60,13 @@ module Date =
 
 module ConferenceId =
     let value (ConferenceId v) = v
+
     let generate () =
         ConferenceId (Guid.NewGuid())
 
 module UniqueSlug =
     let value (UniqueSlug v) = v
+
     let create fieldName str =
         if String.IsNullOrEmpty str then
             Error (sprintf "%s must not be null or empty" fieldName)
@@ -76,16 +79,25 @@ module UniqueSlug =
 
 module AccessCode =
     let value (AccessCode v) = v
+
     let generate () =
         AccessCode "abcdef" // TODO: replace real logic
 
 module NotEditableUniqueSlug =
     let value (NotEditable (UniqueSlug v)) = v
+
     let create fieldName str =
         UniqueSlug.create fieldName str
         |> Result.map NotEditable
 
 module GeneratedAndNotEditableAccessCode =
     let value (GeneratedAndNotEditable (AccessCode v)) = v
+
     let generate () =
         AccessCode.generate() |> GeneratedAndNotEditable
+
+    let create fieldName (str: string) =
+        if str.Length <> 6 then
+            Error (sprintf "%s has invalid format" fieldName)
+        else
+            Ok (GeneratedAndNotEditable (AccessCode str))

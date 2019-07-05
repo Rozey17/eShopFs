@@ -7,6 +7,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
+open eShop.Domain.ConferenceManagement.ConferenceDetails.Web
 open eShop.Domain.ConferenceManagement.CreateConference.Web
 open eShop.Domain.ConferencePublic.DisplayConference.Web
 
@@ -35,14 +36,15 @@ let webApp =
     choose [
         GET >=>
             choose [
-                route  "/conferences/create" >=> renderCreateConferenceView
+                route  "/conferences/create"     >=> renderCreateConferenceView
+                route  "/conferences/details"    >=> renderConferenceDetailsView
 
                 // TODO: change route
-                route  "/conferences/display" >=> renderDisplayConferenceView
+                route  "/conferences/display"    >=> renderDisplayConferenceView
             ]
         POST >=>
             choose [
-                route  "/conferences/create" >=> createConference
+                route  "/conferences/create"     >=> createConference
             ]
         text "Not Found" |> RequestErrors.notFound ]
 

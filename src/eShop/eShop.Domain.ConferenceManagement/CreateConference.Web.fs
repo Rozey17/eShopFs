@@ -10,7 +10,7 @@ open Npgsql
 open eShop.Domain.Shared
 
 // get
-let renderCreateConferenceView next ctx =
+let renderCreateConferenceView: HttpHandler =
     let form =
         { OwnerName = ""
           OwnerEmail = ""
@@ -23,7 +23,7 @@ let renderCreateConferenceView next ctx =
           StartDate = DateTime.Now.AddDays(1.)
           EndDate = DateTime.Now.AddDays(2.) }
 
-    razorHtmlView "CreateConference" (Some form) None None next ctx
+    razorHtmlView "CreateConference" (Some form) None None
 
 // post
 let createConference next (ctx: HttpContext) =

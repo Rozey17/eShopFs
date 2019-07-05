@@ -6,10 +6,6 @@ open eShop.Domain.ConferenceManagement.Common
 
 module ReadConferenceDetails =
 
-    type QueryParam =
-        { Slug: string
-          AccessCode: string }
-
     type QueryResult =
         { name: string
           description: string
@@ -44,7 +40,7 @@ module ReadConferenceDetails =
               from conference
              where slug = @Slug
                and access_code = @AccessCode"
-        let param = { Slug = slug; AccessCode = accessCode }
+        let param = {| Slug = slug; AccessCode = accessCode |}
 
         async {
             let! result = Db.tryParameterizedQuerySingleAsync<QueryResult> connection sql param
