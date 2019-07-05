@@ -49,6 +49,7 @@ let webApp =
         POST >=>
             choose [
                 route  "/conferences/create"     >=> createConference
+                route  "/conferences/locate"     >=> locateConference
             ]
         text "Not Found" |> RequestErrors.notFound ]
 

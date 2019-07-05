@@ -6,6 +6,7 @@ open eShop.Domain.ConferenceManagement.Common
 
 module ReadConferenceDetails =
 
+    [<CLIMutable>]
     type QueryResult =
         { name: string
           description: string
@@ -45,8 +46,6 @@ module ReadConferenceDetails =
         async {
             let! result = Db.tryParameterizedQuerySingleAsync<QueryResult> connection sql param
             match result with
-            | None ->
-                return None
             | Some record ->
                 let dto =
                     { Name = record.name
@@ -61,6 +60,8 @@ module ReadConferenceDetails =
                       OwnerName = record.owner_name
                       OwnerEmail = record.owner_email
                       IsPublished = record.is_published }
-
                 return Some dto
+
+            | None ->
+                return None
         }

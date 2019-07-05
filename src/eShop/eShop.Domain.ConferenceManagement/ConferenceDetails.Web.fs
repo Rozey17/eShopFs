@@ -8,7 +8,7 @@ open Npgsql
 open eShop.Infrastructure
 open eShop.Domain.ConferenceManagement.Common
 
-let parseParams slugStr accessCodeStr =
+let validateParams slugStr accessCodeStr =
     result {
         let! slug = slugStr |> NotEditableUniqueSlug.create "Slug"
         let! accessCode = accessCodeStr |> GeneratedAndNotEditableAccessCode.create "AccessCode"
@@ -25,7 +25,7 @@ let renderConferenceDetailsView next (ctx: HttpContext) =
         let slugStr = ctx.TryGetQueryStringValue "slug" |> Option.defaultValue ""
         let accessCodeStr = ctx.TryGetQueryStringValue "access_code" |> Option.defaultValue ""
 
-        match parseParams slugStr accessCodeStr with
+        match validateParams slugStr accessCodeStr with
         | Ok (slug, accessCode) ->
             let! dto = Db.ReadConferenceDetails.query connection slug accessCode
             match dto with
