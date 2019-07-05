@@ -39,7 +39,6 @@
     *:first-child+html .content-main_register .content-main__main {padding: 0; }
     .page_create-conf .content-main__main,
     .content-main_register .content-main__main {
-        float: left;
         margin: 0;
         width: 700px;
         }
