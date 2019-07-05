@@ -12,8 +12,9 @@ let validateParams slugStr accessCodeStr =
     result {
         let! slug = slugStr |> NotEditableUniqueSlug.create "Slug"
         let! accessCode = accessCodeStr |> GeneratedAndNotEditableAccessCode.create "AccessCode"
+        let validatedParams = {| Slug = slug; AccessCode = accessCode |}
 
-        return (slug, accessCode)
+        return validatedParams
     }
 
 // get
@@ -26,14 +27,16 @@ let renderConferenceDetailsView next (ctx: HttpContext) =
         let accessCodeStr = ctx.TryGetQueryStringValue "access_code" |> Option.defaultValue ""
 
         match validateParams slugStr accessCodeStr with
-        | Ok (slug, accessCode) ->
-            let! dto = Db.ReadConferenceDetails.query connection slug accessCode
+        | Ok validatedParams ->
+            let! dto = Db.ReadConferenceDetails.query connection validatedParams.Slug validatedParams.AccessCode
             match dto with
             | Some dto ->
                 let viewData = dict [("Slug", box dto.Slug); ("AccessCode", box dto.AccessCode)]
                 return! razorHtmlView "ConferenceDetails" (Some dto) (Some viewData) None next ctx
+
             | None ->
                 return! text "not found" next ctx
+
         | Error _ ->
             return! text "bad request" next ctx
     }
