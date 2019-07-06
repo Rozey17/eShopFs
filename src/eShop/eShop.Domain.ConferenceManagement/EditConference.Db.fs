@@ -1,4 +1,4 @@
-module eShop.Domain.ConferenceManagement.ConferenceDetails.Db
+module eShop.Domain.ConferenceManagement.EditConference.Db
 
 open System
 open eShop.Infrastructure

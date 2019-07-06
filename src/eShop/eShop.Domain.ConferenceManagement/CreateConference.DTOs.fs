@@ -15,7 +15,7 @@ type ConferenceFormDTO =
       StartDate: DateTime
       EndDate: DateTime }
 
-module internal ConferenceFormDTO =
+module ConferenceFormDTO =
 
     /// Used when importing an Conference Form from outside world into the domain
     let toUnvalidatedConferenceInfo (dto: ConferenceFormDTO) =

@@ -31,15 +31,19 @@
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Db.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Web.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\CreateConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
-    <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.DTOs.fs" />
-    <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Db.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\EditConference.DTOs.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\EditConference.Db.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\EditConference.Web.fs" />
+    <Content Include="eShop.Domain.ConferenceManagement\EditConference.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="eShop.Domain.ConferenceManagement\UpdateConference.PublicTypes.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\UpdateConference.Impl.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\UpdateConference.DTOs.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\UpdateConference.Db.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\UpdateConference.Web.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Web.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\ConferenceDetails.cshtml" CopyToOutputDirectory="PreserveNewest" />
-    <Compile Include="eShop.Domain.ConferenceManagement\EditConference.PublicTypes.fs" />
-    <Compile Include="eShop.Domain.ConferenceManagement\EditConference.Impl.fs" />
-    <Compile Include="eShop.Domain.ConferenceManagement\EditConference.DTOs.fs" />
-    <Compile Include="eShop.Domain.ConferenceManagement\EditConference.Web.fs" />
-    <Content Include="eShop.Domain.ConferenceManagement\EditConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.ConferenceManagement\LocateConference.DTOs.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\LocateConference.Db.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\LocateConference.Web.fs" />

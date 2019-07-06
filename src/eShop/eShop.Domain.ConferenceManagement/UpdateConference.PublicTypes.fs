@@ -1,4 +1,4 @@
-namespace eShop.Domain.ConferenceManagement.EditConference
+namespace eShop.Domain.ConferenceManagement.UpdateConference
 
 open System
 open eShop.Infrastructure
@@ -19,7 +19,16 @@ type UnvalidatedConferenceInfo =
 type UpdateConferenceCommand = Command<UnvalidatedConferenceInfo>
 
 // success output
-type ConferenceUpdated = Conference
+type ValidatedConferenceInfo =
+    { Id: ConferenceId
+      Name: String250
+      Description: NotEmptyString
+      Location: String250
+      Tagline: String250 option
+      TwitterSearch: String250 option
+      StartDate: Date
+      EndDate: Date }
+type ConferenceUpdated = ValidatedConferenceInfo
 type UpdateConferenceEvent =
     | ConferenceUpdated of ConferenceUpdated
 

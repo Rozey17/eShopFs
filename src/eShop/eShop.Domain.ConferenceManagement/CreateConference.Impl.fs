@@ -8,7 +8,7 @@ open eShop.Domain.ConferenceManagement.Common
 // types
 // -----
 
-// validate
+// step: validate
 type ValidatedConferenceInfo =
     { Name: String250
       Description: NotEmptyString
@@ -42,10 +42,10 @@ type ValidateConferenceInfo =
      -> UnvalidatedConferenceInfo                              // input
      -> AsyncResult<ValidatedConferenceInfo, ValidationError>  // output
 
-// insert
+// step: insert into db
 type InsertConferenceIntoDb = Conference -> Async<unit>
 
-// create events
+// step: create events
 type CreateEvents = Conference -> CreateConferenceEvent list
 
 // -----

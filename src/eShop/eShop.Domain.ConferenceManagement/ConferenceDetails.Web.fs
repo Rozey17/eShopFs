@@ -5,8 +5,8 @@ open Microsoft.AspNetCore.Http
 open Giraffe
 open Giraffe.Razor
 open Npgsql
-open eShop.Infrastructure
-open eShop.Domain.ConferenceManagement
+open eShop.Domain.ConferenceManagement.EditConference
+open eShop.Domain.ConferenceManagement.Web
 
 // get
 let renderConferenceDetailsView next (ctx: HttpContext) =
@@ -14,7 +14,7 @@ let renderConferenceDetailsView next (ctx: HttpContext) =
         let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"
         use connection = new NpgsqlConnection(connStr)
 
-        match Web.Common.validateParam ctx with
+        match WebCommon.validateParam ctx with
         | Ok (slug, accessCode) ->
             let! dto = Db.ReadConferenceDetails.query connection slug accessCode
             match dto with

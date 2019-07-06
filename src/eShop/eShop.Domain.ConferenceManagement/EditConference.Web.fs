@@ -5,7 +5,7 @@ open Microsoft.AspNetCore.Http
 open Giraffe
 open Giraffe.Razor
 open Npgsql
-open eShop.Domain.ConferenceManagement
+open eShop.Domain.ConferenceManagement.Web
 
 // get
 let renderEditConferenceView next (ctx: HttpContext) =
@@ -13,29 +13,17 @@ let renderEditConferenceView next (ctx: HttpContext) =
         let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"
         use connection = new NpgsqlConnection(connStr)
 
-        match Web.Common.validateParam ctx with
+        match WebCommon.validateParam ctx with
         | Ok (slug, accessCode) ->
-            let! result = ConferenceDetails.Db.ReadConferenceDetails.query connection slug accessCode
+            let! result = Db.ReadConferenceDetails.query connection slug accessCode
             match result with
             | Some details ->
-                let form = ConferenceFormDTO.fromConferenceDetailsDTO details
-                let viewData = dict [("Slug", box form.Slug); ("AccessCode", box form.AccessCode)]
-                return! razorHtmlView "EditConference" (Some form) (Some viewData) None next ctx
+                let viewData = dict [("Slug", box details.Slug); ("AccessCode", box details.AccessCode)]
+                return! razorHtmlView "EditConference" (Some details) (Some viewData) None next ctx
 
             | None ->
                 return! text "not found" next ctx
 
         | Error _ ->
             return! text "bad request" next ctx
-    }
-
-// post
-let updateConference next (ctx: HttpContext) =
-    task {
-        let! form = ctx.BindFormAsync<ConferenceFormDTO>()
-        printfn "%A" form
-
-        let viewData = dict [("Slug", box form.Slug); ("AccessCode", box form.AccessCode)]
-
-        return! razorHtmlView "EditConference" (Some form) (Some viewData) None next ctx
     }

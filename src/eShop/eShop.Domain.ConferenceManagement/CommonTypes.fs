@@ -64,6 +64,12 @@ module ConferenceId =
     let generate () =
         ConferenceId (Guid.NewGuid())
 
+    let create fieldName guid =
+        if guid = Guid.Empty then
+            Error (sprintf "%s: must not be empty" fieldName)
+        else
+            Ok (ConferenceId guid)
+
 module UniqueSlug =
     let value (UniqueSlug v) = v
 
