@@ -1,4 +1,4 @@
-namespace eShop.Domain.ConferenceManagement.CreateConference
+namespace eShop.Domain.ConferenceManagement.EditConference
 
 open System
 open eShop.Infrastructure
@@ -7,9 +7,7 @@ open eShop.Domain.ConferenceManagement.Common
 
 // input
 type UnvalidatedConferenceInfo =
-    { OwnerName: string
-      OwnerEmail: string
-      Slug: string
+    { Id: Guid
       Name: string
       Tagline: string
       Location: string
@@ -18,18 +16,18 @@ type UnvalidatedConferenceInfo =
       StartDate: DateTime
       EndDate: DateTime }
 
-type CreateConferenceCommand = Command<UnvalidatedConferenceInfo>
+type UpdateConferenceCommand = Command<UnvalidatedConferenceInfo>
 
 // success output
-type ConferenceCreated = Conference
-type CreateConferenceEvent =
-    | ConferenceCreated of ConferenceCreated
+type ConferenceUpdated = Conference
+type UpdateConferenceEvent =
+    | ConferenceUpdated of ConferenceUpdated
 
 // error output
 type ValidationError = ValidationError of string
-type CreateConferenceError =
+type UpdateConferenceError =
     | Validation of ValidationError
 
 // workflow
-type CreateConference =
-    CreateConferenceCommand -> AsyncResult<CreateConferenceEvent list, CreateConferenceError>
+type UpdateConference =
+    UpdateConferenceCommand -> AsyncResult<UpdateConferenceEvent list, UpdateConferenceError>

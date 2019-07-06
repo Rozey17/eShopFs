@@ -3,7 +3,8 @@ namespace eShop.Domain.ConferenceManagement.ConferenceDetails
 open System
 
 type ConferenceDetailsDTO =
-    { Name: string
+    { Id: Guid
+      Name: string
       Description: string
       Location: string
       Tagline: string

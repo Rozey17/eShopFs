@@ -52,7 +52,7 @@ let webApp =
             choose [
                 route  "/conferences/create"     >=> createConference
                 route  "/conferences/locate"     >=> locateConference
-                route  "/conferences/edit"       >=> locateConference
+                route  "/conferences/edit"       >=> updateConference
             ]
         text "Not Found" |> RequestErrors.notFound ]
 

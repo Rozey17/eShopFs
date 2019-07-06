@@ -22,6 +22,7 @@ let validateForm (form: LocateFormDTO) =
 
         return validatedForm
     }
+
 // post
 let locateConference next (ctx: HttpContext) =
     task {

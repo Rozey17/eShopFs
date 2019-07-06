@@ -1,4 +1,4 @@
-@model eShop.Domain.ConferenceManagement.ConferenceDetails.ConferenceDetailsDTO
+@model eShop.Domain.ConferenceManagement.EditConference.ConferenceFormDTO
 
 @{
     ViewBag.Title = "Edit Conference";
@@ -23,6 +23,7 @@
       @Html.ValidationSummary(false)
       <div class="content-main__wrapper">
         <div class="content-main__main">
+          <input type="hidden" name="Id" value="@Model.Id"/>
           <div class="content-main__header">Owner information</div>
           <fieldset class="content">
             <div class="form__fieldset">
@@ -50,7 +51,7 @@
           <fieldset class="content">
             <div class="form">
               <div class="form__fieldset">
-                @Html.LabelFor(model => model.Name, "Title:*")
+                @Html.LabelFor(model => model.Name, "Name:*")
                 <div class="form__field">
                   @Html.TextBoxFor(model => model.Name)
                 </div>
@@ -90,11 +91,11 @@
             <div class="form">
               <div class="form__fieldset">
                 @Html.LabelFor(model => model.StartDate, "Start date:*")
-                @Html.Hidden("StartDate", Model.StartDate.ToString("yyyy/MM/dd"), new { @class="inline-datepicker" })
+                @Html.Hidden("StartDate", Model.StartDate.ToString("yyyy/MM/dd"), new {@class = "inline-datepicker"})
               </div>
               <div class="form__fieldset">
                 @Html.LabelFor(model => model.EndDate, "End date:*")
-                @Html.Hidden("EndDate", Model.EndDate.ToString("yyyy/MM/dd"), new { @class="inline-datepicker" })
+                @Html.Hidden("EndDate", Model.EndDate.ToString("yyyy/MM/dd"), new {@class = "inline-datepicker"})
               </div>
               <div class="g-clear"></div>
             </div>

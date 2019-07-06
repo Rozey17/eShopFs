@@ -35,6 +35,9 @@
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Db.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Web.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\ConferenceDetails.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="eShop.Domain.ConferenceManagement\EditConference.PublicTypes.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\EditConference.Impl.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\EditConference.DTOs.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\EditConference.Web.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\EditConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.ConferenceManagement\LocateConference.DTOs.fs" />

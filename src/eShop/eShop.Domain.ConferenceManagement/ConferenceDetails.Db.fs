@@ -8,7 +8,8 @@ module ReadConferenceDetails =
 
     [<CLIMutable>]
     type QueryResult =
-        { name: string
+        { id: Guid
+          name: string
           description: string
           location: string
           tagline: string
@@ -26,7 +27,8 @@ module ReadConferenceDetails =
         let accessCode = accessCode |> GeneratedAndNotEditableAccessCode.value
 
         let sql = @"
-            select name,
+            select id,
+                   name,
                    description,
                    location,
                    tagline,
@@ -48,7 +50,8 @@ module ReadConferenceDetails =
             match result with
             | Some record ->
                 let dto =
-                    { Name = record.name
+                    { Id = record.id
+                      Name = record.name
                       Description = record.description
                       Location = record.location
                       Tagline = record.tagline
