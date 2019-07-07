@@ -1,4 +1,4 @@
-module eShop.Domain.Shared.ConstrainedType
+module eShop.Domain.Common.ConstrainedType
 
 open System
 open System.Text.RegularExpressions

@@ -7,7 +7,7 @@ open eShop.Domain.ConferenceManagement.Common
 module ReadConferenceDetails =
 
     [<CLIMutable>]
-    type QueryResult =
+    type ConferenceDetailsDbDTO =
         { id: Guid
           name: string
           description: string
@@ -20,6 +20,7 @@ module ReadConferenceDetails =
           access_code: string
           owner_name: string
           owner_email: string
+          can_delete_seat: bool
           is_published: bool }
 
     let query connection slug accessCode =
@@ -39,6 +40,7 @@ module ReadConferenceDetails =
                    access_code,
                    owner_name,
                    owner_email,
+                   can_delete_seat,
                    is_published
               from conference
              where slug = @Slug
@@ -46,7 +48,7 @@ module ReadConferenceDetails =
         let param = {| Slug = slug; AccessCode = accessCode |}
 
         async {
-            let! result = Db.tryParameterizedQuerySingleAsync<QueryResult> connection sql param
+            let! result = Db.tryParameterizedQuerySingleAsync<ConferenceDetailsDbDTO> connection sql param
             match result with
             | Some record ->
                 let dto =
@@ -62,6 +64,7 @@ module ReadConferenceDetails =
                       AccessCode = record.access_code
                       OwnerName = record.owner_name
                       OwnerEmail = record.owner_email
+                      CanDeleteSeat = record.can_delete_seat
                       IsPublished = record.is_published }
                 return Some dto
 

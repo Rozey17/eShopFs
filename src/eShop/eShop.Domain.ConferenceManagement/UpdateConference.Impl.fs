@@ -1,7 +1,7 @@
 module eShop.Domain.ConferenceManagement.UpdateConference.Impl
 
 open eShop.Infrastructure
-open eShop.Domain.Shared
+open eShop.Domain.Common
 open eShop.Domain.ConferenceManagement.Common
 
 // -----
@@ -27,7 +27,7 @@ let validateConferenceInfo: ValidateConferenceInfo =
         result {
             let! id =
                 unvalidatedInfo.Id
-                |> ConferenceId.create "Id"
+                |> ConferenceId.create
                 |> Result.mapError ValidationError
             let! name =
                 unvalidatedInfo.Name

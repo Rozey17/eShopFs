@@ -15,16 +15,17 @@
     <Compile Include="eShop.Infrastructure.FSharp\Async.fs" />
     <Compile Include="eShop.Infrastructure.FSharp\AsyncResult.fs" />
     <Compile Include="eShop.Infrastructure.Db\Db.fs" />
-    <Compile Include="eShop.Domain.Shared\ConstrainedType.fs" />
-    <Compile Include="eShop.Domain.Shared\CommonTypes.fs" />
-    <Compile Include="eShop.Domain.Shared\Command.fs" />
+    <Compile Include="eShop.Domain.Common\ConstrainedType.fs" />
+    <Compile Include="eShop.Domain.Common\CommonTypes.fs" />
+    <Compile Include="eShop.Domain.Common\Command.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\_Layout.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="eShop.Domain.ConferenceManagement\_ViewStart.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="eShop.Domain.ConferenceManagement\_Navigation.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.ConferenceManagement\CommonTypes.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\CommonDb.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\CommonWeb.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\Home.Web.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\Home.cshtml" CopyToOutputDirectory="PreserveNewest" />
-    <Compile Include="eShop.Domain.ConferenceManagement\CommonWeb.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.PublicTypes.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.Impl.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\CreateConference.DTOs.fs" />
@@ -41,6 +42,7 @@
     <Compile Include="eShop.Domain.ConferenceManagement\UpdateConference.Impl.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\UpdateConference.DTOs.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\UpdateConference.Db.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\PublishConference.PublicTypes.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\UpdateConference.Web.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Web.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\ConferenceDetails.cshtml" CopyToOutputDirectory="PreserveNewest" />

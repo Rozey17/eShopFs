@@ -3,7 +3,7 @@ namespace eShop.Domain.ConferenceManagement.Common
 open System
 open System.Text.RegularExpressions
 open eShop.Infrastructure
-open eShop.Domain.Shared
+open eShop.Domain.Common
 
 /// Constrained range from DateTime.Now to DateTime.Now + 1 year
 type Date = private Date of DateTime
@@ -18,6 +18,7 @@ module Date =
         else
             Ok (Date dt)
 
+/// Constrained start date must come before end date
 type StartAndEnd = private StartAndEnd of startDate:Date * endDate:Date
 module StartAndEnd =
     let startDateValue (StartAndEnd (startDate, _)) = startDate |> Date.value
@@ -41,13 +42,13 @@ module ConferenceId =
     let generate () =
         ConferenceId (Guid.NewGuid())
 
-    let create fieldName guid =
+    let create guid =
         if guid = Guid.Empty then
-            Error (sprintf "%s: must not be empty" fieldName)
+            Error "Id: must not be empty"
         else
             Ok (ConferenceId guid)
 
-/// Slug has a specific format, no more than 250 chars, not null
+/// Unique slug has a specific format, no more than 250 chars, not null
 type UniqueSlug = private UniqueSlug of string
 module UniqueSlug =
     let value (UniqueSlug v) = v

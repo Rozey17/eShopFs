@@ -1,4 +1,4 @@
-namespace eShop.Domain.Shared
+namespace eShop.Domain.Common
 
 open System
 

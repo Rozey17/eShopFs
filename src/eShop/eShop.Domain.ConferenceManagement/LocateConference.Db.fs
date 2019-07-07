@@ -1,7 +1,7 @@
 module eShop.Domain.ConferenceManagement.LocateConference.Db
 
 open eShop.Infrastructure
-open eShop.Domain.Shared
+open eShop.Domain.Common
 open eShop.Domain.ConferenceManagement.Common
 
 module ReadConferenceByEmailAndAccessCode =

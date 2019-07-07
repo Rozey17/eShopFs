@@ -7,7 +7,7 @@ open Giraffe
 open Giraffe.Razor
 open Npgsql
 open eShop.Infrastructure
-open eShop.Domain.Shared
+open eShop.Domain.Common
 open eShop.Domain.ConferenceManagement.Common
 
 // get

@@ -2,7 +2,7 @@ namespace eShop.Domain.ConferenceManagement.UpdateConference
 
 open System
 open eShop.Infrastructure
-open eShop.Domain.Shared
+open eShop.Domain.Common
 open eShop.Domain.ConferenceManagement.Common
 
 // input
