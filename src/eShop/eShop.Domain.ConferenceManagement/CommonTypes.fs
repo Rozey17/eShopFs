@@ -111,10 +111,8 @@ type ConferenceInfo =
       AccessCode: NotEditable<Generated<AccessCode>>
       Owner: NotEditable<OwnerInfo> }
 
-type WasEverPublished = bool
-
 type PublishedConference = PublishedConference of ConferenceInfo
-type UnpublishedConference = UnpublishedConference of info:ConferenceInfo * wasEverPublished:WasEverPublished
+type UnpublishedConference = UnpublishedConference of info:ConferenceInfo * wasEverPublished:bool
 
 type Conference =
     | Unpublished of UnpublishedConference
