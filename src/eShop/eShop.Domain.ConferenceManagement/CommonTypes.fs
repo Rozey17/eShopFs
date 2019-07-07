@@ -2,51 +2,11 @@ namespace eShop.Domain.ConferenceManagement.Common
 
 open System
 open System.Text.RegularExpressions
+open eShop.Infrastructure
 open eShop.Domain.Shared
 
 /// Constrained range from DateTime.Now to DateTime.Now + 1 year
 type Date = private Date of DateTime
-
-/// Unique id of a conference
-type ConferenceId = private ConferenceId of Guid
-
-/// Slug has a specific format, no more than 250 chars, not null
-type UniqueSlug = private UniqueSlug of string
-
-/// Access code is a generated string of 6 chars
-type AccessCode = private AccessCode of string
-
-/// Once created, it can not be edited
-type NotEditable<'a> = NotEditable of 'a
-
-/// It is generated and can not be edited
-type GeneratedAndNotEditable<'a> = GeneratedAndNotEditable of 'a
-
-/// Info of conference owner
-type OwnerInfo =
-    { Name: String250
-      Email: EmailAddress }
-
-/// Conference info
-type ConferenceInfo =
-    { Id: ConferenceId
-      Name: String250
-      Description: NotEmptyString
-      Location: String250
-      Tagline: String250 option
-      Slug: NotEditable<UniqueSlug>
-      TwitterSearch: String250 option
-      StartDate: Date
-      EndDate: Date
-      AccessCode: GeneratedAndNotEditable<AccessCode>
-      Owner: OwnerInfo }
-
-type WasNeverPublished = bool
-
-type Conference =
-    | UnpublishedConference of info:ConferenceInfo * canDeleteSeat:WasNeverPublished
-    | PublisedConference of info:ConferenceInfo
-
 module Date =
     let value (Date v) = v
 
@@ -58,6 +18,23 @@ module Date =
         else
             Ok (Date dt)
 
+type StartAndEnd = private StartAndEnd of startDate:Date * endDate:Date
+module StartAndEnd =
+    let startDateValue (StartAndEnd (startDate, _)) = startDate |> Date.value
+    let endDateValue (StartAndEnd (_, endDate)) = endDate |> Date.value
+
+    let create (startDate, endDate) =
+        result {
+            let! startDate = startDate |> Date.create "Start Date"
+            let! endDate = endDate |> Date.create "End Date"
+            do! if startDate > endDate then Error "StartDate can not come after EndDate"
+                else Ok ()
+
+            return StartAndEnd (startDate, endDate)
+        }
+
+/// Unique id of a conference
+type ConferenceId = private ConferenceId of Guid
 module ConferenceId =
     let value (ConferenceId v) = v
 
@@ -70,40 +47,71 @@ module ConferenceId =
         else
             Ok (ConferenceId guid)
 
+/// Slug has a specific format, no more than 250 chars, not null
+type UniqueSlug = private UniqueSlug of string
 module UniqueSlug =
     let value (UniqueSlug v) = v
 
-    let create fieldName str =
+    let create str =
         if String.IsNullOrEmpty str then
-            Error (sprintf "%s: must not be null or empty" fieldName)
+            Error "Slug: must not be null or empty"
         else if str.Length > 250 then
-            Error (sprintf "%s: must not be more than 250 chars" fieldName)
+            Error "Slug: must not be more than 250 chars"
         else if not (Regex.IsMatch(str, @"^\w+$")) then
-            Error (sprintf "%s: has invalid format" fieldName)
+            Error "Slug: has invalid format"
         else
             Ok (UniqueSlug str)
 
+/// Access code is a generated string of 6 chars
+type AccessCode = private AccessCode of string
 module AccessCode =
     let value (AccessCode v) = v
 
     let generate () =
         AccessCode "abcdef" // TODO: replace real logic
 
+    let create (str: string) =
+        if str.Length <> 6 then
+            Error "Access Code: has invalid format"
+        else
+            Ok (AccessCode str)
+
+/// Once created, it can not be edited
+type NotEditable<'a> = NotEditable of 'a
+
+/// It is generated
+type Generated<'a> = Generated of 'a
+
 module NotEditableUniqueSlug =
     let value (NotEditable (UniqueSlug v)) = v
 
-    let create fieldName str =
-        UniqueSlug.create fieldName str
-        |> Result.map NotEditable
-
 module GeneratedAndNotEditableAccessCode =
-    let value (GeneratedAndNotEditable (AccessCode v)) = v
+    let value (NotEditable (Generated (AccessCode v))) = v
 
-    let generate () =
-        AccessCode.generate() |> GeneratedAndNotEditable
+/// Info of conference owner
+type OwnerInfo =
+    { Name: String250
+      Email: EmailAddress }
 
-    let create fieldName (str: string) =
-        if str.Length <> 6 then
-            Error (sprintf "%s: has invalid format" fieldName)
-        else
-            Ok (GeneratedAndNotEditable (AccessCode str))
+module NotEditableOwnerInfo =
+    let name (NotEditable { Name = name }) = name |> String250.value
+    let email (NotEditable { Email = email }) = email |> EmailAddress.value
+
+/// Conference info
+type ConferenceInfo =
+    { Id: ConferenceId
+      Name: String250
+      Description: NotEmptyString
+      Location: String250
+      Tagline: String250 option
+      Slug: NotEditable<UniqueSlug>
+      TwitterSearch: String250 option
+      StartAndEnd: StartAndEnd
+      AccessCode: NotEditable<Generated<AccessCode>>
+      Owner: NotEditable<OwnerInfo> }
+
+type WasNeverPublished = bool
+
+type Conference =
+    | UnpublishedConference of info:ConferenceInfo * canDeleteSeat:WasNeverPublished
+    | PublisedConference of info:ConferenceInfo

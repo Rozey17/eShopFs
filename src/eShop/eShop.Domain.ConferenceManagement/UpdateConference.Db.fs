@@ -15,8 +15,8 @@ module UpdateConferenceInDb =
                Location = info.Location |> String250.value
                Tagline = info.Tagline |> Option.map String250.value |> Option.defaultValue null
                TwitterSearch = info.TwitterSearch |> Option.map String250.value |> Option.defaultValue null
-               StartDate = info.StartDate |> Date.value
-               EndDate = info.EndDate |> Date.value |}
+               StartDate = info.StartAndEnd |> StartAndEnd.startDateValue
+               EndDate = info.StartAndEnd |> StartAndEnd.endDateValue |}
 
     let execute connection conference =
         let sql =

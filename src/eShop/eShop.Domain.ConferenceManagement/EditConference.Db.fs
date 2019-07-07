@@ -23,8 +23,8 @@ module ReadConferenceDetails =
           is_published: bool }
 
     let query connection slug accessCode =
-        let slug = slug |> NotEditableUniqueSlug.value
-        let accessCode = accessCode |> GeneratedAndNotEditableAccessCode.value
+        let slug = slug |> UniqueSlug.value
+        let accessCode = accessCode |> AccessCode.value
 
         let sql = @"
             select id,

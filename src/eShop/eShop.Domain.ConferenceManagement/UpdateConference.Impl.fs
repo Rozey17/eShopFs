@@ -3,7 +3,6 @@ module eShop.Domain.ConferenceManagement.UpdateConference.Impl
 open eShop.Infrastructure
 open eShop.Domain.Shared
 open eShop.Domain.ConferenceManagement.Common
-open eShop.Domain.ConferenceManagement
 
 // -----
 // types
@@ -50,16 +49,9 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 unvalidatedInfo.TwitterSearch
                 |> String250.createOption "Twitter Search"
                 |> Result.mapError ValidationError
-            let! startDate =
-                unvalidatedInfo.StartDate
-                |> Date.create "Start Date"
-                |> Result.mapError ValidationError
-            let! endDate =
-                unvalidatedInfo.EndDate
-                |> Date.create "End Date"
-                |> Result.mapError ValidationError
-            do! (startDate, endDate)
-                ||> CreateConference.Impl.validateDateOrder
+            let! startAndEnd =
+                (unvalidatedInfo.StartDate, unvalidatedInfo.EndDate)
+                |> StartAndEnd.create
                 |> Result.mapError ValidationError
             let validatedInfo: ValidatedConferenceInfo =
                 { Id = id
@@ -68,8 +60,7 @@ let validateConferenceInfo: ValidateConferenceInfo =
                   Location = location
                   Tagline = tagline
                   TwitterSearch = twitterSearch
-                  StartDate = startDate
-                  EndDate = endDate }
+                  StartAndEnd = startAndEnd }
 
             return validatedInfo
         }

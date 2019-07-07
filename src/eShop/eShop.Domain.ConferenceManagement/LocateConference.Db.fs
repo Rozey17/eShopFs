@@ -14,7 +14,7 @@ module ReadConferenceByEmailAndAccessCode =
 
     let query connection email accessCode =
         let email = email |> EmailAddress.value
-        let accessCode = accessCode |> GeneratedAndNotEditableAccessCode.value
+        let accessCode = accessCode |> AccessCode.value
 
         let sql =
             """

@@ -21,11 +21,11 @@ module InsertConferenceIntoDb =
                Tagline = info.Tagline |> Option.map String250.value |> Option.defaultValue null
                Slug = info.Slug |> NotEditableUniqueSlug.value
                TwitterSearch = info.TwitterSearch |> Option.map String250.value |> Option.defaultValue null
-               StartDate = info.StartDate |> Date.value
-               EndDate = info.EndDate |> Date.value
+               StartDate = info.StartAndEnd |> StartAndEnd.startDateValue
+               EndDate = info.StartAndEnd |> StartAndEnd.endDateValue
                AccessCode = info.AccessCode |> GeneratedAndNotEditableAccessCode.value
-               OwnerName = info.Owner.Name |> String250.value
-               OwnerEmail = info.Owner.Email |> EmailAddress.value
+               OwnerName = info.Owner |> NotEditableOwnerInfo.name
+               OwnerEmail = info.Owner |> NotEditableOwnerInfo.email
                CanDeleteSeat = canDeleteSeat
                IsPublished = publised |}
 
@@ -73,7 +73,7 @@ module InsertConferenceIntoDb =
 
 module CheckSlugExists =
 
-    let query connection (slug: NotEditable<UniqueSlug>) =
+    let query connection (slug: UniqueSlug) =
         let sql = @"
             select exists
                    (
@@ -81,6 +81,6 @@ module CheckSlugExists =
                          from conference
                         where slug = @Slug
                    )"
-        let slug = slug |> NotEditableUniqueSlug.value
+        let slug = slug |> UniqueSlug.value
         let param = {| Slug = slug |}
         Db.parameterizedQuerySingleAsync<bool> connection sql param

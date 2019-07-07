@@ -17,7 +17,7 @@ let renderLocateConferenceView: HttpHandler =
 let validateForm (form: LocateFormDTO) =
     result {
         let! email = form.Email |> EmailAddress.create "Email"
-        let! accessCode = form.AccessCode |> GeneratedAndNotEditableAccessCode.create "Access Code"
+        let! accessCode = form.AccessCode |> AccessCode.create
         let validatedForm = {| Email = email; AccessCode = accessCode |}
 
         return validatedForm

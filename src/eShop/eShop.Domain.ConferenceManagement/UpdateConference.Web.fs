@@ -13,7 +13,7 @@ open eShop.Domain.ConferenceManagement.EditConference
 // post
 let updateConference next (ctx: HttpContext) =
     task {
-        let slug, accessCode = WebCommon.getParamExn ctx
+        let slug, accessCode = CommonWeb.exnQueryStringValue ctx
 
         let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"
         use connection = new NpgsqlConnection(connStr)

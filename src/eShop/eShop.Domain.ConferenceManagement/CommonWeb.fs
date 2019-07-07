@@ -6,25 +6,25 @@ open eShop.Infrastructure
 open eShop.Domain.ConferenceManagement.Common
 
 [<RequireQualifiedAccess>]
-module WebCommon =
+module CommonWeb =
 
-    let getParam (ctx: HttpContext) =
+    let queryStringValue (ctx: HttpContext) =
         let slug = ctx.TryGetQueryStringValue "slug" |> Option.defaultValue ""
         let accessCode = ctx.TryGetQueryStringValue "access_code" |> Option.defaultValue ""
         (slug, accessCode)
 
     let validate (slug, accessCode) =
         result {
-            let! slug = slug |> NotEditableUniqueSlug.create "Slug"
-            let! accessCode = accessCode |> GeneratedAndNotEditableAccessCode.create "AccessCode"
+            let! slug = slug |> UniqueSlug.create
+            let! accessCode = accessCode |> AccessCode.create
             return (slug, accessCode)
         }
 
-    let validateParam ctx =
-        let param = getParam ctx
-        validate param
+    let validateQueryStringValue ctx =
+        let value = queryStringValue ctx
+        validate value
 
-    let getParamExn (ctx: HttpContext) =
+    let exnQueryStringValue (ctx: HttpContext) =
         let slug = ctx.TryGetQueryStringValue "slug"
         let accessCode = ctx.TryGetQueryStringValue "access_code"
         match slug, accessCode with

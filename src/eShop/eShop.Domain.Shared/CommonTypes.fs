@@ -29,18 +29,6 @@ module EmailAddress =
         let pattern = @"[\w-]+(\.?[\w-])*\@[\w-]+(\.[\w-]+)+"
         ConstrainedType.createLike fieldName EmailAddress pattern
 
-/// Id of a basket
-type BasketId = private BasketId of Guid
-module BasketId =
-    let value (BasketId v) = v
-    let create () = BasketId (Guid.NewGuid())
-
-/// Id of a product
-type ProductId = private ProductId of Guid
-module ProductId =
-    let value (ProductId v) = v
-    let create = ProductId (Guid.NewGuid())
-
 /// Constrained to be a integer between 1 and 1000
 type UnitQuantity = private UnitQuantity of int
 module UnitQuantity =

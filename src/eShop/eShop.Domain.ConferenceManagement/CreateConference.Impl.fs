@@ -14,28 +14,26 @@ type ValidatedConferenceInfo =
       Description: NotEmptyString
       Location: String250
       Tagline: String250 option
-      Slug: NotEditable<UniqueSlug>
+      Slug: UniqueSlug
       TwitterSearch: String250 option
-      StartDate: Date
-      EndDate: Date
+      StartAndEnd: StartAndEnd
       Owner: OwnerInfo }
 
 module ValidatedConferenceInfo =
 
     let toConferenceInfoWith id accessCode validatedInfo =
         { Id = id
-          AccessCode = accessCode
+          AccessCode = accessCode |> Generated |> NotEditable
           Name = validatedInfo.Name
           Description = validatedInfo.Description
           Location = validatedInfo.Location
           Tagline = validatedInfo.Tagline
-          Slug = validatedInfo.Slug
+          Slug = validatedInfo.Slug |> NotEditable
           TwitterSearch = validatedInfo.TwitterSearch
-          StartDate = validatedInfo.StartDate
-          EndDate = validatedInfo.EndDate
-          Owner = validatedInfo.Owner }
+          StartAndEnd = validatedInfo.StartAndEnd
+          Owner = validatedInfo.Owner |> NotEditable }
 
-type CheckSlugExists = NotEditable<UniqueSlug> -> Async<bool>
+type CheckSlugExists = UniqueSlug -> Async<bool>
 
 type ValidateConferenceInfo =
     CheckSlugExists                                            // dependency
@@ -59,12 +57,6 @@ let validateSlugExists (checkSlugExists: CheckSlugExists) slug =
         else
             return Ok ()
     }
-
-let validateDateOrder (startDate: Date) (endDate: Date) =
-    if startDate > endDate then
-        Error "StartDate can not come after EndDate"
-    else
-        Ok ()
 
 let validateConferenceInfo: ValidateConferenceInfo =
     fun checkSlugExists unvalidatedInfo ->
@@ -101,7 +93,7 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 |> AsyncResult.mapError ValidationError
             let! slug =
                 unvalidatedInfo.Slug
-                |> NotEditableUniqueSlug.create "Slug"
+                |> UniqueSlug.create
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             do! slug
@@ -112,18 +104,9 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 |> String250.createOption "Twitter Search"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
-            let! startDate =
-                unvalidatedInfo.StartDate
-                |> Date.create "Start Date"
-                |> AsyncResult.ofResult
-                |> AsyncResult.mapError ValidationError
-            let! endDate =
-                unvalidatedInfo.EndDate
-                |> Date.create "End Date"
-                |> AsyncResult.ofResult
-                |> AsyncResult.mapError ValidationError
-            do! (startDate, endDate)
-                ||> validateDateOrder
+            let! startAndEnd =
+                (unvalidatedInfo.StartDate, unvalidatedInfo.EndDate)
+                |> StartAndEnd.create
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
 
@@ -134,8 +117,7 @@ let validateConferenceInfo: ValidateConferenceInfo =
                   Tagline = tagline
                   Slug = slug
                   TwitterSearch = twitterSearch
-                  StartDate = startDate
-                  EndDate = endDate
+                  StartAndEnd = startAndEnd
                   Owner =
                       { Name = ownerName
                         Email = ownerEmail } }
@@ -168,7 +150,7 @@ let createConference
                 |> AsyncResult.mapError CreateConferenceError.Validation
 
             let id = ConferenceId.generate()
-            let accessCode = GeneratedAndNotEditableAccessCode.generate()
+            let accessCode = AccessCode.generate()
             let conferenceInfo =
                 validatedInfo
                 |> ValidatedConferenceInfo.toConferenceInfoWith id accessCode

@@ -26,8 +26,7 @@ type ValidatedConferenceInfo =
       Location: String250
       Tagline: String250 option
       TwitterSearch: String250 option
-      StartDate: Date
-      EndDate: Date }
+      StartAndEnd: StartAndEnd }
 type ConferenceUpdated = ValidatedConferenceInfo
 type UpdateConferenceEvent =
     | ConferenceUpdated of ConferenceUpdated
