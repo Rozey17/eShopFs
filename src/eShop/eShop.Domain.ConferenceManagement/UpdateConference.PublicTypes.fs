@@ -31,7 +31,7 @@ type ValidatedConferenceInfo =
       StartAndEnd: StartAndEnd
       Slug: UniqueSlug
       AccessCode: AccessCode }
-type ConferenceUpdated = ValidatedConferenceInfo
+type ConferenceUpdated = Conference
 type UpdateConferenceEvent =
     | ConferenceUpdated of ConferenceUpdated
 

@@ -19,7 +19,7 @@ type ValidateConferenceInfo =
 type UpdateConferenceInfoInDb = Conference -> Async<unit>
 
 // step: create events
-type CreateEvents = ValidatedConferenceInfo -> UpdateConferenceEvent list
+type CreateEvents = Conference -> UpdateConferenceEvent list
 
 // -----
 // impl
@@ -94,7 +94,7 @@ let applyUpdateConference (validatedInfo: ValidatedConferenceInfo) conference =
     | Published _ ->
         Published (PublishedConference changedInfo)
 
-let createConferenceUpdatedEvent (info: ValidatedConferenceInfo) : ConferenceUpdated = info
+let createConferenceUpdatedEvent conference : ConferenceUpdated = conference
 
 let createEvents: CreateEvents =
     fun validatedInfo ->
@@ -124,7 +124,7 @@ let updateConference
             let conference = conference |> applyUpdateConference validatedInfo
             do! updateConferenceInfoInDb conference
                 |> AsyncResult.ofAsync
-            let events = validatedInfo |> createEvents
+            let events = conference |> createEvents
 
             return events
         }
