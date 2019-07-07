@@ -8,12 +8,15 @@ open eShop.Domain.ConferenceManagement.Common
 // types
 // -----
 
+// step: read single conference
+type ReadSingleConference = UniqueSlug * AccessCode -> Async<Conference>
+
 // step: validate
 type ValidateConferenceInfo =
     UnvalidatedConferenceInfo -> Result<ValidatedConferenceInfo, ValidationError>
 
 // step: update in db
-type UpdateConferenceInfoInDb = ValidatedConferenceInfo -> Async<unit>
+type UpdateConferenceInfoInDb = Conference -> Async<unit>
 
 // step: create events
 type CreateEvents = ValidatedConferenceInfo -> UpdateConferenceEvent list
@@ -53,6 +56,14 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 (unvalidatedInfo.StartDate, unvalidatedInfo.EndDate)
                 |> StartAndEnd.create
                 |> Result.mapError ValidationError
+            let! slug =
+                unvalidatedInfo.Slug
+                |> UniqueSlug.create
+                |> Result.mapError ValidationError
+            let! accessCode =
+                unvalidatedInfo.AccessCode
+                |> AccessCode.create
+                |> Result.mapError ValidationError
             let validatedInfo: ValidatedConferenceInfo =
                 { Id = id
                   Name = name
@@ -60,10 +71,28 @@ let validateConferenceInfo: ValidateConferenceInfo =
                   Location = location
                   Tagline = tagline
                   TwitterSearch = twitterSearch
-                  StartAndEnd = startAndEnd }
+                  StartAndEnd = startAndEnd
+                  Slug = slug
+                  AccessCode = accessCode }
 
             return validatedInfo
         }
+
+let applyUpdateConference (validatedInfo: ValidatedConferenceInfo) conference =
+    let info = conference |> Conference.info
+    let changedInfo =
+        { info with
+            Name = validatedInfo.Name
+            Description = validatedInfo.Description
+            Location = validatedInfo.Location
+            Tagline = validatedInfo.Tagline
+            TwitterSearch = validatedInfo.TwitterSearch
+            StartAndEnd = validatedInfo.StartAndEnd }
+    match conference with
+    | Unpublished (UnpublishedConference (_, wasEverPublished)) ->
+        Unpublished (UnpublishedConference (changedInfo, wasEverPublished))
+    | Published _ ->
+        Published (PublishedConference changedInfo)
 
 let createConferenceUpdatedEvent (info: ValidatedConferenceInfo) : ConferenceUpdated = info
 
@@ -78,14 +107,22 @@ let createEvents: CreateEvents =
             yield conferenceUpdated
         ]
 
-let updateConference (updateConferenceInfoInDb: UpdateConferenceInfoInDb) : UpdateConference =
+let updateConference
+    (readSingleConference: ReadSingleConference)
+    (updateConferenceInfoInDb: UpdateConferenceInfoInDb)
+    : UpdateConference =
+
     fun cmd ->
         asyncResult {
             let! validatedInfo =
                 validateConferenceInfo cmd.Data
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError UpdateConferenceError.Validation
-            do! updateConferenceInfoInDb validatedInfo
+            let! conference =
+                readSingleConference (validatedInfo.Slug, validatedInfo.AccessCode)
+                |> AsyncResult.ofAsync
+            let conference = conference |> applyUpdateConference validatedInfo
+            do! updateConferenceInfoInDb conference
                 |> AsyncResult.ofAsync
             let events = validatedInfo |> createEvents
 

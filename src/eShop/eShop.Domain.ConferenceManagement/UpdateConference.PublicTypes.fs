@@ -14,7 +14,9 @@ type UnvalidatedConferenceInfo =
       TwitterSearch: string
       Description: string
       StartDate: DateTime
-      EndDate: DateTime }
+      EndDate: DateTime
+      Slug: string
+      AccessCode: string }
 
 type UpdateConferenceCommand = Command<UnvalidatedConferenceInfo>
 
@@ -26,7 +28,9 @@ type ValidatedConferenceInfo =
       Location: String250
       Tagline: String250 option
       TwitterSearch: String250 option
-      StartAndEnd: StartAndEnd }
+      StartAndEnd: StartAndEnd
+      Slug: UniqueSlug
+      AccessCode: AccessCode }
 type ConferenceUpdated = ValidatedConferenceInfo
 type UpdateConferenceEvent =
     | ConferenceUpdated of ConferenceUpdated

@@ -14,5 +14,7 @@ module EditConferenceFormDTO =
               TwitterSearch = dto.TwitterSearch
               Description = dto.Description
               StartDate = dto.StartDate
-              EndDate = dto.EndDate }
+              EndDate = dto.EndDate
+              Slug = dto.Slug
+              AccessCode = dto.AccessCode }
         domainObj

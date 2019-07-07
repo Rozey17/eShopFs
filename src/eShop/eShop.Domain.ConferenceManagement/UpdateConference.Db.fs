@@ -8,7 +8,9 @@ module UpdateConferenceInDb =
 
     module ConferenceDbDTO =
 
-        let fromDomain (info: ValidatedConferenceInfo) =
+        let fromDomain conference =
+            let info = conference |> Conference.info
+
             {| Id = info.Id |> ConferenceId.value
                Name = info.Name |> String250.value
                Description = info.Description |> NotEmptyString.value

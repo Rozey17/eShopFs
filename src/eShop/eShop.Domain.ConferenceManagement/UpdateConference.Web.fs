@@ -8,6 +8,7 @@ open Giraffe.Razor
 open Npgsql
 open eShop.Domain.Common
 open eShop.Domain.ConferenceManagement.Web
+open eShop.Domain.ConferenceManagement.Db
 open eShop.Domain.ConferenceManagement.EditConference
 
 // post
@@ -22,8 +23,9 @@ let updateConference next (ctx: HttpContext) =
         let unvalidatedInfo = form |> EditConferenceFormDTO.toUnvalidatedConferenceInfo
         let cmd = Command.create unvalidatedInfo
 
+        let readSingleConference = CommonDb.ReadSingleConference.execute connection
         let updateConferenceInfoInDb = Db.UpdateConferenceInDb.execute connection
-        let workflow = Impl.updateConference updateConferenceInfoInDb
+        let workflow = Impl.updateConference readSingleConference updateConferenceInfoInDb
 
         let! result = workflow cmd
 

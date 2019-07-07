@@ -125,3 +125,8 @@ module Conference =
         match conference with
         | Published (PublishedConference info) -> info.Id
         | Unpublished (UnpublishedConference (info, _)) -> info.Id
+
+    let info conference =
+        match conference with
+        | Published (PublishedConference info) -> info
+        | Unpublished (UnpublishedConference (info, _)) -> info
