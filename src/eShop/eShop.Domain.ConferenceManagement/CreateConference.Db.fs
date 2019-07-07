@@ -8,12 +8,7 @@ module InsertConferenceIntoDb =
 
     module ConferenceDbDTO =
 
-        let fromDomain (conference: Conference) =
-            let info, publised, canDeleteSeat =
-                match conference with
-                | PublisedConference info -> info, true, false
-                | UnpublishedConference (info, canDeleteSeat) -> info, false, canDeleteSeat
-
+        let fromDomain (UnpublishedConference (info, _)) =
             {| Id = info.Id |> ConferenceId.value
                Name = info.Name |> String250.value
                Description = info.Description |> NotEmptyString.value
@@ -26,8 +21,8 @@ module InsertConferenceIntoDb =
                AccessCode = info.AccessCode |> GeneratedAndNotEditableAccessCode.value
                OwnerName = info.Owner |> NotEditableOwnerInfo.name
                OwnerEmail = info.Owner |> NotEditableOwnerInfo.email
-               CanDeleteSeat = canDeleteSeat
-               IsPublished = publised |}
+               WasEverPublished = false
+               IsPublished = false |}
 
     let execute connection conference =
         let sql =
@@ -47,7 +42,7 @@ module InsertConferenceIntoDb =
                     access_code,
                     owner_name,
                     owner_email,
-                    can_delete_seat,
+                    was_ever_published,
                     is_published
                 )
                 values
@@ -64,7 +59,7 @@ module InsertConferenceIntoDb =
                     @AccessCode,
                     @OwnerName,
                     @OwnerEmail,
-                    @CanDeleteSeat,
+                    @WasEverPublished,
                     @IsPublished
                 )
             """

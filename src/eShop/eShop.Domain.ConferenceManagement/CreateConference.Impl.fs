@@ -41,10 +41,10 @@ type ValidateConferenceInfo =
      -> AsyncResult<ValidatedConferenceInfo, ValidationError>  // output
 
 // step: insert into db
-type InsertConferenceIntoDb = Conference -> Async<unit>
+type InsertConferenceIntoDb = UnpublishedConference -> Async<unit>
 
 // step: create events
-type CreateEvents = Conference -> CreateConferenceEvent list
+type CreateEvents = UnpublishedConference -> CreateConferenceEvent list
 
 // -----
 // impl
@@ -125,7 +125,7 @@ let validateConferenceInfo: ValidateConferenceInfo =
             return validatedInfo
         }
 
-let createConferenceCreatedEvent (conference: Conference) : ConferenceCreated = conference
+let createConferenceCreatedEvent (conference: UnpublishedConference) : ConferenceCreated = conference
 
 let createEvents: CreateEvents =
     fun conference ->
@@ -154,7 +154,7 @@ let createConference
             let conferenceInfo =
                 validatedInfo
                 |> ValidatedConferenceInfo.toConferenceInfoWith id accessCode
-            let conference = UnpublishedConference(info=conferenceInfo, canDeleteSeat=true)
+            let conference = UnpublishedConference(info=conferenceInfo, wasEverPublished=false)
 
             do! insertConferenceIntoDb conference
                 |> AsyncResult.ofAsync

@@ -16,5 +16,5 @@ type EditConferenceFormDTO =
       AccessCode: string
       OwnerName: string
       OwnerEmail: string
-      CanDeleteSeat: bool
+      WasEverPublished: bool
       IsPublished: bool }

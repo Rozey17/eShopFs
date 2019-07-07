@@ -12,6 +12,6 @@ create table conference
   access_code text not null,
   owner_name text not null,
   owner_email text not null,
-  can_delete_seat boolean not null,
+  was_ever_published boolean not null,
   is_published boolean not null
-)
+);

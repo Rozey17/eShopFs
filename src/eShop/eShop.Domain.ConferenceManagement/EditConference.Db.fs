@@ -20,7 +20,7 @@ module ReadConferenceDetails =
           access_code: string
           owner_name: string
           owner_email: string
-          can_delete_seat: bool
+          was_ever_published: bool
           is_published: bool }
 
     let query connection slug accessCode =
@@ -40,7 +40,7 @@ module ReadConferenceDetails =
                    access_code,
                    owner_name,
                    owner_email,
-                   can_delete_seat,
+                   was_ever_published,
                    is_published
               from conference
              where slug = @Slug
@@ -64,7 +64,7 @@ module ReadConferenceDetails =
                       AccessCode = record.access_code
                       OwnerName = record.owner_name
                       OwnerEmail = record.owner_email
-                      CanDeleteSeat = record.can_delete_seat
+                      WasEverPublished = record.was_ever_published
                       IsPublished = record.is_published }
                 return Some dto
 

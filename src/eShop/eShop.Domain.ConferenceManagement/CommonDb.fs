@@ -28,7 +28,7 @@ module CommonDb =
               access_code: string
               owner_name: string
               owner_email: string
-              can_delete_seat: bool
+              was_ever_published: bool
               is_published: bool }
 
         let execute connection id =
@@ -47,7 +47,7 @@ module CommonDb =
                        access_code,
                        owner_name,
                        owner_email,
-                       can_delete_seat,
+                       was_ever_published,
                        is_published
                   from conference
                  where id = @Id
@@ -71,7 +71,7 @@ module CommonDb =
                             Email = dto.owner_email |> EmailAddress.create "Owner Email" |> exnOnError } |> NotEditable }
                 match dto.is_published with
                 | true ->
-                    return PublisedConference info
+                    return PublishedConference info |> Conference.Published
                 | false ->
-                    return UnpublishedConference (info = info, canDeleteSeat = dto.can_delete_seat)
+                    return UnpublishedConference (info, dto.was_ever_published) |> Conference.Unpublished
             }

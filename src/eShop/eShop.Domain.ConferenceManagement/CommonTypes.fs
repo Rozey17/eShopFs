@@ -111,8 +111,17 @@ type ConferenceInfo =
       AccessCode: NotEditable<Generated<AccessCode>>
       Owner: NotEditable<OwnerInfo> }
 
-type WasNeverPublished = bool
+type WasEverPublished = bool
+
+type PublishedConference = PublishedConference of ConferenceInfo
+type UnpublishedConference = UnpublishedConference of info:ConferenceInfo * wasEverPublished:WasEverPublished
 
 type Conference =
-    | UnpublishedConference of info:ConferenceInfo * canDeleteSeat:WasNeverPublished
-    | PublisedConference of info:ConferenceInfo
+    | Unpublished of UnpublishedConference
+    | Published of PublishedConference
+
+module Conference =
+    let id conference =
+        match conference with
+        | Published (PublishedConference info) -> info.Id
+        | Unpublished (UnpublishedConference (info, _)) -> info.Id
