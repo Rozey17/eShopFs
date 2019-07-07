@@ -4,11 +4,11 @@ open eShop.Domain.Common
 open eShop.Domain.ConferenceManagement.Common
 
 // input
-type PublishConferenceCommand = Command<ConferenceId>
+type PublishConferenceCommand = Command<UniqueSlug * AccessCode>
 
 
 // success output
-type ConferencePublished = ConferenceId
+type ConferencePublished = PublishedConference
 type PublishConferenceEvent =
     | ConferencePublished of ConferencePublished
 

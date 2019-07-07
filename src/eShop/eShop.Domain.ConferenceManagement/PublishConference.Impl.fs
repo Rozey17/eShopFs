@@ -7,28 +7,34 @@ open eShop.Domain.ConferenceManagement.Common
 // -----
 
 // step: read single conference
-type ReadSingleConference = ConferenceId -> Async<Conference>
+type ReadSingleConference = UniqueSlug * AccessCode -> Async<Conference>
 
 // step: publish
-type ApplyPublishConference = Conference -> Conference
+type ApplyPublishConference = Conference -> PublishedConference
 
 // step: mark conference as published in db
-type MarkConferenceAsPublishedInDb = Conference -> Async<unit>
+type MarkConferenceAsPublishedInDb = PublishedConference -> Async<unit>
 
 // step: create events
-type CreateEvents = Conference -> PublishConferenceEvent list
+type CreateEvents = PublishedConference -> PublishConferenceEvent list
 
 // -----
 // impl
 // -----
-let applyPublishConference conference =
-    match conference with
-    | Unpublished (UnpublishedConference (info, _)) ->
-        Published (PublishedConference info)
-    | published ->
-        published
 
-let createConferencePublishedEvent conference : ConferencePublished = conference |> Conference.id
+// step: publish
+let applyPublishConference: ApplyPublishConference =
+    fun conference ->
+        match conference with
+        | Unpublished (UnpublishedConference (info, _)) ->
+            PublishedConference info
+        | Published publishedConference ->
+            publishedConference
+
+// step: create events
+let createConferencePublishedEvent conference : ConferencePublished =
+    conference
+
 let createEvents: CreateEvents =
     fun conference ->
         let conferencePublished =
@@ -39,7 +45,6 @@ let createEvents: CreateEvents =
             yield conferencePublished
         ]
 
-
 let publishConference
     (readSingleConference: ReadSingleConference)
     (markConferenceAsPublishedInDb: MarkConferenceAsPublishedInDb)
@@ -48,9 +53,9 @@ let publishConference
     fun cmd ->
         async {
             let! conference = readSingleConference cmd.Data
-            let conference = conference |> applyPublishConference
-            do! markConferenceAsPublishedInDb conference
+            let publishedConference = conference |> applyPublishConference
+            do! markConferenceAsPublishedInDb publishedConference
 
-            let events = conference |> createEvents
+            let events = publishedConference |> createEvents
             return events
         }

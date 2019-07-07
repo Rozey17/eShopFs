@@ -13,6 +13,7 @@ open eShop.Domain.ConferenceManagement.CreateConference.Web
 open eShop.Domain.ConferenceManagement.EditConference.Web
 open eShop.Domain.ConferenceManagement.UpdateConference.Web
 open eShop.Domain.ConferenceManagement.LocateConference.Web
+open eShop.Domain.ConferenceManagement.PublishConference.Web
 open eShop.Domain.ConferencePublic.DisplayConference.Web
 
 [<AutoOpen>]
@@ -54,6 +55,7 @@ let webApp =
                 route  "/conferences/create"     >=> createConference
                 route  "/conferences/locate"     >=> locateConference
                 route  "/conferences/edit"       >=> updateConference
+                route  "/conferences/publish"    >=> publishConference
             ]
         text "Not Found" |> RequestErrors.notFound ]
 

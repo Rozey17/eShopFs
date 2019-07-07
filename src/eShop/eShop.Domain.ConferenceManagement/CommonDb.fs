@@ -7,7 +7,7 @@ open eShop.Domain.ConferenceManagement.Common
 
 [<RequireQualifiedAccess>]
 module CommonDb =
-    let exnOnError v =
+    let private exnOnError v =
         match v with
         | Ok r -> r
         | Error _ -> failwith "db is in invalid state"
@@ -31,8 +31,10 @@ module CommonDb =
               was_ever_published: bool
               is_published: bool }
 
-        let execute connection id =
-            let id = id |> ConferenceId.value
+        let execute connection (slug, accessCode) =
+            let slug = slug |> UniqueSlug.value
+            let accessCode = accessCode |> AccessCode.value
+
             let sql =
                 """
                 select id,
@@ -50,9 +52,10 @@ module CommonDb =
                        was_ever_published,
                        is_published
                   from conference
-                 where id = @Id
+                 where slug = @Slug
+                   and access_code = @AccessCode
                 """
-            let param = {| Id = id |}
+            let param = {| Slug = slug; AccessCode = accessCode |}
 
             async {
                 let! dto = Db.parameterizedQuerySingleAsync<ConferenceDbDTO> connection sql param

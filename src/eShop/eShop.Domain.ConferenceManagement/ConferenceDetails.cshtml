@@ -102,7 +102,7 @@
         <div class="nav content-main__nav">
           <a class="nav__left" href="/conferences/edit?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]">Edit</a>
           @{ var action = Model.IsPublished ? "Unpublish" : "Publish"; }
-          <form action="/conferences/@action?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]" method="POST">
+          <form action="/conferences/@(action.ToLower())?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]" method="POST">
             <button type="submit" class="nav__right">
               @action
             </button>

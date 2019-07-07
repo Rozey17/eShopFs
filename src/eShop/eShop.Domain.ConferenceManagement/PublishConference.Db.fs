@@ -5,12 +5,12 @@ open eShop.Domain.ConferenceManagement.Common
 
 module MarkConferenceAsPublishedInDb =
 
-    let execute connection conference =
-        let id = conference |> Conference.id |> ConferenceId.value
+    let execute connection (PublishedConference info) =
+        let id = info.Id |> ConferenceId.value
         let sql =
             """
             update conference
-               set published = 't',
+               set is_published = 't',
                    was_ever_published = 't'
              where id = @Id
             """
