@@ -40,7 +40,23 @@ let createEvents: CreateEvents =
         let conferenceUnpublished =
             conference
             |> createConferenceUnpublishedEvent
-            |> UnpublishConferenceEvent.ConferenceUnpublished
+            |> ConferenceUnpublished
         [
             yield conferenceUnpublished
         ]
+
+// workflow
+let unpublishConference
+    (readSingleConference: ReadSingleConference)
+    (markConferenceAsUnpublishedInDb: MarkConferenceAsUnpublishedInDb)
+    : UnpublishConference =
+
+    fun cmd ->
+        async {
+            let! conference = readSingleConference cmd.Data
+            let unpublishedConference = applyUnpublishConference conference
+            do! markConferenceAsUnpublishedInDb unpublishedConference
+
+            let events = unpublishedConference |> createEvents
+            return events
+        }

@@ -74,7 +74,7 @@ module CommonDb =
                             Email = dto.owner_email |> EmailAddress.create "Owner Email" |> exnOnError } |> NotEditable }
                 match dto.is_published with
                 | true ->
-                    return PublishedConference info |> Conference.Published
+                    return Published (PublishedConference info)
                 | false ->
-                    return UnpublishedConference (info, dto.was_ever_published) |> Conference.Unpublished
+                    return Unpublished (UnpublishedConference (info, dto.was_ever_published))
             }

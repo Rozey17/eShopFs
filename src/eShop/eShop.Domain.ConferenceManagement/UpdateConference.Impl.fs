@@ -101,7 +101,7 @@ let createEvents: CreateEvents =
         let conferenceUpdated =
             validatedInfo
             |> createConferenceUpdatedEvent
-            |> UpdateConferenceEvent.ConferenceUpdated
+            |> ConferenceUpdated
 
         [
             yield conferenceUpdated

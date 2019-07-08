@@ -14,6 +14,7 @@ open eShop.Domain.ConferenceManagement.EditConference.Web
 open eShop.Domain.ConferenceManagement.UpdateConference.Web
 open eShop.Domain.ConferenceManagement.LocateConference.Web
 open eShop.Domain.ConferenceManagement.PublishConference.Web
+open eShop.Domain.ConferenceManagement.UnpublishConference.Web
 open eShop.Domain.ConferencePublic.DisplayConference.Web
 
 [<AutoOpen>]
@@ -56,6 +57,7 @@ let webApp =
                 route  "/conferences/locate"     >=> locateConference
                 route  "/conferences/edit"       >=> updateConference
                 route  "/conferences/publish"    >=> publishConference
+                route  "/conferences/unpublish"  >=> unpublishConference
             ]
         text "Not Found" |> RequestErrors.notFound ]
 

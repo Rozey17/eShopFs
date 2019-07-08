@@ -132,7 +132,7 @@ let createEvents: CreateEvents =
         let conferenceCreated =
             conference
             |> createConferenceCreatedEvent
-            |> CreateConferenceEvent.ConferenceCreated
+            |> ConferenceCreated
 
         [
             yield conferenceCreated
