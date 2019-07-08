@@ -60,6 +60,7 @@
     <Content Include="eShop.Domain.ConferencePublic\_Layout.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.ConferencePublic\DisplayConference.Web.fs" />
     <Content Include="eShop.Domain.ConferencePublic\DisplayConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="eShop.Domain.Registration\ConferenceIntegration.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

@@ -16,6 +16,7 @@ open eShop.Domain.ConferenceManagement.LocateConference.Web
 open eShop.Domain.ConferenceManagement.PublishConference.Web
 open eShop.Domain.ConferenceManagement.UnpublishConference.Web
 open eShop.Domain.ConferencePublic.DisplayConference.Web
+open eShop.Domain.Registration
 
 [<AutoOpen>]
 module Middleware =
@@ -90,6 +91,8 @@ let configureLogging (builder : ILoggingBuilder) =
 
 [<EntryPoint>]
 let main _ =
+    ConferenceIntegration.initialize()
+
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot     = Path.Combine(contentRoot, "WebRoot")
 
