@@ -85,8 +85,8 @@ let configureServices (services : IServiceCollection) =
 
 let configureLogging (builder : ILoggingBuilder) =
     builder.AddFilter(fun l -> l.Equals LogLevel.Error)
-           .AddConsole()
-           .AddDebug() |> ignore
+       .AddConsole()
+       .AddDebug() |> ignore
 
 [<EntryPoint>]
 let main _ =
