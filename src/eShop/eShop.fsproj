@@ -47,6 +47,9 @@
     <Compile Include="eShop.Domain.ConferenceManagement\PublishConference.Impl.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\PublishConference.Db.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\PublishConference.Web.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\UnpublishConference.PublicTypes.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\UnpublishConference.Impl.fs" />
+    <Compile Include="eShop.Domain.ConferenceManagement\UnpublishConference.Db.fs" />
     <Compile Include="eShop.Domain.ConferenceManagement\ConferenceDetails.Web.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\ConferenceDetails.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.ConferenceManagement\LocateConference.DTOs.fs" />

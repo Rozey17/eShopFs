@@ -32,8 +32,7 @@ let applyPublishConference: ApplyPublishConference =
             publishedConference
 
 // step: create events
-let createConferencePublishedEvent conference : ConferencePublished =
-    conference
+let createConferencePublishedEvent conference : ConferencePublished = conference
 
 let createEvents: CreateEvents =
     fun conference ->
@@ -45,6 +44,7 @@ let createEvents: CreateEvents =
             yield conferencePublished
         ]
 
+// workflow
 let publishConference
     (readSingleConference: ReadSingleConference)
     (markConferenceAsPublishedInDb: MarkConferenceAsPublishedInDb)
