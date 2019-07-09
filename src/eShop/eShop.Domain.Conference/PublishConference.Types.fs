@@ -16,7 +16,7 @@ type PublishConferenceEvent =
 type ValidationError = ValidationError of string
 type PublishConferenceError =
     | Validation of ValidationError
-    | ConferenceNotFound of ConferenceDb.NotFound
+    | ConferenceNotFound of ConferenceDb.RecordNotFound
 
 // workflow
 type PublishConference =

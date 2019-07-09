@@ -82,7 +82,7 @@ module ReadSingleConference =
                     else
                         return Ok (UnpublishedConference (info, dto.was_ever_published))
                 | None ->
-                    return Error (NotFound)
+                    return Error (RecordNotFound)
             }
 
 module CheckSlugExists =

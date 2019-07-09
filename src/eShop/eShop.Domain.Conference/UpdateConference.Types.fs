@@ -29,7 +29,7 @@ type UpdateConferenceEvent =
 type ValidationError = ValidationError of string
 type UpdateConferenceError =
     | Validation of ValidationError
-    | ConferenceNotFound of ConferenceDb.NotFound
+    | ConferenceNotFound of ConferenceDb.RecordNotFound
 
 // workflow
 type UpdateConference =

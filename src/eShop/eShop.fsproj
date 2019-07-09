@@ -73,6 +73,8 @@
     <Compile Include="eShop.Domain.Conference\UpdateConference.Impl.fs" />
     <Compile Include="eShop.Domain.Conference\PublishConference.Types.fs" />
     <Compile Include="eShop.Domain.Conference\PublishConference.Impl.fs" />
+    <Compile Include="eShop.Domain.Conference\UnpublishConference.Types.fs" />
+    <Compile Include="eShop.Domain.Conference\UnpublishConference.Impl.fs" />
   </ItemGroup>
 
   <ItemGroup>

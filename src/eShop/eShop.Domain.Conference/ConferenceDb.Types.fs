@@ -5,9 +5,9 @@ open eShop.Infrastructure
 [<RequireQualifiedAccess>]
 module ConferenceDb =
 
-    type NotFound = NotFound
+    type RecordNotFound = RecordNotFound
 
-    type ReadSingleConference = UniqueSlug * AccessCode -> AsyncResult<Conference, NotFound>
+    type ReadSingleConference = UniqueSlug * AccessCode -> AsyncResult<Conference, RecordNotFound>
     type CheckSlugExists = UniqueSlug -> Async<bool>
     type InsertConference = Conference -> Async<unit>
     type UpdateConference = Conference -> Async<unit>
