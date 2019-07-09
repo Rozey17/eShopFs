@@ -7,6 +7,7 @@ open Microsoft.AspNetCore.Mvc.ModelBinding
 open Giraffe
 open Giraffe.Razor
 open Npgsql
+open eShop.Infrastructure.Bus
 open eShop.Domain.Common
 open eShop.Domain.ConferenceManagement.Common
 
@@ -43,10 +44,13 @@ let createConference next (ctx: HttpContext) =
         let! result = workflow cmd
 
         match result with
-        | Ok [ (ConferenceCreated (UnpublishedConference(info, _))) ] ->
+        | Ok [ (ConferenceCreated e) ] ->
+            let (UnpublishedConference (info, _)) = e
             let slug = info.Slug |> NotEditableUniqueSlug.value
             let accessCode = info.AccessCode |> GeneratedAndNotEditableAccessCode.value
             let url = sprintf "/conferences/details?slug=%s&access_code=%s" slug accessCode
+
+            do! Bus.Publish e (TimeSpan.FromMinutes 1.)
 
             return! redirectTo false url next ctx
 

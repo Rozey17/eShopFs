@@ -20,7 +20,7 @@ type ValidatedConferenceInfo =
       Owner: OwnerInfo }
 
 type ValidateConferenceInfo =
-    ConferenceDb.CheckSlugExists                                         // dependency
+    ConferenceDb.CheckSlugExists                               // dependency
      -> UnvalidatedConferenceInfo                              // input
      -> AsyncResult<ValidatedConferenceInfo, ValidationError>  // output
 
@@ -143,6 +143,7 @@ let createConference
     (checkSlugExists: ConferenceDb.CheckSlugExists)
     (insertConference: ConferenceDb.InsertConference)
     : CreateConference =
+
         fun unvalidatedInfo ->
             asyncResult {
                 let! validatedInfo =
