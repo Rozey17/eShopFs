@@ -18,7 +18,6 @@
     <Compile Include="eShop.Infrastructure.Bus\Bus.fs" />
     <Compile Include="eShop.Domain.Common\ConstrainedType.fs" />
     <Compile Include="eShop.Domain.Common\CommonTypes.fs" />
-    <Compile Include="eShop.Domain.Common\Command.fs" />
     <Content Include="eShop.Domain.ConferenceManagement\_Layout.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="eShop.Domain.ConferenceManagement\_ViewStart.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="eShop.Domain.ConferenceManagement\_Navigation.cshtml" CopyToOutputDirectory="PreserveNewest" />
@@ -60,6 +59,18 @@
     <Content Include="eShop.Domain.ConferencePublic\_Layout.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.ConferencePublic\DisplayConference.Web.fs" />
     <Content Include="eShop.Domain.ConferencePublic\DisplayConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="eShop.Domain.Conference\ConferenceTypes.fs" />
+    <Compile Include="eShop.Domain.Conference\ConferenceDb.Types.fs" />
+    <Compile Include="eShop.Domain.Conference\ConferenceDb.Impl.fs" />
+    <Compile Include="eShop.Domain.Conference\CreateConference.Types.fs" />
+    <Compile Include="eShop.Domain.Conference\CreateConference.Impl.fs" />
+    <Compile Include="eShop.Domain.Conference\UpdateConference.Types.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Program.fs" />
   </ItemGroup>
 
