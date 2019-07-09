@@ -63,11 +63,15 @@
 
   <ItemGroup>
     <Compile Include="eShop.Domain.Conference\ConferenceTypes.fs" />
+    <Compile Include="eShop.Domain.Conference\ConferenceValidation.Types.fs" />
+    <Compile Include="eShop.Domain.Conference\ConferenceValidation.Impl.fs" />
     <Compile Include="eShop.Domain.Conference\ConferenceDb.Types.fs" />
     <Compile Include="eShop.Domain.Conference\ConferenceDb.Impl.fs" />
     <Compile Include="eShop.Domain.Conference\CreateConference.Types.fs" />
     <Compile Include="eShop.Domain.Conference\CreateConference.Impl.fs" />
     <Compile Include="eShop.Domain.Conference\UpdateConference.Types.fs" />
+    <Compile Include="eShop.Domain.Conference\UpdateConference.Impl.fs" />
+    <Compile Include="eShop.Domain.Conference\PublishConference.Types.fs" />
   </ItemGroup>
 
   <ItemGroup>

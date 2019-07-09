@@ -2,10 +2,11 @@ namespace eShop.Domain.Conference.UpdateConference
 
 open System
 open eShop.Infrastructure
-open eShop.Domain.Common
 open eShop.Domain.Conference
 
 // input
+type ConferenceIdentifier = ConferenceIdentifier of slug:string * accessCode:string
+
 type UnvalidatedConferenceInfo =
     { Id: Guid
       Name: string
@@ -14,23 +15,12 @@ type UnvalidatedConferenceInfo =
       TwitterSearch: string
       Description: string
       StartDate: DateTime
-      EndDate: DateTime
-      Slug: string
-      AccessCode: string }
+      EndDate: DateTime }
 
-type UpdateConferenceCommand = UnvalidatedConferenceInfo
+type UpdateConferenceCommand = ConferenceIdentifier * UnvalidatedConferenceInfo
 
 // success output
-type ValidatedConferenceInfo =
-    { Id: ConferenceId
-      Name: String250
-      Description: NotEmptyString
-      Location: String250
-      Tagline: String250 option
-      TwitterSearch: String250 option
-      StartAndEnd: StartAndEnd
-      Slug: UniqueSlug
-      AccessCode: AccessCode }
+
 type ConferenceUpdated = Conference
 type UpdateConferenceEvent =
     | ConferenceUpdated of ConferenceUpdated
@@ -39,6 +29,7 @@ type UpdateConferenceEvent =
 type ValidationError = ValidationError of string
 type UpdateConferenceError =
     | Validation of ValidationError
+    | RecordNotFound of ConferenceDb.NotFound
 
 // workflow
 type UpdateConference =

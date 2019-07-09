@@ -112,7 +112,7 @@ let validateConferenceInfo: ValidateConferenceInfo =
         }
 
 // step: enrich
-let enrichValidatedConferenceInfoWith: EnrichValidatedConferenceInfoWith =
+let enrichWith: EnrichValidatedConferenceInfoWith =
     fun id accessCode info ->
         { Id = id
           AccessCode = accessCode |> Generated |> NotEditable
@@ -153,9 +153,7 @@ let createConference
 
                 let id = ConferenceId.generate()
                 let accessCode = AccessCode.generate()
-                let conferenceInfo =
-                    validatedInfo
-                    |> enrichValidatedConferenceInfoWith id accessCode
+                let conferenceInfo = validatedInfo |> enrichWith id accessCode
                 let conference = UnpublishedConference(info=conferenceInfo, wasEverPublished=false)
 
                 do! insertConference conference
