@@ -128,7 +128,7 @@ let updateConference
                     |> AsyncResult.mapError (ValidationError >> UpdateConferenceError.Validation)
                 let! conference =
                     readSingleConferenceFromDb identifier
-                    |> AsyncResult.mapError UpdateConference.RecordNotFound
+                    |> AsyncResult.mapError UpdateConference.ConferenceNotFound
 
                 let conference =
                     conference
