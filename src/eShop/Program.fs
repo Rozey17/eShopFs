@@ -9,6 +9,7 @@ open Microsoft.Extensions.DependencyInjection
 open Giraffe
 open eShop.Domain.Conference.Web
 open eShop.Domain.Registration.Conference.Integrator
+open eShop.Domain.Registration.Web
 
 [<AutoOpen>]
 module Middleware =
@@ -21,6 +22,7 @@ module Middleware =
                 fun (options : RazorViewEngineOptions) ->
                     options.ViewLocationFormats.Clear()
                     options.ViewLocationFormats.Add("/eShop.Domain.Conference.Web/{1}/{0}.cshtml")
+                    options.ViewLocationFormats.Add("/eShop.Domain.Registration.Web/{1}/{0}.cshtml")
                 )
                 .AddMvc()
             |> ignore
@@ -34,11 +36,13 @@ let webApp =
     choose [
         GET >=>
             choose [
-                route  "/conferences"            >=>  Home.Impl.renderHomeView
+                route  "/conferences"            >=>  ConferencesHome.Impl.renderHomeView
                 route  "/conferences/create"     >=>  CreateConference.Impl.renderCreateConferenceView
                 route  "/conferences/details"    >=>  ConferenceDetails.renderConferenceDetailsView
                 route  "/conferences/locate"     >=>  LocateConference.renderLocateConferenceView
                 route  "/conferences/edit"       >=>  EditConference.renderEditConferenceView
+
+                route  "/registration"           >=>  RegistrationHome.Impl.renderHomeView
             ]
         POST >=>
             choose [

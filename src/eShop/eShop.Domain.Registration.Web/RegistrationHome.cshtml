@@ -1,0 +1,22 @@
+@model IEnumerable<eShop.Domain.Registration.Conference.ReadModel.ReadPublishedConferences.ConferenceEntryDTO>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1 class="page__head page__wrapper">List of conferences</h1>
+<div class="page__content">
+  <div class="page__wrapper content-main">
+    <p>
+      Go to the specific conference page:
+    </p>
+    <ul>
+      @foreach (var conference in Model)
+      {
+        <li>
+          <a href="/registration/conference?slug=@conference.Slug">@conference.Name</a>
+        </li>
+      }
+    </ul>
+  </div>
+</div>
