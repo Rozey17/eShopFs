@@ -8,6 +8,7 @@ open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
 open eShop.Domain.Conference.Web
+open eShop.Domain.Registration
 
 [<AutoOpen>]
 module Middleware =
@@ -33,15 +34,15 @@ let webApp =
     choose [
         GET >=>
             choose [
-                route  "/conferences"            >=>  Home.renderHomeView
-                route  "/conferences/create"     >=>  CreateConference.renderCreateConferenceView
+                route  "/conferences"            >=>  Home.Impl.renderHomeView
+                route  "/conferences/create"     >=>  CreateConference.Impl.renderCreateConferenceView
                 route  "/conferences/details"    >=>  ConferenceDetails.renderConferenceDetailsView
                 route  "/conferences/locate"     >=>  LocateConference.renderLocateConferenceView
                 route  "/conferences/edit"       >=>  EditConference.renderEditConferenceView
             ]
         POST >=>
             choose [
-                route  "/conferences/create"     >=>  CreateConference.createConference
+                route  "/conferences/create"     >=>  CreateConference.Impl.createConference
                 route  "/conferences/locate"     >=>  LocateConference.locateConference
                 route  "/conferences/edit"       >=>  EditConference.updateConference
                 route  "/conferences/publish"    >=>  PublishConference.publishConference
@@ -78,7 +79,7 @@ let configureLogging (builder : ILoggingBuilder) =
 
 [<EntryPoint>]
 let main _ =
-    // ConferenceIntegration.initialize()
+    Conference.Integrator.initialise()
 
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot     = Path.Combine(contentRoot, "WebRoot")

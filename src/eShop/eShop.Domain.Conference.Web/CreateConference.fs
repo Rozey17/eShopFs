@@ -1,4 +1,4 @@
-module eShop.Domain.Conference.Web.CreateConference
+module eShop.Domain.Conference.Web.CreateConference.Impl
 
 open System
 open FSharp.Control.Tasks.V2.ContextInsensitive
@@ -7,43 +7,13 @@ open Microsoft.AspNetCore.Mvc.ModelBinding
 open Giraffe
 open Giraffe.Razor
 open Npgsql
+open eShop.Infrastructure.Bus
 open eShop.Domain.Conference
 open eShop.Domain.Conference.CreateConference
 
-// dto
-[<CLIMutable>]
-type ConferenceFormDTO =
-    { OwnerName: string
-      OwnerEmail: string
-      Slug: string
-      Name: string
-      Tagline: string
-      Location: string
-      TwitterSearch: string
-      Description: string
-      StartDate: DateTime
-      EndDate: DateTime }
-
-module ConferenceFormDTO =
-
-    /// Used when importing an Conference Form from outside world into the domain
-    let toUnvalidatedConferenceInfo (dto: ConferenceFormDTO) =
-        let domainObj: UnvalidatedConferenceInfo =
-            { OwnerName = dto.OwnerName
-              OwnerEmail = dto.OwnerEmail
-              Slug = dto.Slug
-              Name = dto.Name
-              Tagline = dto.Tagline
-              Location = dto.Location
-              TwitterSearch = dto.TwitterSearch
-              Description = dto.Description
-              StartDate = dto.StartDate
-              EndDate = dto.EndDate }
-        domainObj
-
 // get
 let renderCreateConferenceView: HttpHandler =
-    let form =
+    let form: ConferenceFormDTO =
         { OwnerName = ""
           OwnerEmail = ""
           Slug = ""
@@ -74,11 +44,16 @@ let createConference next (ctx: HttpContext) =
         let! result = workflow cmd
 
         match result with
-        | Ok [ (ConferenceCreated (UnpublishedConference (info, _))) ] ->
+        | Ok [ (ConferenceCreated e) ] ->
+            // internal response
+            let e' = ConferenceCreatedDTO.fromDomain e
+            do! Bus.Publish e' (TimeSpan.FromMinutes 1.)
+
+            // web response
+            let info = e |> Conference.info
             let slug = info.Slug |> NotEditableUniqueSlug.value
             let accessCode = info.AccessCode |> GeneratedAndNotEditableAccessCode.value
             let url = sprintf "/conferences/details?slug=%s&access_code=%s" slug accessCode
-
             return! redirectTo false url next ctx
 
         | Error (Validation (ValidationError error)) ->

@@ -50,6 +50,7 @@
     <Compile Include="eShop.Domain.Conference.Web\Common.fs" />
     <Compile Include="eShop.Domain.Conference.Web\Home.fs" />
     <Content Include="eShop.Domain.Conference.Web\Home.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="eShop.Domain.Conference.Web\CreateConference.DTOs.fs" />
     <Compile Include="eShop.Domain.Conference.Web\CreateConference.fs" />
     <Content Include="eShop.Domain.Conference.Web\CreateConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.Conference.Web\EditConference.fs" />
@@ -60,6 +61,10 @@
     <Content Include="eShop.Domain.Conference.Web\ConferenceDetails.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.Conference.Web\LocateConference.fs" />
     <Content Include="eShop.Domain.Conference.Web\LocateConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="eShop.Domain.Registration.Conference\Integrator.fs" />
   </ItemGroup>
 
   <ItemGroup>

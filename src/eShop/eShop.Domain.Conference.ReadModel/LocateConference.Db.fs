@@ -15,7 +15,7 @@ let locateConference connection : LocateConference =
             select owner_email,
                    slug,
                    access_code
-              from conference
+              from cm.conference
              where owner_email = @Email
                and access_code = @AccessCode
             """

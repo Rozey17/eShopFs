@@ -66,7 +66,7 @@ module ReadSingleConference =
                        owner_email,
                        was_ever_published,
                        is_published
-                  from conference
+                  from cm.conference
                  where slug = @Slug
                    and access_code = @AccessCode
                 """
@@ -94,7 +94,7 @@ module CheckSlugExists =
                 select exists
                        (
                            select 1
-                             from conference
+                             from cm.conference
                             where slug = @Slug
                        )"
             let param = {| Slug = slug |}
@@ -127,7 +127,7 @@ module InsertConference =
                 let sql =
                     """
                     insert into
-                        conference
+                        cm.conference
                         (
                             id,
                             name,
@@ -188,7 +188,7 @@ module UpdateConference =
         fun conference ->
             let sql =
                 """
-                update conference
+                update cm.conference
                    set name = @Name,
                        description = @Description,
                        location = @Location,
@@ -211,7 +211,7 @@ module MarkConferenceAsPublished =
                 let id = info.Id |> ConferenceId.value
                 let sql =
                     """
-                    update conference
+                    update cm.conference
                        set is_published = 't',
                            was_ever_published = 't'
                      where id = @Id
@@ -230,7 +230,7 @@ module MarkConferenceAsUnpublished =
                 let id = info.Id |> ConferenceId.value
                 let sql =
                     """
-                    update conference
+                    update cm.conference
                        set is_published = 'f'
                      where id = @Id
                     """

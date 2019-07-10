@@ -1,4 +1,4 @@
-module eShop.Domain.Conference.Web.Home
+module eShop.Domain.Conference.Web.Home.Impl
 
 open Giraffe
 open Giraffe.Razor

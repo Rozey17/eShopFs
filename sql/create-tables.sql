@@ -1,4 +1,6 @@
-create table conference
+create schema cm;
+
+create table cm.conference
 (
   id uuid primary key,
   name text not null,
@@ -14,4 +16,18 @@ create table conference
   owner_email text not null,
   was_ever_published boolean not null,
   is_published boolean not null
+);
+
+create schema r;
+
+create table r.conference
+(
+  id uuid primary key,
+  name text not null,
+  description text not null,
+  location text not null,
+  tagline text,
+  slug text not null,
+  twitter_search text,
+  start_date timestamptz not null
 );

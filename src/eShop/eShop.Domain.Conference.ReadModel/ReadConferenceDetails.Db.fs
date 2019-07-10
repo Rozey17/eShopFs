@@ -38,7 +38,7 @@ let readConferenceDetails connection : ReadConferenceDetails =
                    owner_email,
                    was_ever_published,
                    is_published
-              from conference
+              from cm.conference
              where slug = @Slug
                and access_code = @AccessCode
             """
