@@ -7,8 +7,8 @@ type SubscriptionId = SubscriptionId of string
 
 type IMessageBus =
     inherit IDisposable
-    abstract member Publish<'a when 'a : not struct> : 'a -> TimeSpan -> Async<unit>
-    abstract member TopicPublish<'a when 'a : not struct> : 'a -> Topic -> TimeSpan -> Async<unit>
+    abstract member Publish<'a when 'a : not struct> : 'a -> Async<unit>
+    abstract member TopicPublish<'a when 'a : not struct> : 'a -> Topic -> Async<unit>
     abstract member Subscribe<'a when 'a : not struct> : SubscriptionId -> ('a -> Async<unit>) -> unit
     abstract member TopicSubscribe<'a when 'a : not struct> : SubscriptionId -> Topic -> ('a -> Async<unit>) -> unit
 
@@ -30,7 +30,7 @@ type Subscriber<'a> =
             this.Binding
 
 type Message =
-    | Publish of payload:obj * payloadType:Type * expiry:DateTime * topic:Topic option
+    | Publish of payload:obj * payloadType:Type * topic:Topic option
     | Subscribe of subscriber:ISubscriber
     | Stop of AsyncReplyChannel<unit>
 
@@ -69,13 +69,13 @@ let rec loop subscribers (exiting: AsyncReplyChannel<unit> option) (agent: Mailb
                 return! loop subscribers (Some channel) agent
             | Subscribe subscriber ->
                 return! loop (subscriber::subscribers) exiting agent
-            | Publish (message, type', expiry, topic) ->
-                if expiry > DateTime.Now then
-                    let matchingSubs =
-                        subscribers
-                        |> List.filter (fun it -> it.Type = type' && topicBindingMatch topic it.Binding)
-                    for sub in matchingSubs do
-                        sub.Action message |> Async.StartImmediate
+            | Publish (message, type', topic) ->
+                let matchingSubs =
+                    subscribers
+                    |> List.filter (fun it -> it.Type = type' && topicBindingMatch topic it.Binding)
+                for sub in matchingSubs do
+                    sub.Action message |> Async.StartImmediate
+
                 return! loop subscribers exiting agent
     }
 
@@ -88,11 +88,11 @@ type MemoryMessageBus() =
             agent.PostAndReply Stop
 
     interface IMessageBus with
-        member __.Publish (message: 'a) expiry =
-            agent.Post (Publish (box message, typeof<'a>, DateTime.Now + expiry, None))
+        member __.Publish (message: 'a) =
+            agent.Post (Publish (box message, typeof<'a>, None))
             async.Zero()
-        member __.TopicPublish (message: 'a) topic expiry =
-            agent.Post (Publish (box message, typeof<'a>, DateTime.Now + expiry, Some topic))
+        member __.TopicPublish (message: 'a) topic =
+            agent.Post (Publish (box message, typeof<'a>, Some topic))
             async.Zero()
         member __.Subscribe sid action =
             agent.Post (Subscribe { SubscriptionId = sid; Binding = "#"; Action = action })

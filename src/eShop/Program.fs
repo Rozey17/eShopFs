@@ -8,7 +8,7 @@ open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
 open eShop.Domain.Conference.Web
-open eShop.Domain.Registration
+open eShop.Domain.Registration.Conference.Integrator
 
 [<AutoOpen>]
 module Middleware =
@@ -45,7 +45,7 @@ let webApp =
                 route  "/conferences/create"     >=>  CreateConference.Impl.createConference
                 route  "/conferences/locate"     >=>  LocateConference.locateConference
                 route  "/conferences/edit"       >=>  EditConference.updateConference
-                route  "/conferences/publish"    >=>  PublishConference.publishConference
+                route  "/conferences/publish"    >=>  PublishConference.Impl.publishConference
                 route  "/conferences/unpublish"  >=>  UnpublishConference.unpublishConference
             ]
         text "Not Found" |> RequestErrors.notFound ]
@@ -79,7 +79,7 @@ let configureLogging (builder : ILoggingBuilder) =
 
 [<EntryPoint>]
 let main _ =
-    Conference.Integrator.initialise()
+    ConferenceIntegrator.initialise()
 
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot     = Path.Combine(contentRoot, "WebRoot")

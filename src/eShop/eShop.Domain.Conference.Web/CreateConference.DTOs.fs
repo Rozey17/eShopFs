@@ -15,7 +15,8 @@ type ConferenceCreatedDTO =
       Location: string
       Tagline: string
       TwitterSearch: string
-      StartDate: DateTime }
+      StartDate: DateTime
+      IsPublished: bool }
 
 module ConferenceCreatedDTO =
 
@@ -29,7 +30,8 @@ module ConferenceCreatedDTO =
           Location = info.Location |> String250.value
           Tagline = info.Tagline |> Option.map String250.value |> Option.defaultValue null
           TwitterSearch = info.TwitterSearch |> Option.map String250.value |> Option.defaultValue null
-          StartDate = info.StartAndEnd |> StartAndEnd.startDateValue }
+          StartDate = info.StartAndEnd |> StartAndEnd.startDateValue
+          IsPublished = false }
 
 // web dto
 [<CLIMutable>]

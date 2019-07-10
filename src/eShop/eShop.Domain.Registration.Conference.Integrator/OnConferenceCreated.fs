@@ -1,14 +1,12 @@
-module eShop.Domain.Registration.Conference.Integrator
+module eShop.Domain.Registration.Conference.Integrator.OnConferenceCreated
 
 open Npgsql
 open eShop.Infrastructure
-open eShop.Infrastructure.Bus
 open eShop.Domain.Conference.Web.CreateConference
 
-let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"
-
-let OnConferenceCreated (event: ConferenceCreatedDTO) =
+let execute (e: ConferenceCreatedDTO) =
     async {
+        let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"
         use connection = new NpgsqlConnection(connStr)
         let sql =
             """
@@ -22,7 +20,8 @@ let OnConferenceCreated (event: ConferenceCreatedDTO) =
                     tagline,
                     slug,
                     twitter_search,
-                    start_date
+                    start_date,
+                    is_published
                 )
                 values
                 (
@@ -33,12 +32,9 @@ let OnConferenceCreated (event: ConferenceCreatedDTO) =
                     @Tagline,
                     @Slug,
                     @TwitterSearch,
-                    @StartDate
+                    @StartDate,
+                    @IsPublished
                 )
             """
-        do! Db.parameterizedExecuteAsync connection sql event
+        do! Db.parameterizedExecuteAsync connection sql e
     }
-
-let initialise () =
-    let subId = SubscriptionId "Registration"
-    Bus.Subscribe<ConferenceCreatedDTO> subId OnConferenceCreated

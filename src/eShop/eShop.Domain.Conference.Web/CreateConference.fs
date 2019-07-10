@@ -47,7 +47,7 @@ let createConference next (ctx: HttpContext) =
         | Ok [ (ConferenceCreated e) ] ->
             // internal response
             let e' = ConferenceCreatedDTO.fromDomain e
-            do! Bus.Publish e' (TimeSpan.FromMinutes 1.)
+            do! Bus.Publish e'
 
             // web response
             let info = e |> Conference.info

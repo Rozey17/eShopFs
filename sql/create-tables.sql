@@ -29,5 +29,6 @@ create table r.conference
   tagline text,
   slug text not null,
   twitter_search text,
-  start_date timestamptz not null
+  start_date timestamptz not null,
+  is_published boolean not null
 );
