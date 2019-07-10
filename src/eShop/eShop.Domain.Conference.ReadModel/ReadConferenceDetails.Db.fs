@@ -1,4 +1,4 @@
-module eShop.Domain.Conference.ReadModel.ConferenceDetails
+module eShop.Domain.Conference.ReadModel.ReadConferenceDetails.Db
 
 open System
 open eShop.Infrastructure

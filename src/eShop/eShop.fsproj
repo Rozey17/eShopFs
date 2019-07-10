@@ -78,8 +78,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="eShop.Domain.Conference.ReadModel\ConferenceDetails.Types.fs" />
-    <Compile Include="eShop.Domain.Conference.ReadModel\ConferenceDetails.Db.fs" />
+    <Compile Include="eShop.Domain.Conference.ReadModel\ReadConferenceDetails.Types.fs" />
+    <Compile Include="eShop.Domain.Conference.ReadModel\ReadConferenceDetails.Db.fs" />
     <Compile Include="eShop.Domain.Conference.ReadModel\LocateConference.Types.fs" />
     <Compile Include="eShop.Domain.Conference.ReadModel\LocateConference.Db.fs" />
   </ItemGroup>

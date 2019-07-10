@@ -1,8 +1,12 @@
-namespace eShop.Domain.Conference.ReadModel
+namespace eShop.Domain.Conference.ReadModel.ReadConferenceDetails
 
 open System
 open eShop.Infrastructure
 
+// input
+type ConferenceIdentifier = string * string // slug * accessCode
+
+// output
 type ConferenceDetailsDTO =
     { Id: Guid
       Name: string
@@ -19,6 +23,8 @@ type ConferenceDetailsDTO =
       WasEverPublished: bool
       IsPublished: bool }
 
+// error
 type RecordNotFound = RecordNotFound
 
-type ReadConferenceDetails = string * string -> AsyncResult<ConferenceDetailsDTO, RecordNotFound>
+// query
+type ReadConferenceDetails = ConferenceIdentifier -> AsyncResult<ConferenceDetailsDTO, RecordNotFound>
