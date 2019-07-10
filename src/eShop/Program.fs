@@ -7,16 +7,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
-open eShop.Domain.ConferenceManagement.Home.Web
-open eShop.Domain.ConferenceManagement.ConferenceDetails.Web
-open eShop.Domain.ConferenceManagement.CreateConference.Web
-open eShop.Domain.ConferenceManagement.EditConference.Web
-open eShop.Domain.ConferenceManagement.UpdateConference.Web
-open eShop.Domain.ConferenceManagement.LocateConference.Web
-open eShop.Domain.ConferenceManagement.PublishConference.Web
-open eShop.Domain.ConferenceManagement.UnpublishConference.Web
-open eShop.Domain.ConferencePublic.DisplayConference.Web
-open eShop.Domain.Registration
+open eShop.Domain.Conference.Web
 
 [<AutoOpen>]
 module Middleware =
@@ -28,8 +19,7 @@ module Middleware =
             this.Configure<RazorViewEngineOptions>(
                 fun (options : RazorViewEngineOptions) ->
                     options.ViewLocationFormats.Clear()
-                    options.ViewLocationFormats.Add("/eShop.Domain.ConferenceManagement/{1}/{0}.cshtml")
-                    options.ViewLocationFormats.Add("/eShop.Domain.ConferencePublic/{1}/{0}.cshtml")
+                    options.ViewLocationFormats.Add("/eShop.Domain.Conference.Web/{1}/{0}.cshtml")
                 )
                 .AddMvc()
             |> ignore
@@ -43,22 +33,19 @@ let webApp =
     choose [
         GET >=>
             choose [
-                route  "/conferences"            >=> renderHomeView
-                route  "/conferences/create"     >=> renderCreateConferenceView
-                route  "/conferences/details"    >=> renderConferenceDetailsView
-                route  "/conferences/locate"     >=> renderLocateConferenceView
-                route  "/conferences/edit"       >=> renderEditConferenceView
-
-                // TODO: change route
-                route  "/conferences/display"    >=> renderDisplayConferenceView
+                route  "/conferences"            >=>  Home.renderHomeView
+                route  "/conferences/create"     >=>  CreateConference.renderCreateConferenceView
+                route  "/conferences/details"    >=>  ConferenceDetails.renderConferenceDetailsView
+                route  "/conferences/locate"     >=>  LocateConference.renderLocateConferenceView
+                route  "/conferences/edit"       >=>  EditConference.renderEditConferenceView
             ]
         POST >=>
             choose [
-                route  "/conferences/create"     >=> createConference
-                route  "/conferences/locate"     >=> locateConference
-                route  "/conferences/edit"       >=> updateConference
-                route  "/conferences/publish"    >=> publishConference
-                route  "/conferences/unpublish"  >=> unpublishConference
+                route  "/conferences/create"     >=>  CreateConference.createConference
+                route  "/conferences/locate"     >=>  LocateConference.locateConference
+                route  "/conferences/edit"       >=>  EditConference.updateConference
+                route  "/conferences/publish"    >=>  PublishConference.publishConference
+                route  "/conferences/unpublish"  >=>  UnpublishConference.unpublishConference
             ]
         text "Not Found" |> RequestErrors.notFound ]
 
@@ -91,7 +78,7 @@ let configureLogging (builder : ILoggingBuilder) =
 
 [<EntryPoint>]
 let main _ =
-    ConferenceIntegration.initialize()
+    // ConferenceIntegration.initialize()
 
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot     = Path.Combine(contentRoot, "WebRoot")

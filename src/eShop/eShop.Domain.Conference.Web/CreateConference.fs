@@ -1,4 +1,4 @@
-module eShop.Domain.ConferenceManagement.CreateConference.Web
+module eShop.Domain.Conference.Web.CreateConference
 
 open System
 open FSharp.Control.Tasks.V2.ContextInsensitive
@@ -7,9 +7,39 @@ open Microsoft.AspNetCore.Mvc.ModelBinding
 open Giraffe
 open Giraffe.Razor
 open Npgsql
-open eShop.Infrastructure.Bus
-open eShop.Domain.Common
-open eShop.Domain.ConferenceManagement.Common
+open eShop.Domain.Conference
+open eShop.Domain.Conference.CreateConference
+
+// dto
+[<CLIMutable>]
+type ConferenceFormDTO =
+    { OwnerName: string
+      OwnerEmail: string
+      Slug: string
+      Name: string
+      Tagline: string
+      Location: string
+      TwitterSearch: string
+      Description: string
+      StartDate: DateTime
+      EndDate: DateTime }
+
+module ConferenceFormDTO =
+
+    /// Used when importing an Conference Form from outside world into the domain
+    let toUnvalidatedConferenceInfo (dto: ConferenceFormDTO) =
+        let domainObj: UnvalidatedConferenceInfo =
+            { OwnerName = dto.OwnerName
+              OwnerEmail = dto.OwnerEmail
+              Slug = dto.Slug
+              Name = dto.Name
+              Tagline = dto.Tagline
+              Location = dto.Location
+              TwitterSearch = dto.TwitterSearch
+              Description = dto.Description
+              StartDate = dto.StartDate
+              EndDate = dto.EndDate }
+        domainObj
 
 // get
 let renderCreateConferenceView: HttpHandler =
@@ -35,22 +65,19 @@ let createConference next (ctx: HttpContext) =
 
         let! form = ctx.BindFormAsync<ConferenceFormDTO>()
         let unvalidatedInfo = form |> ConferenceFormDTO.toUnvalidatedConferenceInfo
-        let cmd = Command.create unvalidatedInfo
+        let cmd = unvalidatedInfo
 
-        let checkSlugExists = Db.CheckSlugExists.query connection
-        let insertConferenceIntoDb = Db.InsertConferenceIntoDb.execute connection
+        let checkSlugExists = ConferenceDb.Impl.CheckSlugExists.execute connection
+        let insertConferenceIntoDb = ConferenceDb.Impl.InsertConference.execute connection
         let workflow = Impl.createConference checkSlugExists insertConferenceIntoDb
 
         let! result = workflow cmd
 
         match result with
-        | Ok [ (ConferenceCreated e) ] ->
-            let (UnpublishedConference (info, _)) = e
+        | Ok [ (ConferenceCreated (UnpublishedConference (info, _))) ] ->
             let slug = info.Slug |> NotEditableUniqueSlug.value
             let accessCode = info.AccessCode |> GeneratedAndNotEditableAccessCode.value
             let url = sprintf "/conferences/details?slug=%s&access_code=%s" slug accessCode
-
-            do! Bus.Publish e (TimeSpan.FromMinutes 1.)
 
             return! redirectTo false url next ctx
 

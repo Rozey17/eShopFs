@@ -207,7 +207,7 @@ module MarkConferenceAsPublished =
     let execute connection : MarkConferenceAsPublished =
         fun conference ->
             match conference with
-            | UnpublishedConference (info, _) ->
+            | PublishedConference info ->
                 let id = info.Id |> ConferenceId.value
                 let sql =
                     """
