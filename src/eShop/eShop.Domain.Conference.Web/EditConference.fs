@@ -1,4 +1,4 @@
-module eShop.Domain.Conference.Web.EditConference
+module eShop.Domain.Conference.Web.EditConference.Impl
 
 open System
 open FSharp.Control.Tasks.V2.ContextInsensitive
@@ -8,6 +8,7 @@ open Giraffe
 open Giraffe.Razor
 open Npgsql
 open eShop.Domain.Conference
+open eShop.Domain.Conference.Web
 open eShop.Domain.Conference.UpdateConference
 open eShop.Domain.Conference.ReadModel.ReadConferenceDetails
 

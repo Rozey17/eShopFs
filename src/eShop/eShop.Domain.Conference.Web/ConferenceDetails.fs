@@ -1,10 +1,11 @@
-module eShop.Domain.Conference.Web.ConferenceDetails
+module eShop.Domain.Conference.Web.ConferenceDetails.Impl
 
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Microsoft.AspNetCore.Http
 open Giraffe
 open Giraffe.Razor
 open Npgsql
+open eShop.Domain.Conference.Web
 open eShop.Domain.Conference.ReadModel.ReadConferenceDetails
 
 // get

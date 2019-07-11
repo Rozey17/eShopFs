@@ -1,10 +1,11 @@
-module eShop.Domain.Conference.Web.UnpublishConference
+module eShop.Domain.Conference.Web.UnpublishConference.Impl
 
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Microsoft.AspNetCore.Http
 open Giraffe
 open Npgsql
 open eShop.Domain.Conference
+open eShop.Domain.Conference.Web
 open eShop.Domain.Conference.UnpublishConference
 
 // post

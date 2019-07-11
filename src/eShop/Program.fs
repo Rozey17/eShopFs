@@ -36,21 +36,22 @@ let webApp =
     choose [
         GET >=>
             choose [
-                route  "/conferences"            >=>  ConferencesHome.Impl.renderHomeView
-                route  "/conferences/create"     >=>  CreateConference.Impl.renderCreateConferenceView
-                route  "/conferences/details"    >=>  ConferenceDetails.renderConferenceDetailsView
-                route  "/conferences/locate"     >=>  LocateConference.renderLocateConferenceView
-                route  "/conferences/edit"       >=>  EditConference.renderEditConferenceView
+                route  "/conferences"                >=>  ConferencesHome.Impl.renderHomeView
+                route  "/conferences/create"         >=>  CreateConference.Impl.renderCreateConferenceView
+                route  "/conferences/details"        >=>  ConferenceDetails.Impl.renderConferenceDetailsView
+                route  "/conferences/locate"         >=>  LocateConference.Impl.renderLocateConferenceView
+                route  "/conferences/edit"           >=>  EditConference.Impl.renderEditConferenceView
 
-                route  "/registration"           >=>  RegistrationHome.Impl.renderHomeView
+                route  "/registration"               >=>  RegistrationHome.Impl.renderHomeView
+                route  "/registration/conference"    >=>  DisplayConference.Impl.renderDisplayConferenceView
             ]
         POST >=>
             choose [
-                route  "/conferences/create"     >=>  CreateConference.Impl.createConference
-                route  "/conferences/locate"     >=>  LocateConference.locateConference
-                route  "/conferences/edit"       >=>  EditConference.updateConference
-                route  "/conferences/publish"    >=>  PublishConference.Impl.publishConference
-                route  "/conferences/unpublish"  >=>  UnpublishConference.unpublishConference
+                route  "/conferences/create"         >=>  CreateConference.Impl.createConference
+                route  "/conferences/locate"         >=>  LocateConference.Impl.locateConference
+                route  "/conferences/edit"           >=>  EditConference.Impl.updateConference
+                route  "/conferences/publish"        >=>  PublishConference.Impl.publishConference
+                route  "/conferences/unpublish"      >=>  UnpublishConference.Impl.unpublishConference
             ]
         text "Not Found" |> RequestErrors.notFound ]
 

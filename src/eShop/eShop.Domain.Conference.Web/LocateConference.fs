@@ -1,4 +1,4 @@
-module eShop.Domain.Conference.Web.LocateConference
+module eShop.Domain.Conference.Web.LocateConference.Impl
 
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Microsoft.AspNetCore.Http

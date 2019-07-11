@@ -1,0 +1,139 @@
+@model eShop.Domain.Registration.Conference.ReadModel.ReadConferenceDetails.ConferenceDetailsDTO
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<h1 class="page__head page__wrapper">
+  @Model.Name
+  @if (!string.IsNullOrEmpty(Model.Tagline))
+  {
+    <br /><span class="page__head-note">(@Model.Tagline)</span>
+  }
+</h1>
+
+<div class="page__content">
+  <div class="page__wrapper content-main">
+    <div class="content-main__wrapper">
+      <div class="content-main__main">
+        <div class="content-main__header"></div>
+        <a class="tile" href="javascript:void(0)">
+          <span class="tile__imgs tile-slide">
+            <img class="tile__img" src="/r/tmp/pic_.jpg" alt="" style="width: 250px;">
+            <img class="tile__img" src="/r/tmp/pic_1.jpg" alt="" style="width: 250px;">
+            <img class="tile__img" src="/r/tmp/pic_2.jpg" alt="" style="width: 250px;">
+          </span>
+          <span class="tile__header">Speakers</span>
+        </a>
+        <a class="tile tile_narrow" href="javascript:void(0)">
+          <span class="tile__img-container">
+            <img src="/r/Conference/date.png" alt="About event">
+          </span>
+          <span class="tile__header">
+            About event
+          </span>
+        </a>
+        <a class="tile" href="javascript:void(0)">
+          <span class="tile__imgs tile-slide">
+            <img class="tile__img" src="/r/Conference/sessions.png" alt="" style="z-index: 10;">
+            <span style="display: none;">
+              <span class="tile__topic">Get the .NET Framework 1.1 – MSDN
+                Explore Windows, Web, Cloud
+              </span>
+              <span class="tile__span">11:00 am – 12:00 am</span>
+            </span>
+          </span>
+          <span class="tile__header">Sessions</span>
+        </a>
+        <a class="tile tile_narrow" href="javascript:void(0)">
+          <span class="tile__imgs tile-slide">
+            <img class="tile__img" src="/r/Conference/destination.png" alt="" style="z-index: 10;">
+            <img class="tile__img" src="/r/tmp/pic_1.jpg" alt="">
+            <img class="tile__img" src="/r/tmp/pic_2.jpg" alt="">
+          </span>
+          <span class="tile__header">Destination</span>
+        </a>
+        <a class="tile" href="javascript:void(0)">
+          <span class="tile__topic">
+            Automating your build process with perforated cards
+          </span>
+          <span class="tile__span">11:00 am – 12:00 am</span>
+          <span class="tile__header">
+            Event topics
+            <span class="tile__nav">
+              <span class="tile__nav-item tile__nav-item_active"><i></i></span>
+              <span class="tile__nav-item"><i></i></span>
+              <span class="tile__nav-item"><i></i></span>
+              <span class="tile__nav-item"><i></i></span>
+            </span>
+          </span>
+        </a>
+        <a class="tile tile_narrow" href="javascript:void(0)">
+          <span class="tile__imgs tile-slide">
+            <img class="tile__img" src="/r/Conference/organizers.png" alt="" style="z-index: 10;">
+            <img class="tile__img" src="/r/tmp/pic_1.jpg" alt="">
+            <img class="tile__img" src="/r/tmp/pic_2.jpg" alt="">
+          </span>
+          <span class="tile__header">Organizers</span>
+        </a>
+      </div>
+    </div>
+    <div class="content-main__aside">
+      <div class="content-main__header"></div>
+      <a class="tile tile_register" href="/registration/start-registration">
+        <span class="tile__header">Register <i></i></span>
+      </a>
+    </div>
+    <div class="content-main__extra">
+      <div class="content-main__header">Media</div>
+      <div class="content-main__extra-right">
+        <a class="tile tile_small" href="javascript:void(0)">
+          <img src="/r/Conference/plus.png" alt="">
+          <span class="tile__header">Add to my calendar</span>
+        </a>
+      </div>
+      <div class="content-main__extra-left">
+        <a class="tile" href="javascript:void(0)">
+          <span class="tile__img-container">
+            <img src="/r/Conference/sponsors.png" alt="">
+          </span>
+          <span class="tile__header">Sponsor</span>
+        </a>
+        <a class="tile" href="javascript:void(0)">
+          <span class="tile__img-container">
+            <img src="/r/Conference/press.png" alt="">
+          </span>
+          <span class="tile__header">Press</span>
+        </a>
+        @{ var twitter = Model.TwitterSearch ?? "#cqrsjourney"; }
+        <a class="tile tile_twitter" href="https://twitter.com/#!/search/@System.Net.WebUtility.UrlEncode(twitter)" target="_search">
+          <span class="tile__header">Twitter</span>
+          <span id="tweets" class="tile-slide" data-search="@System.Net.WebUtility.UrlDecode(twitter)"></span>
+        </a>
+      </div>
+    </div>
+    <div class="g-clear"></div>
+    <div class="content-main__time-n-place time-n-place">
+      <div class="time-n-place__date">@Model.StartDate.ToString("MMM d")</div>
+      <div class="time-n-place__time">@Model.StartDate.ToString("hh:mm tt")</div>
+      <div class="time-n-place__place">@Model.Location</div>
+    </div>
+
+  </div>
+</div>
+<div class="page__likes page__wrapper">
+  <div class="page__wrapper likes">
+    <a class="likes__link likes__link_facebook" href="javascript:void(0)"></a>
+    <a class="likes__link likes__link_mail" href="javascript:void(0)"></a>
+    <a class="likes__link likes__link_twitter" href="javascript:void(0)"></a>
+  </div>
+</div>
+
+@section Navigation {
+  <a class="quick__login" href="/registration/find-order">Locate Registration</a>
+}
+
+@section Scripts {
+  <script type="text/javascript" src="/r/lib/jquery.cycle.all-2.99.min.js" ></script>
+  <script type="text/javascript" src="/r/js/main.js"> </script>
+}
