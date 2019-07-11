@@ -31,9 +31,9 @@ let publishConference next (ctx: HttpContext) =
 
             match result with
             | Ok [ (ConferencePublished e) ] ->
-                // internal response
-                let e' = ConferencePublishedDTO.fromDomain e
-                do! Bus.Publish e'
+                // to registration context
+                let dto = ConferencePublishedDTO.fromDomain e
+                do! Bus.Publish dto
 
                 // web response
                 let url = sprintf "/conferences/details?slug=%s&access_code=%s" slug accessCode

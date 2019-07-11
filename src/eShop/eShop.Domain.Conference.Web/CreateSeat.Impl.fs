@@ -5,6 +5,7 @@ open Microsoft.AspNetCore.Mvc.ModelBinding
 open Giraffe
 open Giraffe.Razor
 open Npgsql
+open eShop.Infrastructure.Bus
 open eShop.Domain.Conference
 open eShop.Domain.Conference.Web
 open eShop.Domain.Conference.ReadModel.ReadConferenceDetails
@@ -35,8 +36,20 @@ let createSeat next ctx =
 
             let! result = workflow cmd
             match result with
-            | Ok events ->
-                return! razorHtmlView "SeatGrid" None None None next ctx
+            | Ok [ SeatCreated e ] ->
+                let dto = SeatTypeDTO.fromDomain e
+                let viewData = dict [("WasEverPublished", box details.WasEverPublished)]
+                return! razorHtmlView "SeatGrid" (Some [dto]) (Some viewData) None next ctx
+
+            | Ok [ SeatCreated e1; PublishedSeatCreated e2 ] ->
+                // to registration context
+                let dto = PublishedSeatCreatedDTO.fromDomain e2
+                do! Bus.Publish dto
+
+                // web response
+                let dto = SeatTypeDTO.fromDomain e1
+                let viewData = dict [("WasEverPublished", box details.WasEverPublished)]
+                return! razorHtmlView "SeatGrid" (Some [dto]) (Some viewData) None next ctx
 
             | Error (Validation (ValidationError err)) ->
                 let modelState = ModelStateDictionary()

@@ -45,9 +45,9 @@ let createConference next (ctx: HttpContext) =
 
         match result with
         | Ok [ (ConferenceCreated e) ] ->
-            // internal response
-            let e' = ConferenceCreatedDTO.fromDomain e
-            do! Bus.Publish e'
+            // to registration context
+            let dto = ConferenceCreatedDTO.fromDomain e
+            do! Bus.Publish dto
 
             // web response
             let info = e |> Conference.info
