@@ -75,7 +75,18 @@
                 <td>@Html.DisplayFor(x => item.Quantity)</td>
                 <td>@Html.DisplayFor(x => item.Price)</td>
                 <td>
-                  @if (ViewData["WasEverPublished"])
+                  @if ((bool)ViewData["WasEverPublished"])
+                  {
+                    <span title="The conference has been published at least once before. Cannot delete seat types.">
+                      Delete
+                    </span>
+                  }
+                  else
+                  {
+                    <a href="javascript:void(0)" class="deleteRow">
+                      Delete
+                    </a>
+                  }
                 </td>
               </tr>
             }
@@ -90,7 +101,9 @@
           </table>
         </div>
         <div class="nav content-main__nav">
-          <a class="nav__left" href="/conferences/details?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]">Back</a>
+          <a class="nav__left" href="/conferences/details?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]">
+            Back
+          </a>
         </div>
       </div>
     </div>
