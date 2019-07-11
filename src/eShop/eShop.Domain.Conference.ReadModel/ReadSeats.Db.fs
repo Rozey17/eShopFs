@@ -3,7 +3,7 @@ module eShop.Domain.Conference.ReadModel.ReadSeats.Db
 open eShop.Infrastructure
 
 let readSeats connection : ReadSeats =
-    fun id ->
+    fun conferenceId ->
         let sql =
             """
             select conference_id as ConferenceId,
@@ -13,7 +13,7 @@ let readSeats connection : ReadSeats =
                    quantity as Quantity,
                    price as Price
               from cm.seat
-             where id = @Id
+             where conference_id = @ConferenceId
             """
-        let param = {| Id = id |}
+        let param = {| ConferenceId = conferenceId |}
         Db.parameterizedQueryAsync<SeatTypeDTO> connection sql param

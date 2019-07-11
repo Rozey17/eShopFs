@@ -67,29 +67,7 @@
               </tr>
             </thead>
             <tbody>
-            @foreach (var item in Model)
-            {
-              <tr data-pkey="@item.Id">
-                <td><a href="javascript:void(0)" class="makeRowEditable">@item.Name</a></td>
-                <td>@Html.DisplayFor(x => item.Description)</td>
-                <td>@Html.DisplayFor(x => item.Quantity)</td>
-                <td>@Html.DisplayFor(x => item.Price)</td>
-                <td>
-                  @if ((bool)ViewData["WasEverPublished"])
-                  {
-                    <span title="The conference has been published at least once before. Cannot delete seat types.">
-                      Delete
-                    </span>
-                  }
-                  else
-                  {
-                    <a href="javascript:void(0)" class="deleteRow">
-                      Delete
-                    </a>
-                  }
-                </td>
-              </tr>
-            }
+            @Html.Partial("SeatGrid", Model)
             <tr class="seats-type-add hidden">
               <td colspan="10">
                 <a href="javascript:void(0)" class="js-add-edit-type">
