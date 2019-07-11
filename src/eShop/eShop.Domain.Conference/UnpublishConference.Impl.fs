@@ -21,8 +21,8 @@ type CreateEvents = Conference -> UnpublishConferenceEvent list
 let applyUnpublish: ApplyUnpublish =
     fun conference ->
         match conference with
-        | PublishedConference info ->
-            UnpublishedConference(info=info, wasEverPublished=true)
+        | PublishedConference (info, seats) ->
+            UnpublishedConference(info=info, wasEverPublished=true, seats=seats)
         | unpublishedConference ->
             unpublishedConference
 

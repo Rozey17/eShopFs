@@ -37,6 +37,8 @@
     <Compile Include="eShop.Domain.Conference\PublishConference.Impl.fs" />
     <Compile Include="eShop.Domain.Conference\UnpublishConference.Types.fs" />
     <Compile Include="eShop.Domain.Conference\UnpublishConference.Impl.fs" />
+    <Compile Include="eShop.Domain.Conference\CreateSeat.Types.fs" />
+    <Compile Include="eShop.Domain.Conference\CreateSeat.Impl.fs" />
   </ItemGroup>
 
   <ItemGroup>

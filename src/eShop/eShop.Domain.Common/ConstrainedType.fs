@@ -50,3 +50,11 @@ let createLike fieldName ctor pattern str =
         Ok (ctor str)
     else
         Error (sprintf "%s: '%s' must match the pattern '%s'" fieldName str pattern)
+
+/// Create a constrained guid using the constructor provided
+/// Return Error if input is empty
+let createGuid fieldName ctor guid =
+    if guid = Guid.Empty then
+        Error (sprintf "%s: must not be empty" fieldName)
+    else
+        Ok (ctor guid)

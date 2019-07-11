@@ -13,7 +13,7 @@ let private exnOnError v =
 module ReadSingleConference =
 
     [<CLIMutable>]
-    type ConferenceDTO =
+    type ConferenceInfoDTO =
         { id: Guid
           name: string
           description: string
@@ -28,9 +28,8 @@ module ReadSingleConference =
           owner_email: string
           was_ever_published: bool
           is_published: bool }
-
     module ConferenceDTO =
-        let toConferenceInfo (dto: ConferenceDTO) =
+        let toConferenceInfo dto =
             let domainObj =
                 { Id = dto.id |> ConferenceId.create |> exnOnError
                   Name = dto.name |> String250.create "Name" |> exnOnError
@@ -46,11 +45,30 @@ module ReadSingleConference =
                         Email = dto.owner_email |> EmailAddress.create "Owner Email" |> exnOnError } |> NotEditable }
             domainObj
 
+    [<CLIMutable>]
+    type SeatTypeDTO =
+        { conference_id: Guid
+          id: Guid
+          name: string
+          description: string
+          quantity: int
+          price: decimal }
+    module SeatTypeDTO =
+        let toSeatType dto =
+            let domainObj =
+                { ConferenceId = dto.conference_id |> ConferenceId.create |> exnOnError
+                  Id = dto.id |> SeatTypeId.create |> exnOnError
+                  Name = dto.name |> Name.create |> exnOnError
+                  Description = dto.description |> String250.create "Description" |> exnOnError
+                  Quantity = dto.quantity |> UnitQuantity.create "Quantity" |> exnOnError
+                  Price = dto.price |> Price.create "Price" |> exnOnError }
+            domainObj
+
     let query connection : ReadSingleConference =
         fun (slug, accessCode) ->
             let slug = slug |> UniqueSlug.value
             let accessCode = accessCode |> AccessCode.value
-            let sql =
+            let sql1 =
                 """
                 select id,
                        name,
@@ -70,23 +88,43 @@ module ReadSingleConference =
                  where slug = @Slug
                    and access_code = @AccessCode
                 """
-            let param = {| Slug = slug; AccessCode = accessCode |}
+            let sql2 =
+                """
+                select conference_id,
+                       id,
+                       name,
+                       description,
+                       quantity,
+                       price
+                  from cm.seat
+                 where conference_id = @ConferenceId
+                """
 
             async {
-                let! queryResult = Db.tryParameterizedQuerySingleAsync<ConferenceDTO> connection sql param
-                match queryResult with
-                | Some dto ->
-                    let info = dto |> ConferenceDTO.toConferenceInfo
-                    if dto.is_published then
-                        return Ok (PublishedConference info)
+                let param1 = {| Slug = slug; AccessCode = accessCode |}
+                let! infoResult = Db.tryParameterizedQuerySingleAsync<ConferenceInfoDTO> connection sql1 param1
+
+                match infoResult with
+                | Some infoDTO ->
+                    let info = infoDTO |> ConferenceDTO.toConferenceInfo
+
+                    let param2 = {| ConferenceId = infoDTO.id |}
+                    let! seatDTOs = Db.parameterizedQueryAsync<SeatTypeDTO> connection sql2 param2
+
+                    let seats =
+                        seatDTOs
+                        |> Seq.map SeatTypeDTO.toSeatType
+                        |> List.ofSeq
+
+                    if infoDTO.is_published then
+                        return Ok (PublishedConference (info, seats))
                     else
-                        return Ok (UnpublishedConference (info, dto.was_ever_published))
+                        return Ok (UnpublishedConference (info, infoDTO.was_ever_published, seats))
                 | None ->
                     return Error (RecordNotFound)
             }
 
 module CheckSlugExists =
-
     let execute connection : CheckSlugExists =
         fun slug ->
             let slug = slug |> UniqueSlug.value
@@ -106,7 +144,7 @@ module CheckSlugExists =
 module InsertConference =
 
     module ConferenceInfoDTO =
-        let fromDomain info =
+        let fromDomain (info: ConferenceInfo) =
             {| Id = info.Id |> ConferenceId.value
                Name = info.Name |> String250.value
                Description = info.Description |> NotEmptyString.value
@@ -124,56 +162,52 @@ module InsertConference =
 
     let execute connection : InsertConference =
         fun conference ->
-            match conference with
-            | UnpublishedConference (info, wasEverPublish) when wasEverPublish = false ->
-                let sql =
-                    """
-                    insert into
-                        cm.conference
-                        (
-                            id,
-                            name,
-                            description,
-                            location,
-                            tagline,
-                            slug,
-                            twitter_search,
-                            start_date,
-                            end_date,
-                            access_code,
-                            owner_name,
-                            owner_email,
-                            was_ever_published,
-                            is_published
-                        )
-                        values
-                        (
-                            @Id,
-                            @Name,
-                            @Description,
-                            @Location,
-                            @Tagline,
-                            @Slug,
-                            @TwitterSearch,
-                            @StartDate,
-                            @EndDate,
-                            @AccessCode,
-                            @OwnerName,
-                            @OwnerEmail,
-                            @WasEverPublished,
-                            @IsPublished
-                        )
-                    """
-                let dto = ConferenceInfoDTO.fromDomain info
-                Db.parameterizedExecuteAsync connection sql dto
-            | _ ->
-                async.Zero()
+            let info = conference |> Conference.info
+            let sql =
+                """
+                insert into
+                    cm.conference
+                    (
+                        id,
+                        name,
+                        description,
+                        location,
+                        tagline,
+                        slug,
+                        twitter_search,
+                        start_date,
+                        end_date,
+                        access_code,
+                        owner_name,
+                        owner_email,
+                        was_ever_published,
+                        is_published
+                    )
+                    values
+                    (
+                        @Id,
+                        @Name,
+                        @Description,
+                        @Location,
+                        @Tagline,
+                        @Slug,
+                        @TwitterSearch,
+                        @StartDate,
+                        @EndDate,
+                        @AccessCode,
+                        @OwnerName,
+                        @OwnerEmail,
+                        @WasEverPublished,
+                        @IsPublished
+                    )
+                """
+            let dto = ConferenceInfoDTO.fromDomain info
+            Db.parameterizedExecuteAsync connection sql dto
 
 
 module UpdateConference =
 
     module ConferenceDTO =
-
         let fromDomain conference =
             let info = conference |> Conference.info
 
@@ -209,7 +243,7 @@ module MarkConferenceAsPublished =
     let execute connection : MarkConferenceAsPublished =
         fun conference ->
             match conference with
-            | PublishedConference info ->
+            | PublishedConference (info, _) ->
                 let id = info.Id |> ConferenceId.value
                 let sql =
                     """
@@ -228,7 +262,7 @@ module MarkConferenceAsUnpublished =
     let execute connection : MarkConferenceAsUnpublished =
         fun conference ->
             match conference with
-            | UnpublishedConference (info, _) ->
+            | UnpublishedConference (info, _, _) ->
                 let id = info.Id |> ConferenceId.value
                 let sql =
                     """
@@ -240,3 +274,50 @@ module MarkConferenceAsUnpublished =
                 Db.parameterizedExecuteAsync connection sql param
             | _ ->
                 async.Zero()
+
+
+module InsertSeat =
+
+    [<CLIMutable>]
+    type SeatTypeDTO =
+        { ConferenceId: Guid
+          Id: Guid
+          Name: string
+          Description: string
+          Quantity: int
+          Price: decimal }
+    module SeatTypeDTO =
+        let fromDomain (seatType: SeatType) =
+            { ConferenceId = seatType.ConferenceId |> ConferenceId.value
+              Id = seatType.Id |> SeatTypeId.value
+              Name = seatType.Name |> Name.value
+              Description = seatType.Description |> String250.value
+              Quantity = seatType.Quantity |> UnitQuantity.value
+              Price = seatType.Price |> Price.value }
+
+    let execute connection : InsertSeat =
+        fun (_conference, seatType) ->
+            let sql =
+                """
+                insert into
+                    cm.seat
+                    (
+                        conference_id,
+                        id,
+                        name,
+                        description,
+                        quantity,
+                        price
+                    )
+                    values
+                    (
+                        @ConferenceId,
+                        @Id,
+                        @Name,
+                        @Description,
+                        @Quantity,
+                        @Price
+                    )
+                """
+            let dto = SeatTypeDTO.fromDomain seatType
+            Db.parameterizedExecuteAsync connection sql dto

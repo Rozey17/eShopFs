@@ -18,6 +18,16 @@ create table cm.conference
   is_published boolean not null
 );
 
+create table cm.seat
+(
+  conference_id uuid not null,
+  id uuid primary key,
+  name text not null,
+  description text not null,
+  quantity integer not null,
+  price decimal not null
+);
+
 create schema r;
 
 create table r.conference

@@ -17,7 +17,7 @@ module NotEmptyString =
     let value (NotEmptyString v) = v
     let create fieldName str =
         if String.IsNullOrEmpty str then
-            Error (sprintf "%s must not be null or empty" fieldName)
+            Error (sprintf "%s: Must not be null or empty" fieldName)
         else
             Ok (NotEmptyString str)
 
@@ -29,16 +29,16 @@ module EmailAddress =
         let pattern = @"[\w-]+(\.?[\w-])*\@[\w-]+(\.[\w-]+)+"
         ConstrainedType.createLike fieldName EmailAddress pattern
 
-/// Constrained to be a integer between 1 and 1000
+/// Constrained to be a integer between 1 and 10000
 type UnitQuantity = private UnitQuantity of int
 module UnitQuantity =
     let value (UnitQuantity v) = v
     let create fieldName =
-        ConstrainedType.createNumber fieldName UnitQuantity 0 1000
+        ConstrainedType.createNumber fieldName UnitQuantity 0 10000
 
-/// Constrained to be a decimal between 0.0 and 1000.00
+/// Constrained to be a decimal between 0.0 and 50000.00
 type Price = private Price of decimal
 module Price =
     let value (Price v) = v
     let create fieldName =
-        ConstrainedType.createNumber fieldName Price 0.M 1000M
+        ConstrainedType.createNumber fieldName Price 0.M 50000M

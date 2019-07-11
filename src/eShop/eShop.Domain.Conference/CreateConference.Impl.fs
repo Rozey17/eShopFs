@@ -45,40 +45,40 @@ let validateSlugExists (checkSlugExists: ConferenceDb.CheckSlugExists) slug =
     }
 
 let validateConferenceInfo: ValidateConferenceInfo =
-    fun checkSlugExists unvalidatedInfo ->
+    fun checkSlugExists unvalidated ->
         asyncResult {
             let! ownerName =
-                unvalidatedInfo.OwnerName
+                unvalidated.OwnerName
                 |> String250.create "Owner Name"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! ownerEmail =
-                unvalidatedInfo.OwnerEmail
+                unvalidated.OwnerEmail
                 |> EmailAddress.create "Owner Email"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! name =
-                unvalidatedInfo.Name
+                unvalidated.Name
                 |> String250.create "Name"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! description =
-                unvalidatedInfo.Description
+                unvalidated.Description
                 |> NotEmptyString.create "Description"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! location =
-                unvalidatedInfo.Location
+                unvalidated.Location
                 |> String250.create "Location"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! tagline =
-                unvalidatedInfo.Tagline
+                unvalidated.Tagline
                 |> String250.createOption "Tagline"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! slug =
-                unvalidatedInfo.Slug
+                unvalidated.Slug
                 |> UniqueSlug.create
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
@@ -86,16 +86,15 @@ let validateConferenceInfo: ValidateConferenceInfo =
                 |> validateSlugExists checkSlugExists
                 |> AsyncResult.mapError ValidationError
             let! twitterSearch =
-                unvalidatedInfo.TwitterSearch
+                unvalidated.TwitterSearch
                 |> String250.createOption "Twitter Search"
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
             let! startAndEnd =
-                (unvalidatedInfo.StartDate, unvalidatedInfo.EndDate)
+                (unvalidated.StartDate, unvalidated.EndDate)
                 |> StartAndEnd.create
                 |> AsyncResult.ofResult
                 |> AsyncResult.mapError ValidationError
-
             let validatedInfo: ValidatedConferenceInfo =
                 { Name = name
                   Description = description
@@ -113,17 +112,17 @@ let validateConferenceInfo: ValidateConferenceInfo =
 
 // step: enrich
 let enrichWith: EnrichValidatedConferenceInfoWith =
-    fun id accessCode info ->
+    fun id accessCode validated ->
         { Id = id
           AccessCode = accessCode |> Generated |> NotEditable
-          Name = info.Name
-          Description = info.Description
-          Location = info.Location
-          Tagline = info.Tagline
-          Slug = info.Slug |> NotEditable
-          TwitterSearch = info.TwitterSearch
-          StartAndEnd = info.StartAndEnd
-          Owner = info.Owner |> NotEditable }
+          Name = validated.Name
+          Description = validated.Description
+          Location = validated.Location
+          Tagline = validated.Tagline
+          Slug = validated.Slug |> NotEditable
+          TwitterSearch = validated.TwitterSearch
+          StartAndEnd = validated.StartAndEnd
+          Owner = validated.Owner |> NotEditable }
 
 // step: create events
 let createConferenceCreatedEvent conference : ConferenceCreated = conference
@@ -154,7 +153,7 @@ let createConference
                 let id = ConferenceId.generate()
                 let accessCode = AccessCode.generate()
                 let conferenceInfo = validatedInfo |> enrichWith id accessCode
-                let conference = UnpublishedConference(info=conferenceInfo, wasEverPublished=false)
+                let conference = UnpublishedConference(info=conferenceInfo, wasEverPublished=false, seats=[])
 
                 do! insertConference conference
                     |> AsyncResult.ofAsync

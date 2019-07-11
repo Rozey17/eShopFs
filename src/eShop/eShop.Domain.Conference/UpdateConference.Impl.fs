@@ -34,34 +34,34 @@ type CreateEvents = Conference -> UpdateConferenceEvent list
 
 // step: validate
 let validateConferenceInfo: ValidateConferenceInfo =
-    fun unvalidatedInfo ->
+    fun unvalidated ->
         result {
             let! id =
-                unvalidatedInfo.Id
+                unvalidated.Id
                 |> ConferenceId.create
                 |> Result.mapError ValidationError
             let! name =
-                unvalidatedInfo.Name
+                unvalidated.Name
                 |> String250.create "Name"
                 |> Result.mapError ValidationError
             let! description =
-                unvalidatedInfo.Description
+                unvalidated.Description
                 |> NotEmptyString.create "Description"
                 |> Result.mapError ValidationError
             let! location =
-                unvalidatedInfo.Location
+                unvalidated.Location
                 |> String250.create "Location"
                 |> Result.mapError ValidationError
             let! tagline =
-                unvalidatedInfo.Tagline
+                unvalidated.Tagline
                 |> String250.createOption "Tagline"
                 |> Result.mapError ValidationError
             let! twitterSearch =
-                unvalidatedInfo.TwitterSearch
+                unvalidated.TwitterSearch
                 |> String250.createOption "Twitter Search"
                 |> Result.mapError ValidationError
             let! startAndEnd =
-                (unvalidatedInfo.StartDate, unvalidatedInfo.EndDate)
+                (unvalidated.StartDate, unvalidated.EndDate)
                 |> StartAndEnd.create
                 |> Result.mapError ValidationError
             let validatedInfo: ValidatedConferenceInfo =
@@ -89,10 +89,10 @@ let applyUpdate: ApplyUpdate =
                 TwitterSearch = validatedInfo.TwitterSearch
                 StartAndEnd = validatedInfo.StartAndEnd }
         match conference with
-        | UnpublishedConference (_, wasEverPublished) ->
-            UnpublishedConference (changedInfo, wasEverPublished)
-        | PublishedConference _ ->
-            PublishedConference changedInfo
+        | UnpublishedConference (_, wasEverPublished, seats) ->
+            UnpublishedConference (changedInfo, wasEverPublished, seats)
+        | PublishedConference (_, seats) ->
+            PublishedConference (changedInfo, seats)
 
 // step: create events
 let createConferenceUpdatedEvent conference : ConferenceUpdated = conference
