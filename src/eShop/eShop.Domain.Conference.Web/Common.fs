@@ -9,12 +9,9 @@ module Common =
     let private notEmpty (str: string) =
         not (String.IsNullOrEmpty str)
 
-    let exnQueryStringValue (ctx: HttpContext) =
-        let slug = ctx.TryGetQueryStringValue "slug"
-        let accessCode = ctx.TryGetQueryStringValue "access_code"
+    let exnQueryStringValue (ctx: HttpContext) q =
+        let v = ctx.TryGetQueryStringValue q
 
-        match slug, accessCode with
-        | Some slug, Some accessCode when (slug |> notEmpty) && (accessCode |> notEmpty) ->
-            slug, accessCode
-        | _ ->
-            failwith "slug or access_code is missing"
+        match v with
+        | Some v when (v |> notEmpty) -> v
+        | _ -> failwith (sprintf "%s is missing" q)

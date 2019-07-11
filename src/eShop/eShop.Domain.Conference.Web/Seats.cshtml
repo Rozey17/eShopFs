@@ -1,4 +1,4 @@
-@model IEnumerable<eShop.Domain.Conference.ReadModel.ReadSeats.SeatTypeDTO>
+@model IEnumerable<eShop.Domain.Conference.ReadModel.SeatTypeDTO.SeatTypeDTO>
 
 @{
     ViewBag.Title = "Seat Types";
@@ -130,7 +130,9 @@
     }
 
     function makeRowEditable(row) {
-      $.get('', function (editableRow) {
+      var id = row.data('pkey')
+      var url = '/conferences/edit-seat?id=' + id + '&slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]'
+      $.get(url, function (editableRow) {
         row.replaceWith(editableRow);
       });
     }

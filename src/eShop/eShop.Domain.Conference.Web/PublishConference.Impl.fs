@@ -16,7 +16,8 @@ let publishConference next (ctx: HttpContext) =
         let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"
         use connection = new NpgsqlConnection(connStr)
 
-        let slug, accessCode = Common.exnQueryStringValue ctx
+        let slug = Common.exnQueryStringValue ctx "slug"
+        let accessCode = Common.exnQueryStringValue ctx "access_code"
         let! detailsResult = Db.readConferenceDetails connection (slug, accessCode)
 
         match detailsResult with

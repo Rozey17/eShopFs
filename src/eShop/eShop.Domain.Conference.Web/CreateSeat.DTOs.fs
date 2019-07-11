@@ -4,7 +4,7 @@ open System
 open eShop.Domain.Common
 open eShop.Domain.Conference
 open eShop.Domain.Conference.CreateSeat
-open eShop.Domain.Conference.ReadModel.ReadSeats
+open eShop.Domain.Conference.ReadModel.SeatTypeDTO
 
 // create form dto
 [<CLIMutable>]

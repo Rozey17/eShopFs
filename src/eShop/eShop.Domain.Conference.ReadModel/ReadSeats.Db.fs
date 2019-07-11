@@ -1,6 +1,7 @@
 module eShop.Domain.Conference.ReadModel.ReadSeats.Db
 
 open eShop.Infrastructure
+open eShop.Domain.Conference.ReadModel.SeatTypeDTO
 
 let readSeats connection : ReadSeats =
     fun conferenceId ->
