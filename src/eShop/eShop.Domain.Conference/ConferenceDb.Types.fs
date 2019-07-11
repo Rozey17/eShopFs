@@ -11,4 +11,4 @@ type InsertConference = Conference -> Async<unit>
 type UpdateConference = Conference -> Async<unit>
 type MarkConferenceAsPublished = Conference -> Async<unit>
 type MarkConferenceAsUnpublished = Conference -> Async<unit>
-type InsertSeat = Conference * SeatType -> Async<unit>
+type InsertSeatType = Conference * SeatType -> Async<unit>

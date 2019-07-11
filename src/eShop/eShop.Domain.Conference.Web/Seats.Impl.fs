@@ -8,6 +8,7 @@ open eShop.Domain.Conference.Web
 open eShop.Domain.Conference.ReadModel.ReadConferenceDetails
 open eShop.Domain.Conference.ReadModel.ReadSeats
 
+// get
 let renderSeatsView next ctx =
     task {
         let connStr = "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=eshop"

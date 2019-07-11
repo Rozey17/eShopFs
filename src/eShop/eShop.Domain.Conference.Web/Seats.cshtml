@@ -119,7 +119,8 @@
 
     function createRow(row) {
       var postParams = getPostParams(row);
-      $.post('', postParams)
+      var url = '/conferences/create-seat?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]'
+      $.post(url, postParams)
         .done(function (newRow) {
           row.replaceWith(newRow);
         })

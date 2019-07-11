@@ -22,7 +22,7 @@ type ValidateSeatType = UnvalidatedSeatType -> Result<ValidatedSeatType, Validat
 type EnrichValidatedSeatTypeWith = SeatTypeId -> ValidatedSeatType -> SeatType
 
 // step: add seat to conference
-type AddSeatToConference = SeatType -> Conference -> Conference
+type AddSeatTypeToConference = SeatType -> Conference -> Conference
 
 // step: create events
 type CreateEvents = Conference * SeatType -> CreateSeatEvent list
@@ -76,7 +76,7 @@ let enrichWith: EnrichValidatedSeatTypeWith =
           Price = validated.Price }
 
 // step: add seat to conference
-let addSeat: AddSeatToConference =
+let addSeat: AddSeatTypeToConference =
     fun newSeatType conference ->
         let existingSeatTypes = conference |> Conference.seats
         let seats = newSeatType::existingSeatTypes
@@ -109,3 +109,31 @@ let createEvents: CreateEvents =
             if wasEverPublished then yield publishedSeatCreated
         ]
 
+// workflow
+let createSeat
+    (readSingleConference: ConferenceDb.ReadSingleConference)
+    (insertSeatType: ConferenceDb.InsertSeatType)
+    : CreateSeat =
+
+        fun seatType ->
+            asyncResult {
+                let! validatedSeatType =
+                    seatType
+                    |> validateSeatType
+                    |> AsyncResult.ofResult
+                    |> AsyncResult.mapError CreateSeatError.Validation
+                let id = SeatTypeId.generate()
+                let seatType = validatedSeatType |> enrichWith id
+
+                let! conference =
+                    readSingleConference seatType.ConferenceId
+                    |> AsyncResult.mapError CreateSeatError.ConferenceNotFound
+
+                let conference = conference |> addSeat seatType
+
+                do! insertSeatType (conference, seatType)
+                    |> AsyncResult.ofAsync
+
+                let events = (conference, seatType) |> createEvents
+                return events
+            }

@@ -274,7 +274,7 @@ module MarkConferenceAsUnpublished =
                 async.Zero()
 
 
-module InsertSeat =
+module InsertSeatType =
 
     [<CLIMutable>]
     type SeatTypeDTO =
@@ -293,7 +293,7 @@ module InsertSeat =
               Quantity = seatType.Quantity |> UnitQuantity.value
               Price = seatType.Price |> Price.value }
 
-    let execute connection : InsertSeat =
+    let execute connection : InsertSeatType =
         fun (_conference, seatType) ->
             let sql =
                 """
