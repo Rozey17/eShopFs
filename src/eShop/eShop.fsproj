@@ -16,6 +16,9 @@
     <Compile Include="eShop.Infrastructure.FSharp\AsyncResult.fs" />
     <Compile Include="eShop.Infrastructure.Db\Db.fs" />
     <Compile Include="eShop.Infrastructure.Bus\Bus.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="eShop.Domain.Common\ConstrainedType.fs" />
     <Compile Include="eShop.Domain.Common\CommonTypes.fs" />
   </ItemGroup>
@@ -73,6 +76,8 @@
   <ItemGroup>
     <Compile Include="eShop.Domain.Registration.Conference.ReadModel\ReadPublishedConferences.Types.fs" />
     <Compile Include="eShop.Domain.Registration.Conference.ReadModel\ReadPublishedConferences.Db.fs" />
+    <Compile Include="eShop.Domain.Registration.Conference.ReadModel\ReadConferenceDetails.Types.fs" />
+    <Compile Include="eShop.Domain.Registration.Conference.ReadModel\ReadConferenceDetails.Db.fs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -80,6 +85,8 @@
     <Content Include="eShop.Domain.Registration.Web\_ViewStart.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.Registration.Web\RegistrationHome.fs" />
     <Content Include="eShop.Domain.Registration.Web\RegistrationHome.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="eShop.Domain.Registration.Web\DisplayConference.fs" />
+    <Content Include="eShop.Domain.Registration.Web\DisplayConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

@@ -90,13 +90,15 @@ module CheckSlugExists =
     let execute connection : CheckSlugExists =
         fun slug ->
             let slug = slug |> UniqueSlug.value
-            let sql = @"
+            let sql =
+                """
                 select exists
                        (
                            select 1
                              from cm.conference
                             where slug = @Slug
-                       )"
+                       )
+                """
             let param = {| Slug = slug |}
             Db.parameterizedQuerySingleAsync<bool> connection sql param
 

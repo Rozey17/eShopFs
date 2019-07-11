@@ -1,6 +1,8 @@
 namespace eShop.Domain.Registration.Conference.ReadModel.ReadPublishedConferences
+
 open System
 
+[<CLIMutable>]
 type ConferenceEntryDTO =
     { Id: Guid
       Slug: string

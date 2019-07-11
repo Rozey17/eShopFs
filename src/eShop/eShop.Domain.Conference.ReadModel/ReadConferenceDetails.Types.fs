@@ -7,6 +7,7 @@ open eShop.Infrastructure
 type ConferenceIdentifier = string * string // slug * accessCode
 
 // output
+[<CLIMutable>]
 type ConferenceDetailsDTO =
     { Id: Guid
       Name: string

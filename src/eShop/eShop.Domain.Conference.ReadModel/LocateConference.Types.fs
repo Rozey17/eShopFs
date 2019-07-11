@@ -8,7 +8,8 @@ type ConferenceIdentifier =
       AccessCode: string }
 
 // output
-type Conference =
+[<CLIMutable>]
+type ConferenceDTO =
     { Email: string
       AccessCode: string
       Slug: string }
@@ -17,4 +18,4 @@ type Conference =
 type RecordNotFound = RecordNotFound
 
 // query
-type LocateConference = ConferenceIdentifier -> AsyncResult<Conference, RecordNotFound>
+type LocateConference = ConferenceIdentifier -> AsyncResult<ConferenceDTO, RecordNotFound>
