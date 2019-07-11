@@ -11,6 +11,6 @@ type SeatTypeDTO =
       Quantity: int
       Price: decimal }
 
-type ConferenceIdentifier = string * string
+type ConferenceId = Guid
 
-type ReadSeats = ConferenceIdentifier -> Async<SeatTypeDTO seq>
+type ReadSeats = ConferenceId -> Async<SeatTypeDTO seq>

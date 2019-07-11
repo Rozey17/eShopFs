@@ -71,7 +71,6 @@
     <Content Include="eShop.Domain.Conference.Web\LocateConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.Conference.Web\Seats.Impl.fs" />
     <Content Include="eShop.Domain.Conference.Web\Seats.cshtml" CopyToOutputDirectory="PreserveNewest" />
-    <Compile Include="eShop.Domain.Conference.Web\SeatGrid.Impl.fs" />
     <Compile Include="eShop.Domain.Conference.Web\CreateSeat.DTOs.fs" />
     <Compile Include="eShop.Domain.Conference.Web\CreateSeat.Impl.fs" />
     <Content Include="eShop.Domain.Conference.Web\CreateSeat.cshtml" CopyToOutputDirectory="PreserveNewest" />

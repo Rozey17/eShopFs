@@ -1,3 +1,5 @@
+@model IEnumerable<eShop.Domain.Conference.ReadModel.ReadSeats.SeatTypeDTO>
+
 @{
     ViewBag.Title = "Seat Types";
     ViewBag.PageType = "page_conference-seats";
@@ -65,13 +67,25 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="seats-type-add hidden">
-                <td colspan="10">
-                  <a href="javascript:void(0)" class="js-add-edit-type">
-                    Add new seat type
-                  </a>
+            @foreach (var item in Model)
+            {
+              <tr data-pkey="@item.Id">
+                <td><a href="javascript:void(0)">@item.Name</a></td>
+                <td>@Html.DisplayFor(x => item.Description)</td>
+                <td>@Html.DisplayFor(x => item.Quantity)</td>
+                <td>@Html.DisplayFor(x => item.Price)</td>
+                <td>
+                  @if (ViewData["WasEverPublished"])
                 </td>
               </tr>
+            }
+            <tr class="seats-type-add hidden">
+              <td colspan="10">
+                <a href="javascript:void(0)" class="js-add-edit-type">
+                  Add new seat type
+                </a>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>

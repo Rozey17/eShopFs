@@ -6,6 +6,7 @@ open Giraffe.Razor
 open Npgsql
 open eShop.Domain.Conference.Web
 open eShop.Domain.Conference.ReadModel.ReadConferenceDetails
+open eShop.Domain.Conference.ReadModel.ReadSeats
 
 let renderSeatsView next ctx =
     task {
@@ -17,12 +18,14 @@ let renderSeatsView next ctx =
 
         match result with
         | Ok details ->
+            let! seats = Db.readSeats connection details.Id
             let viewData = dict [
                 ("Slug", box details.Slug)
                 ("AccessCode", box details.AccessCode)
                 ("OwnerName", box details.OwnerName)
+                ("WasEverPublished", box details.WasEverPublished)
             ]
-            return! razorHtmlView "Seats" None (Some viewData) None next ctx
+            return! razorHtmlView "Seats" (Some seats) (Some viewData) None next ctx
         | _ ->
             return! text "bad request" next ctx
     }
