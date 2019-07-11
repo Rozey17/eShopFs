@@ -70,7 +70,7 @@
             @foreach (var item in Model)
             {
               <tr data-pkey="@item.Id">
-                <td><a href="javascript:void(0)">@item.Name</a></td>
+                <td><a href="javascript:void(0)" class="makeRowEditable">@item.Name</a></td>
                 <td>@Html.DisplayFor(x => item.Description)</td>
                 <td>@Html.DisplayFor(x => item.Quantity)</td>
                 <td>@Html.DisplayFor(x => item.Price)</td>
@@ -110,3 +110,134 @@
     <div class="g-clear"></div>
   </div>
 </div>
+
+<div class="lightbox">
+  <div class="lightbox-bg"></div>
+  <table class="lightbox">
+    <tr>
+      <td class="lightbox">
+        <div class="lightbox-content lightbox-content_delete">
+          <div class="lightbox-content__title">
+            Delete seat type
+          </div>
+          <div class="lightbox-content_delete__q">
+            Are you sure you want to delete?
+          </div>
+          <div class="lightbox-content_delete__action">
+            <a href="javascript:void(0)" class="lightbox-content_delete__action__no">No</a>
+            <a href="javascript:void(0)" class="lightbox-content_delete__action__yes">Yes</a>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script>
+  (function ($, undefined) {
+    $.ajaxSetup({
+      cache: false
+    });
+
+    function createRow(row) {
+      var postParams = getPostParams(row);
+      $.post('', postParams)
+        .done(function (newRow) {
+          row.replaceWith(newRow);
+        })
+        .fail(function () {
+          row.addClass('error');
+        });
+    }
+
+    function makeRowEditable(row) {
+      $.get('', function (editableRow) {
+        row.replaceWith(editableRow);
+      });
+    }
+
+    function editRow(row) {
+      var postParams = getPostParams(row);
+      postParams.push({
+        name: 'Id',
+        value: row.data('pkey')
+      });
+      $.post('', postParams)
+        .done(function (newRow) {
+          row.replaceWith(newRow);
+        })
+        .fail(function () {
+          row.addClass('error');
+        });
+    }
+
+    function getPostParams(row) {
+      return row.find(':input[name]:not(:disabled)').filter(':not(:checkbox), :checked').map(function () {
+        var input = $(this);
+        return {
+          name: input.attr('name'),
+          value: input.val()
+        };
+      }).get();
+    }
+
+    $(function () {
+      var $containerContext = $('#grid-container');
+      var $gridContext = $containerContext.find('#grid');
+
+      $containerContext.find('.seats-type-add').show().click(function (e) {
+        $.get('/conferences/create-seat', function (emptyRow) {
+          $gridContext.find('tbody').prepend(emptyRow);
+        });
+        e.preventDefault();
+      });
+      $gridContext.find('tr > *').filter(':last-child').removeClass('hidden');
+      $gridContext.delegate('.createRow', 'click', function () {
+        createRow($(this).parents('tr'));
+      });
+      $gridContext.delegate('.cancelCreateRow', 'click', function () {
+        $(this).parents('tr').remove();
+      });
+
+      $gridContext.delegate('.makeRowEditable', 'click', function (e) {
+        makeRowEditable($(this).parents('tr'));
+        e.preventDefault();
+      });
+      $gridContext.delegate('.editRow', 'click', function () {
+        editRow($(this).parents('tr'));
+      });
+      $gridContext.delegate('.cancelEditRow', 'click', function () {
+        var row = $(this).parents('tr');
+        $.get('', function (newRow) {
+          row.replaceWith(newRow);
+        });
+      });
+
+      $gridContext.delegate('.deleteRow', 'click', function (e) {
+        var $lightbox = $('div.lightbox');
+        $lightbox.find('.lightbox-content_delete__action__yes').attr('data-row', $(this).parents('tr').data('pkey'));
+        $('div.lightbox').show();
+        e.preventDefault();
+      });
+
+      $('.lightbox-content_delete__action__no').click(function (e) {
+        $('div.lightbox').hide().find('.lightbox-content_delete__action__yes').attr('data-row', null);
+        e.preventDefault();
+      });
+
+      $('.lightbox-content_delete__action__yes').click(function (e) {
+        var $link = $('div.lightbox').hide().find('.lightbox-content_delete__action__yes');
+        var $row = $gridContext.find('tr[data-pkey=' + $link.attr('data-row') + ']');
+        $.post('')
+          .done(function () {
+            $row.remove();
+          })
+          .fail(function () {
+            alert('Row deletion failed.');
+          });
+        $link.attr('data-row', null);
+        e.preventDefault();
+      });
+    });
+  })(jQuery);
+</script>
