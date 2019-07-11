@@ -41,6 +41,7 @@ let webApp =
                 route  "/conferences/details"        >=>  ConferenceDetails.Impl.renderConferenceDetailsView
                 route  "/conferences/locate"         >=>  LocateConference.Impl.renderLocateConferenceView
                 route  "/conferences/edit"           >=>  EditConference.Impl.renderEditConferenceView
+                route  "/conferences/seats"          >=>  Seats.Impl.renderSeatsView
 
                 route  "/registration"               >=>  RegistrationHome.Impl.renderHomeView
                 route  "/registration/conference"    >=>  DisplayConference.Impl.renderDisplayConferenceView

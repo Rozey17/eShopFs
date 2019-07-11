@@ -46,6 +46,8 @@
     <Compile Include="eShop.Domain.Conference.ReadModel\ReadConferenceDetails.Db.fs" />
     <Compile Include="eShop.Domain.Conference.ReadModel\LocateConference.Types.fs" />
     <Compile Include="eShop.Domain.Conference.ReadModel\LocateConference.Db.fs" />
+    <Compile Include="eShop.Domain.Conference.ReadModel\ReadSeats.Types.fs" />
+    <Compile Include="eShop.Domain.Conference.ReadModel\ReadSeats.Db.fs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,20 +55,26 @@
     <Content Include="eShop.Domain.Conference.Web\_ViewStart.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="eShop.Domain.Conference.Web\_Navigation.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.Conference.Web\Common.fs" />
-    <Compile Include="eShop.Domain.Conference.Web\ConferencesHome.fs" />
+    <Compile Include="eShop.Domain.Conference.Web\ConferencesHome.Impl.fs" />
     <Content Include="eShop.Domain.Conference.Web\ConferencesHome.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.Conference.Web\CreateConference.DTOs.fs" />
-    <Compile Include="eShop.Domain.Conference.Web\CreateConference.fs" />
+    <Compile Include="eShop.Domain.Conference.Web\CreateConference.Impl.fs" />
     <Content Include="eShop.Domain.Conference.Web\CreateConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
-    <Compile Include="eShop.Domain.Conference.Web\EditConference.fs" />
+    <Compile Include="eShop.Domain.Conference.Web\EditConference.Impl.fs" />
     <Content Include="eShop.Domain.Conference.Web\EditConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.Conference.Web\PublishConference.DTOs.fs" />
-    <Compile Include="eShop.Domain.Conference.Web\PublishConference.fs" />
-    <Compile Include="eShop.Domain.Conference.Web\UnpublishConference.fs" />
-    <Compile Include="eShop.Domain.Conference.Web\ConferenceDetails.fs" />
+    <Compile Include="eShop.Domain.Conference.Web\PublishConference.Impl.fs" />
+    <Compile Include="eShop.Domain.Conference.Web\UnpublishConference.Impl.fs" />
+    <Compile Include="eShop.Domain.Conference.Web\ConferenceDetails.Impl.fs" />
     <Content Include="eShop.Domain.Conference.Web\ConferenceDetails.cshtml" CopyToOutputDirectory="PreserveNewest" />
-    <Compile Include="eShop.Domain.Conference.Web\LocateConference.fs" />
+    <Compile Include="eShop.Domain.Conference.Web\LocateConference.Impl.fs" />
     <Content Include="eShop.Domain.Conference.Web\LocateConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="eShop.Domain.Conference.Web\Seats.Impl.fs" />
+    <Content Include="eShop.Domain.Conference.Web\Seats.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="eShop.Domain.Conference.Web\SeatGrid.Impl.fs" />
+    <Compile Include="eShop.Domain.Conference.Web\CreateSeat.DTOs.fs" />
+    <Compile Include="eShop.Domain.Conference.Web\CreateSeat.Impl.fs" />
+    <Content Include="eShop.Domain.Conference.Web\CreateSeat.cshtml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
@@ -85,9 +93,9 @@
   <ItemGroup>
     <Content Include="eShop.Domain.Registration.Web\_Layout.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="eShop.Domain.Registration.Web\_ViewStart.cshtml" CopyToOutputDirectory="PreserveNewest" />
-    <Compile Include="eShop.Domain.Registration.Web\RegistrationHome.fs" />
+    <Compile Include="eShop.Domain.Registration.Web\RegistrationHome.Impl.fs" />
     <Content Include="eShop.Domain.Registration.Web\RegistrationHome.cshtml" CopyToOutputDirectory="PreserveNewest" />
-    <Compile Include="eShop.Domain.Registration.Web\DisplayConference.fs" />
+    <Compile Include="eShop.Domain.Registration.Web\DisplayConference.Impl.fs" />
     <Content Include="eShop.Domain.Registration.Web\DisplayConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 

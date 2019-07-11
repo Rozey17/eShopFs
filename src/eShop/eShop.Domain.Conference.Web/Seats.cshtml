@@ -1,0 +1,85 @@
+@{
+    ViewBag.Title = "Seat Types";
+    ViewBag.PageType = "page_conference-seats";
+}
+
+@section Head {
+<style>
+  #grid,
+  #grid input,
+  #grid button {
+    clear: both;
+    width: 100%;
+  }
+
+  #grid thead {
+    white-space: nowrap;
+  }
+
+  #grid thead a {
+    text-decoration: none;
+  }
+
+  #grid .error {
+    background-color: #f66;
+    color: #000;
+  }
+
+  #grid-container .hidden {
+    display: none;
+  }
+
+  .form__but.createRow,
+  .form__but.editRow {
+    margin: 1px 0px;
+  }
+</style>
+}
+
+@section Navigation {
+    <div class="quick__login">@ViewData["OwnerName"]</div>
+}
+
+@section PageNavigation {
+    @Html.Partial("_Navigation")
+}
+
+<h1 class="page__head page__wrapper">
+  Seat types
+</h1>
+
+<div class="page__content">
+  <div class="page__wrapper">
+    <div class="content-main__wrapper">
+      <div class="content-main__main">
+        <div id="grid-container" class="content">
+          <p>Click on a seat type name to edit<br /><br /></p>
+          <table id="grid" class="content__table_first-cell-wide">
+            <thead>
+              <tr>
+                <th width="30%">Seat type</th>
+                <th width="40%">Description</th>
+                <th width="10%">Quota</th>
+                <th width="10%">Price</th>
+                <th class="content__table__delete">&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="seats-type-add hidden">
+                <td colspan="10">
+                  <a href="javascript:void(0)" class="js-add-edit-type">
+                    Add new seat type
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="nav content-main__nav">
+          <a class="nav__left" href="/conferences/details?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]">Back</a>
+        </div>
+      </div>
+    </div>
+    <div class="g-clear"></div>
+  </div>
+</div>
