@@ -74,12 +74,14 @@
     <Compile Include="eShop.Domain.Registration.Conference.ReadModel\ReadPublishedConferences.Types.fs" />
     <Compile Include="eShop.Domain.Registration.Conference.ReadModel\ReadPublishedConferences.Db.fs" />
   </ItemGroup>
-    
+
   <ItemGroup>
+    <Content Include="eShop.Domain.Registration.Web\_Layout.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="eShop.Domain.Registration.Web\_ViewStart.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.Registration.Web\RegistrationHome.fs" />
     <Content Include="eShop.Domain.Registration.Web\RegistrationHome.cshtml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
-    
+
   <ItemGroup>
     <Compile Include="Program.fs" />
   </ItemGroup>
