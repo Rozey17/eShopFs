@@ -44,15 +44,16 @@ let publishConference
     (readSingleConference: ConferenceDb.ReadSingleConference)
     (markConferenceAsPublished: ConferenceDb.MarkConferenceAsPublished)
     : PublishConference =
-        fun (ConferenceIdentifier (slug, accessCode)) ->
+        fun id ->
             asyncResult {
-                let! identifier =
-                    (slug, accessCode)
-                    |> Validation.validateConferenceIdentifier
+                let! id =
+                    id
+                    |> ConferenceId.create
                     |> AsyncResult.ofResult
                     |> AsyncResult.mapError (ValidationError >> PublishConference.Validation)
+
                 let! conference =
-                    readSingleConference identifier
+                    readSingleConference id
                     |> AsyncResult.mapError PublishConference.ConferenceNotFound
 
                 let publishedConference = conference |> applyPublish

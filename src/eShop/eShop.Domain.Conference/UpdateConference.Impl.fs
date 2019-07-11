@@ -114,25 +114,18 @@ let updateConference
     (updateConferenceInDb: ConferenceDb.UpdateConference)
     : UpdateConference =
 
-        fun ((ConferenceIdentifier(slug, accessCode)), info) ->
+        fun info ->
             asyncResult {
                 let! validatedInfo =
                     validateConferenceInfo info
                     |> AsyncResult.ofResult
                     |> AsyncResult.mapError UpdateConferenceError.Validation
 
-                let! identifier =
-                    (slug, accessCode)
-                    |> Validation.validateConferenceIdentifier
-                    |> AsyncResult.ofResult
-                    |> AsyncResult.mapError (ValidationError >> UpdateConferenceError.Validation)
                 let! conference =
-                    readSingleConferenceFromDb identifier
+                    readSingleConferenceFromDb validatedInfo.Id
                     |> AsyncResult.mapError UpdateConference.ConferenceNotFound
 
-                let conference =
-                    conference
-                    |> applyUpdate validatedInfo
+                let conference = conference |> applyUpdate validatedInfo
 
                 do! updateConferenceInDb conference
                     |> AsyncResult.ofAsync

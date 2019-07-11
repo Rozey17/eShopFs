@@ -6,8 +6,9 @@ open Giraffe
 open Npgsql
 open eShop.Infrastructure.Bus
 open eShop.Domain.Conference
-open eShop.Domain.Conference.PublishConference
 open eShop.Domain.Conference.Web
+open eShop.Domain.Conference.PublishConference
+open eShop.Domain.Conference.ReadModel.ReadConferenceDetails
 
 // post
 let publishConference next (ctx: HttpContext) =
@@ -16,23 +17,31 @@ let publishConference next (ctx: HttpContext) =
         use connection = new NpgsqlConnection(connStr)
 
         let slug, accessCode = Common.exnQueryStringValue ctx
-        let cmd = ConferenceIdentifier (slug, accessCode)
+        let! detailsResult = Db.readConferenceDetails connection (slug, accessCode)
 
-        let readSingleConference = ConferenceDb.Impl.ReadSingleConference.query connection
-        let markConferenceAsPublished = ConferenceDb.Impl.MarkConferenceAsPublished.execute connection
-        let workflow = Impl.publishConference readSingleConference markConferenceAsPublished
+        match detailsResult with
+        | Ok details ->
+            let cmd = details.Id
 
-        let! result = workflow cmd
+            let readSingleConference = ConferenceDb.Impl.ReadSingleConference.query connection
+            let markConferenceAsPublished = ConferenceDb.Impl.MarkConferenceAsPublished.execute connection
+            let workflow = Impl.publishConference readSingleConference markConferenceAsPublished
 
-        match result with
-        | Ok [ (ConferencePublished e) ] ->
-            // internal response
-            let e' = ConferencePublishedDTO.fromDomain e
-            do! Bus.Publish e'
+            let! result = workflow cmd
 
-            // web response
-            let url = sprintf "/conferences/details?slug=%s&access_code=%s" slug accessCode
-            return! redirectTo false url next ctx
-        | _ ->
+            match result with
+            | Ok [ (ConferencePublished e) ] ->
+                // internal response
+                let e' = ConferencePublishedDTO.fromDomain e
+                do! Bus.Publish e'
+
+                // web response
+                let url = sprintf "/conferences/details?slug=%s&access_code=%s" slug accessCode
+                return! redirectTo false url next ctx
+
+            | _ ->
+                return! text "unknown error" next ctx
+
+        | Error RecordNotFound ->
             return! text "unknown error" next ctx
     }

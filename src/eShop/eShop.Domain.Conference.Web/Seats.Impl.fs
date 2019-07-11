@@ -26,6 +26,7 @@ let renderSeatsView next ctx =
                 ("WasEverPublished", box details.WasEverPublished)
             ]
             return! razorHtmlView "Seats" (Some seats) (Some viewData) None next ctx
+
         | _ ->
             return! text "bad request" next ctx
     }

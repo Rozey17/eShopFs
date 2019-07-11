@@ -25,8 +25,6 @@
 
   <ItemGroup>
     <Compile Include="eShop.Domain.Conference\ConferenceTypes.fs" />
-    <Compile Include="eShop.Domain.Conference\ConferenceValidation.Types.fs" />
-    <Compile Include="eShop.Domain.Conference\ConferenceValidation.Impl.fs" />
     <Compile Include="eShop.Domain.Conference\ConferenceDb.Types.fs" />
     <Compile Include="eShop.Domain.Conference\ConferenceDb.Impl.fs" />
     <Compile Include="eShop.Domain.Conference\CreateConference.Types.fs" />
@@ -60,6 +58,7 @@
     <Compile Include="eShop.Domain.Conference.Web\CreateConference.DTOs.fs" />
     <Compile Include="eShop.Domain.Conference.Web\CreateConference.Impl.fs" />
     <Content Include="eShop.Domain.Conference.Web\CreateConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="eShop.Domain.Conference.Web\EditConference.DTOs.fs" />
     <Compile Include="eShop.Domain.Conference.Web\EditConference.Impl.fs" />
     <Content Include="eShop.Domain.Conference.Web\EditConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.Conference.Web\PublishConference.DTOs.fs" />

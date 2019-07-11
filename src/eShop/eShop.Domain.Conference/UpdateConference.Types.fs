@@ -5,8 +5,6 @@ open eShop.Infrastructure
 open eShop.Domain.Conference
 
 // input
-type ConferenceIdentifier = ConferenceIdentifier of slug:string * accessCode:string
-
 type UnvalidatedConferenceInfo =
     { Id: Guid
       Name: string
@@ -17,7 +15,7 @@ type UnvalidatedConferenceInfo =
       StartDate: DateTime
       EndDate: DateTime }
 
-type UpdateConferenceCommand = ConferenceIdentifier * UnvalidatedConferenceInfo
+type UpdateConferenceCommand = UnvalidatedConferenceInfo
 
 // success output
 

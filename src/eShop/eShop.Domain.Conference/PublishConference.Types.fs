@@ -1,11 +1,12 @@
 namespace eShop.Domain.Conference.PublishConference
 
+open System
 open eShop.Infrastructure
 open eShop.Domain.Conference
 
 // input
-type ConferenceIdentifier = ConferenceIdentifier of slug:string * accessCode:string
-type PublishConferenceCommand = ConferenceIdentifier
+type ConferenceId = Guid
+type PublishConferenceCommand = ConferenceId
 
 // success output
 type ConferencePublished = Conference

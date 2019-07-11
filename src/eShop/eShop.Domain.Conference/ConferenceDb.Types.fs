@@ -5,7 +5,7 @@ open eShop.Domain.Conference
 
 type RecordNotFound = RecordNotFound
 
-type ReadSingleConference = UniqueSlug * AccessCode -> AsyncResult<Conference, RecordNotFound>
+type ReadSingleConference = ConferenceId -> AsyncResult<Conference, RecordNotFound>
 type CheckSlugExists = UniqueSlug -> Async<bool>
 type InsertConference = Conference -> Async<unit>
 type UpdateConference = Conference -> Async<unit>

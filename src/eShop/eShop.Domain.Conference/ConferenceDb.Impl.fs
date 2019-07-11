@@ -65,9 +65,8 @@ module ReadSingleConference =
             domainObj
 
     let query connection : ReadSingleConference =
-        fun (slug, accessCode) ->
-            let slug = slug |> UniqueSlug.value
-            let accessCode = accessCode |> AccessCode.value
+        fun id ->
+            let id = id |> ConferenceId.value
             let sql1 =
                 """
                 select id,
@@ -85,8 +84,7 @@ module ReadSingleConference =
                        was_ever_published,
                        is_published
                   from cm.conference
-                 where slug = @Slug
-                   and access_code = @AccessCode
+                 where id = @Id
                 """
             let sql2 =
                 """
@@ -101,7 +99,7 @@ module ReadSingleConference =
                 """
 
             async {
-                let param1 = {| Slug = slug; AccessCode = accessCode |}
+                let param1 = {| Id = id |}
                 let! infoResult = Db.tryParameterizedQuerySingleAsync<ConferenceInfoDTO> connection sql1 param1
 
                 match infoResult with

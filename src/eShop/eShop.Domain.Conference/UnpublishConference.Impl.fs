@@ -45,15 +45,15 @@ let unpublishConference
     (markConferenceAsUnpublished: ConferenceDb.MarkConferenceAsUnpublished)
     : UnpublishConference =
 
-        fun (ConferenceIdentifier (slug, accessCode)) ->
+        fun id ->
             asyncResult {
-                let! identifier =
-                    (slug, accessCode)
-                    |> Validation.validateConferenceIdentifier
+                let! id =
+                    id
+                    |> ConferenceId.create
                     |> AsyncResult.ofResult
                     |> AsyncResult.mapError (ValidationError >> UnpublishConference.Validation)
                 let! conference =
-                    readSingleConference identifier
+                    readSingleConference id
                     |> AsyncResult.mapError UnpublishConference.ConferenceNotFound
 
                 let unpublishedConference = conference |> applyUnpublish
