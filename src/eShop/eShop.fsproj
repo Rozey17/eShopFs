@@ -39,6 +39,8 @@
     <Compile Include="eShop.Domain.Conference\CreateSeat.Impl.fs" />
     <Compile Include="eShop.Domain.Conference\UpdateSeat.Types.fs" />
     <Compile Include="eShop.Domain.Conference\UpdateSeat.Impl.fs" />
+    <Compile Include="eShop.Domain.Conference\DeleteSeat.Types.fs" />
+    <Compile Include="eShop.Domain.Conference\DeleteSeat.Impl.fs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -82,6 +84,7 @@
     <Compile Include="eShop.Domain.Conference.Web\EditSeat.DTOs.fs" />
     <Compile Include="eShop.Domain.Conference.Web\EditSeat.Impl.fs" />
     <Content Include="eShop.Domain.Conference.Web\EditSeat.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="eShop.Domain.Conference.Web\DeleteSeat.Impl.fs" />
   </ItemGroup>
 
   <ItemGroup>

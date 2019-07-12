@@ -22,7 +22,7 @@ type ValidateSeatType = UnvalidatedSeatType -> Result<ValidatedSeatType, Validat
 type EnrichValidatedSeatTypeWith = SeatTypeId -> ValidatedSeatType -> SeatType
 
 // step: add seat to conference
-type AddSeatTypeToConference = SeatType -> Conference -> Conference
+type AddSeatToConference = SeatType -> Conference -> Conference * SeatType
 
 // step: create events
 type CreateEvents = Conference * SeatType -> CreateSeatEvent list
@@ -76,15 +76,17 @@ let enrichWith: EnrichValidatedSeatTypeWith =
           Price = validated.Price }
 
 // step: add seat to conference
-let addSeat: AddSeatTypeToConference =
-    fun newSeatType conference ->
-        let existingSeatTypes = conference |> Conference.seats
-        let seats = newSeatType::existingSeatTypes
-        match conference with
-        | PublishedConference (info, _) ->
-            PublishedConference (info, seats)
-        | UnpublishedConference (info, wasEverPublished, _) ->
-            UnpublishedConference (info, wasEverPublished, seats)
+let addSeat: AddSeatToConference =
+    fun newSeat conference ->
+        let existingSeats = conference |> Conference.seats
+        let seats = newSeat::existingSeats
+        let conference =
+            match conference with
+            | PublishedConference (info, _) ->
+                PublishedConference (info, seats)
+            | UnpublishedConference (info, wasEverPublished, _) ->
+                UnpublishedConference (info, wasEverPublished, seats)
+        (conference, newSeat)
 
 // step: create events
 let createPublishedSeatCreatedEvent seat : PublishedSeatCreated = seat
@@ -120,17 +122,17 @@ let createSeat
                     |> AsyncResult.ofResult
                     |> AsyncResult.mapError CreateSeatError.Validation
                 let id = SeatTypeId.generate()
-                let seatType = validatedSeatType |> enrichWith id
+                let newSeat = validatedSeatType |> enrichWith id
 
                 let! conference =
-                    readSingleConference seatType.ConferenceId
+                    readSingleConference newSeat.ConferenceId
                     |> AsyncResult.mapError CreateSeatError.ConferenceNotFound
 
-                let conference = conference |> addSeat seatType
+                let conference, newSeat = conference |> addSeat newSeat
 
-                do! insertSeat seatType
+                do! insertSeat newSeat
                     |> AsyncResult.ofAsync
 
-                let events = (conference, seatType) |> createEvents
+                let events = (conference, newSeat) |> createEvents
                 return events
             }

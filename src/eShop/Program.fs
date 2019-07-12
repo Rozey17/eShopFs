@@ -58,6 +58,7 @@ let webApp =
                 route  "/conferences/unpublish"      >=>  UnpublishConference.Impl.unpublishConference
                 route  "/conferences/create-seat"    >=>  CreateSeat.Impl.createSeat
                 route  "/conferences/update-seat"    >=>  EditSeat.Impl.updateSeat
+                route  "/conferences/delete-seat"    >=>  DeleteSeat.Impl.deleteSeat
             ]
         text "Not Found" |> RequestErrors.notFound ]
 

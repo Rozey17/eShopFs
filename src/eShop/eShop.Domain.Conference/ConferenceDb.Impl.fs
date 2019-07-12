@@ -336,3 +336,15 @@ module UpdateSeat =
                 """
             let dto = SeatTypeDTO.fromDomain seatType
             Db.parameterizedExecuteAsync connection sql dto
+
+module DeleteSeat =
+
+    let execute connection : DeleteSeat =
+        fun seatType ->
+            let sql =
+                """
+                delete from cm.seat
+                      where id = @Id
+                """
+            let param = {| Id = seatType.Id |> SeatTypeId.value |}
+            Db.parameterizedExecuteAsync connection sql param

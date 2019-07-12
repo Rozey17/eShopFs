@@ -208,7 +208,9 @@
       $('.lightbox-content_delete__action__yes').click(function (e) {
         var $link = $('div.lightbox').hide().find('.lightbox-content_delete__action__yes');
         var $row = $gridContext.find('tr[data-pkey=' + $link.attr('data-row') + ']');
-        $.post('')
+        var id = $row.data('pkey');
+        var url = '/conferences/delete-seat?id=' + id + '&slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]';
+        $.post(url)
           .done(function () {
             $row.remove();
           })

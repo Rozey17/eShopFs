@@ -56,9 +56,9 @@ let updateSeat next ctx =
             let unvalidatedSeat = SeatTypeFormDTO.toUnvalidatedSeatType form
             let cmd = unvalidatedSeat
 
-            let readSingleConference = ConferenceDb.Impl.ReadSingleConference.query connection
-            let updateSeat = ConferenceDb.Impl.UpdateSeat.execute connection
-            let workflow = Impl.updateSeat readSingleConference updateSeat
+            let readSingleConferenceFromDb = ConferenceDb.Impl.ReadSingleConference.query connection
+            let updateSeatInDb = ConferenceDb.Impl.UpdateSeat.execute connection
+            let workflow = Impl.updateSeat readSingleConferenceFromDb updateSeatInDb
 
             let! result = workflow cmd
 

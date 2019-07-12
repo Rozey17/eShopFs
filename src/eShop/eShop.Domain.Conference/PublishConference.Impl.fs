@@ -34,6 +34,8 @@ let createEvents: CreateEvents =
         let conferencePublished =
             createConferencePublishedEvent conference
             |> PublishConference.ConferencePublished
+
+        // TODO: seat created events if conference was never publish
         [
             yield conferencePublished
         ]

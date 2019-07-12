@@ -13,7 +13,7 @@ type ValidatedSeatType = SeatType
 type ValidateSeatType = UnvalidatedSeatType -> Result<ValidatedSeatType, ValidationError>
 
 // apply update seat
-type ApplyUpdateSeat = ValidatedSeatType -> Conference -> Conference
+type ApplyUpdateSeat = ValidatedSeatType -> Conference -> Conference * SeatType
 
 // step: create events
 type CreateEvents = Conference * SeatType -> UpdateSeatEvent list
@@ -78,11 +78,13 @@ let applyUpdateSeat: ApplyUpdateSeat =
                 else
                     it
                 )
-        match conference with
-        | PublishedConference (info, _) ->
-            PublishedConference (info, newSeats)
-        | UnpublishedConference (info, wasEverPublished, _) ->
-            UnpublishedConference (info, wasEverPublished, newSeats)
+        let conference =
+            match conference with
+            | PublishedConference (info, _) ->
+                PublishedConference (info, newSeats)
+            | UnpublishedConference (info, wasEverPublished, _) ->
+                UnpublishedConference (info, wasEverPublished, newSeats)
+        (conference, validated)
 
 // step: create events
 let createPublishedSeatUpdatedEvent seat : PublishedSeatUpdated = seat
@@ -122,9 +124,9 @@ let updateSeat
                     readSingleConference validatedSeat.ConferenceId
                     |> AsyncResult.mapError UpdateSeatError.ConferenceNotFound
 
-                let conference = conference |> applyUpdateSeat validatedSeat
+                let conference, updatedSeat = conference |> applyUpdateSeat validatedSeat
 
-                do! updateSeat validatedSeat
+                do! updateSeat updatedSeat
                     |> AsyncResult.ofAsync
 
                 let events = (conference, validatedSeat) |> createEvents
