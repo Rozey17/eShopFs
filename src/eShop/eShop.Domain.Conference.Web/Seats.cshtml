@@ -119,7 +119,7 @@
 
     function createRow(row) {
       var postParams = getPostParams(row);
-      var url = '/conferences/create-seat?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]'
+      var url = '/conferences/create-seat?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]';
       $.post(url, postParams)
         .done(function (newRow) {
           row.replaceWith(newRow);
@@ -130,8 +130,8 @@
     }
 
     function makeRowEditable(row) {
-      var id = row.data('pkey')
-      var url = '/conferences/edit-seat?id=' + id + '&slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]'
+      var id = row.data('pkey');
+      var url = '/conferences/edit-seat?id=' + id + '&slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]';
       $.get(url, function (editableRow) {
         row.replaceWith(editableRow);
       });
@@ -139,7 +139,7 @@
 
     function editRow(row) {
       var postParams = getPostParams(row);
-      var url = '/conferences/update-seat?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]'
+      var url = '/conferences/update-seat?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]';
       $.post(url, postParams)
         .done(function (newRow) {
           row.replaceWith(newRow);
@@ -186,7 +186,9 @@
       });
       $gridContext.delegate('.cancelEditRow', 'click', function () {
         var row = $(this).parents('tr');
-        $.get('', function (newRow) {
+        var id = row.data('pkey');
+        var url = '/conferences/seat?id=' + id + '&slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]';
+        $.get(url, function (newRow) {
           row.replaceWith(newRow);
         });
       });

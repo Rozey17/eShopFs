@@ -3,7 +3,7 @@ module eShop.Domain.Conference.ReadModel.ReadSeat.Db
 open eShop.Infrastructure
 open eShop.Domain.Conference.ReadModel.SeatTypeDTO
 
-let readSeatType connection : ReadSeatType =
+let readSeat connection : ReadSeat =
     fun (conferenceId, id) ->
         let sql =
             """

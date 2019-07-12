@@ -26,7 +26,7 @@ let renderEditSeatView next ctx =
         match detailsResult with
         | Ok details ->
             let id = Common.exnQueryStringValue ctx "id" |> Guid
-            let! seatTypeResult = Db.readSeatType connection (details.Id, id)
+            let! seatTypeResult = Db.readSeat connection (details.Id, id)
 
             match seatTypeResult with
             | Ok seatType ->

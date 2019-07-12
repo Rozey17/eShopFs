@@ -9,4 +9,4 @@ type SeatTypeId = Guid
 
 type RecordNotFound = RecordNotFound
 
-type ReadSeatType = ConferenceId * SeatTypeId -> AsyncResult<SeatTypeDTO, RecordNotFound>
+type ReadSeat = ConferenceId * SeatTypeId -> AsyncResult<SeatTypeDTO, RecordNotFound>
