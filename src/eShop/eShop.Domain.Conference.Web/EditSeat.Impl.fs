@@ -10,7 +10,7 @@ open eShop.Infrastructure.Bus
 open eShop.Domain.Conference
 open eShop.Domain.Conference.Web
 open eShop.Domain.Conference.ReadModel.ReadConferenceDetails
-open eShop.Domain.Conference.ReadModel.ReadSeatType
+open eShop.Domain.Conference.ReadModel.ReadSeat
 
 // get
 let renderEditSeatView next ctx =

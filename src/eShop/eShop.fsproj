@@ -37,6 +37,8 @@
     <Compile Include="eShop.Domain.Conference\UnpublishConference.Impl.fs" />
     <Compile Include="eShop.Domain.Conference\CreateSeat.Types.fs" />
     <Compile Include="eShop.Domain.Conference\CreateSeat.Impl.fs" />
+    <Compile Include="eShop.Domain.Conference\UpdateSeat.Types.fs" />
+    <Compile Include="eShop.Domain.Conference\UpdateSeat.Impl.fs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,8 +49,8 @@
     <Compile Include="eShop.Domain.Conference.ReadModel\SeatTypeDTO.fs" />
     <Compile Include="eShop.Domain.Conference.ReadModel\ReadSeats.Types.fs" />
     <Compile Include="eShop.Domain.Conference.ReadModel\ReadSeats.Db.fs" />
-    <Compile Include="eShop.Domain.Conference.ReadModel\ReadSeatType.Types.fs" />
-    <Compile Include="eShop.Domain.Conference.ReadModel\ReadSeatType.Db.fs" />
+    <Compile Include="eShop.Domain.Conference.ReadModel\ReadSeat.Types.fs" />
+    <Compile Include="eShop.Domain.Conference.ReadModel\ReadSeat.Db.fs" />
   </ItemGroup>
 
   <ItemGroup>

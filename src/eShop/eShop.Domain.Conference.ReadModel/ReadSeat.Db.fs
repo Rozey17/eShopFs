@@ -1,4 +1,4 @@
-module eShop.Domain.Conference.ReadModel.ReadSeatType.Db
+module eShop.Domain.Conference.ReadModel.ReadSeat.Db
 
 open eShop.Infrastructure
 open eShop.Domain.Conference.ReadModel.SeatTypeDTO

@@ -1,4 +1,4 @@
-namespace eShop.Domain.Conference.ReadModel.ReadSeatType
+namespace eShop.Domain.Conference.ReadModel.ReadSeat
 
 open System
 open eShop.Infrastructure
