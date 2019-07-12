@@ -29,15 +29,28 @@ let applyPublish: ApplyPublish =
 // step: create events
 let createConferencePublishedEvent conference : ConferencePublished = conference
 
+let createPublishedSeatCreatedEvent seat : PublishedSeatCreated = seat
+let createPublishedSeatCreatedEvents conference =
+    let wasEverPublished = conference |> Conference.wasEverPublished
+    let seats = conference |> Conference.seats
+
+    if not wasEverPublished then
+        seats |> List.map createPublishedSeatCreatedEvent
+    else
+        []
+
 let createEvents: CreateEvents =
     fun conference ->
         let conferencePublished =
             createConferencePublishedEvent conference
             |> PublishConference.ConferencePublished
+        let publishedSeatCreated =
+            createPublishedSeatCreatedEvents conference
+            |> List.map PublishConference.PublishedSeatCreated
 
-        // TODO: seat created events if conference was never publish
         [
             yield conferencePublished
+            yield! publishedSeatCreated
         ]
 
 // workflow

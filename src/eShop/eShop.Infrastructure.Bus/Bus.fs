@@ -8,6 +8,7 @@ type SubscriptionId = SubscriptionId of string
 type IMessageBus =
     inherit IDisposable
     abstract member Publish<'a when 'a : not struct> : 'a -> Async<unit>
+    abstract member PublishMultiple<'a when 'a : not struct> : 'a seq -> Async<unit>
     abstract member TopicPublish<'a when 'a : not struct> : 'a -> Topic -> Async<unit>
     abstract member Subscribe<'a when 'a : not struct> : SubscriptionId -> ('a -> Async<unit>) -> unit
     abstract member TopicSubscribe<'a when 'a : not struct> : SubscriptionId -> Topic -> ('a -> Async<unit>) -> unit
@@ -90,6 +91,10 @@ type MemoryMessageBus() =
     interface IMessageBus with
         member __.Publish (message: 'a) =
             agent.Post (Publish (box message, typeof<'a>, None))
+            async.Zero()
+        member this.PublishMultiple (messages: 'a seq) =
+            for msg in messages do
+                agent.Post (Publish (box msg, typeof<'a>, None))
             async.Zero()
         member __.TopicPublish (message: 'a) topic =
             agent.Post (Publish (box message, typeof<'a>, Some topic))

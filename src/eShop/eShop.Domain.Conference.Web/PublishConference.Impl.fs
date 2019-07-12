@@ -31,10 +31,10 @@ let publishConference next (ctx: HttpContext) =
             let! result = workflow cmd
 
             match result with
-            | Ok [ (ConferencePublished e) ] ->
+            | Ok events ->
                 // to registration context
-                let dto = ConferencePublishedDTO.fromDomain e
-                do! Bus.Publish dto
+                let eventDTOs = events |> List.map PublishConferenceEventDTO.fromDomain
+                do! Bus.PublishMultiple eventDTOs
 
                 // web response
                 let url = sprintf "/conferences/details?slug=%s&access_code=%s" slug accessCode

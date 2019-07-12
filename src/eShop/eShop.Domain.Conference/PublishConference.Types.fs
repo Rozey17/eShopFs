@@ -10,8 +10,10 @@ type PublishConferenceCommand = ConferenceId
 
 // success output
 type ConferencePublished = Conference
+type PublishedSeatCreated = SeatType
 type PublishConferenceEvent =
     | ConferencePublished of ConferencePublished
+    | PublishedSeatCreated of PublishedSeatCreated
 
 // error output
 type ValidationError = ValidationError of string

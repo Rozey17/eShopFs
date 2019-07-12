@@ -1,4 +1,4 @@
-module eShop.Domain.Registration.Conference.Integrator.OnConferenceCreated
+module eShop.Domain.Registration.Conference.Integrator.CreateConferenceListener
 
 open Npgsql
 open eShop.Infrastructure
