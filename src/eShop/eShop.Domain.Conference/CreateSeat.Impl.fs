@@ -32,7 +32,7 @@ type CreateEvents = Conference * SeatType -> CreateSeatEvent list
 // -----
 
 // step: validate
-let validateSeatType: ValidateSeatType =
+let validateSeat: ValidateSeatType =
     fun unvalidated ->
         result {
             let! conferenceId =
@@ -91,14 +91,12 @@ let createPublishedSeatCreatedEvent seat : PublishedSeatCreated = seat
 let createSeatCreatedEvent seat : SeatCreated = seat
 
 let createEvents: CreateEvents =
-    fun (conference, newSeatType) ->
+    fun (conference, seatType) ->
         let publishedSeatCreated =
-            newSeatType
-            |> createPublishedSeatCreatedEvent
+            createPublishedSeatCreatedEvent seatType
             |> CreateSeatEvent.PublishedSeatCreated
         let seatCreated =
-            newSeatType
-            |> createSeatCreatedEvent
+            createSeatCreatedEvent seatType
             |> CreateSeatEvent.SeatCreated
         let wasEverPublished = conference |> Conference.wasEverPublished
         [
@@ -112,14 +110,13 @@ let createEvents: CreateEvents =
 // workflow
 let createSeat
     (readSingleConference: ConferenceDb.ReadSingleConference)
-    (insertSeatType: ConferenceDb.InsertSeatType)
+    (insertSeat: ConferenceDb.InsertSeat)
     : CreateSeat =
 
-        fun seatType ->
+        fun unvalidatedSeat ->
             asyncResult {
                 let! validatedSeatType =
-                    seatType
-                    |> validateSeatType
+                    validateSeat unvalidatedSeat
                     |> AsyncResult.ofResult
                     |> AsyncResult.mapError CreateSeatError.Validation
                 let id = SeatTypeId.generate()
@@ -131,7 +128,7 @@ let createSeat
 
                 let conference = conference |> addSeat seatType
 
-                do! insertSeatType (conference, seatType)
+                do! insertSeat seatType
                     |> AsyncResult.ofAsync
 
                 let events = (conference, seatType) |> createEvents

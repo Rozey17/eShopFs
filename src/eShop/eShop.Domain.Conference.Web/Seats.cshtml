@@ -139,11 +139,8 @@
 
     function editRow(row) {
       var postParams = getPostParams(row);
-      postParams.push({
-        name: 'Id',
-        value: row.data('pkey')
-      });
-      $.post('', postParams)
+      var url = '/conferences/update-seat?slug=@ViewData["Slug"]&access_code=@ViewData["AccessCode"]'
+      $.post(url, postParams)
         .done(function (newRow) {
           row.replaceWith(newRow);
         })

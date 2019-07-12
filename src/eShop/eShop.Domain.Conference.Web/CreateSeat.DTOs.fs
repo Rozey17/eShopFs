@@ -26,12 +26,14 @@ module SeatTypeFormDTO =
 // result dto
 module SeatTypeDTO =
     let fromDomain (e: SeatCreated) =
-        { ConferenceId = e.ConferenceId |> ConferenceId.value
-          Id = e.Id |> SeatTypeId.value
-          Name = e.Name |> Name.value
-          Description = e.Description |> String250.value
-          Quantity = e.Quantity |> UnitQuantity.value
-          Price = e.Price |> Price.value }
+        let dto =
+            { ConferenceId = e.ConferenceId |> ConferenceId.value
+              Id = e.Id |> SeatTypeId.value
+              Name = e.Name |> Name.value
+              Description = e.Description |> String250.value
+              Quantity = e.Quantity |> UnitQuantity.value
+              Price = e.Price |> Price.value }
+        dto
 
 // result dto
 [<CLIMutable>]

@@ -130,8 +130,7 @@ let createConferenceCreatedEvent conference : ConferenceCreated = conference
 let createEvents: CreateEvents =
     fun conference ->
         let conferenceCreated =
-            conference
-            |> createConferenceCreatedEvent
+            createConferenceCreatedEvent conference
             |> CreateConference.ConferenceCreated
         [
             yield conferenceCreated

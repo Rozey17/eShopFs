@@ -32,8 +32,7 @@ let createConferencePublishedEvent conference : ConferencePublished = conference
 let createEvents: CreateEvents =
     fun conference ->
         let conferencePublished =
-            conference
-            |> createConferencePublishedEvent
+            createConferencePublishedEvent conference
             |> PublishConference.ConferencePublished
         [
             yield conferencePublished

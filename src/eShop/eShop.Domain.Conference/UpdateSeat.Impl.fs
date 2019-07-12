@@ -9,14 +9,7 @@ open eShop.Domain.Conference
 // -----
 
 // step: validate
-type ValidatedSeatType =
-    { ConferenceId: ConferenceId
-      Id: SeatTypeId
-      Name: Name
-      Description: String250
-      Quantity: UnitQuantity
-      Price: Price }
-
+type ValidatedSeatType = SeatType
 type ValidateSeatType = UnvalidatedSeatType -> Result<ValidatedSeatType, ValidationError>
 
 // apply update seat
@@ -31,7 +24,7 @@ type CreateEvents = Conference * SeatType -> UpdateSeatEvent list
 // -----
 
 // step: validate
-let validateSeatType: ValidateSeatType =
+let validateSeat: ValidateSeatType =
     fun unvalidated ->
         result {
             let! conferenceId =
@@ -69,8 +62,8 @@ let validateSeatType: ValidateSeatType =
             return seatType
         }
 
-// step: apply update
-let applyUpdate: ApplyUpdateSeat =
+// step: apply update seat
+let applyUpdateSeat: ApplyUpdateSeat =
     fun validated conference ->
         let oldSeats = conference |> Conference.seats
         let newSeats =
@@ -92,19 +85,16 @@ let applyUpdate: ApplyUpdateSeat =
             UnpublishedConference (info, wasEverPublished, newSeats)
 
 // step: create events
-
 let createPublishedSeatUpdatedEvent seat : PublishedSeatUpdated = seat
 let createSeatUpdatedEvent seat : SeatUpdated = seat
 
 let createEvents: CreateEvents =
     fun (conference, seat) ->
         let seatUpdated =
-            seat
-            |> createSeatUpdatedEvent
+            createSeatUpdatedEvent seat
             |> UpdateSeatEvent.SeatUpdated
         let publishedSeatUpdated =
-            seat
-            |> createPublishedSeatUpdatedEvent
+            createPublishedSeatUpdatedEvent seat
             |> UpdateSeatEvent.PublishedSeatUpdated
         let wasEverPublished = conference |> Conference.wasEverPublished
         [
@@ -114,3 +104,29 @@ let createEvents: CreateEvents =
             // (and therefore is not published either).
             if wasEverPublished then yield publishedSeatUpdated
         ]
+
+// workflow
+let updateSeat
+    (readSingleConference: ConferenceDb.ReadSingleConference)
+    (updateSeat: ConferenceDb.UpdateSeat)
+    : UpdateSeat =
+
+        fun unvalidatedSeat ->
+            asyncResult {
+                let! validatedSeat =
+                    validateSeat unvalidatedSeat
+                    |> AsyncResult.ofResult
+                    |> AsyncResult.mapError UpdateSeatError.Validation
+
+                let! conference =
+                    readSingleConference validatedSeat.ConferenceId
+                    |> AsyncResult.mapError UpdateSeatError.ConferenceNotFound
+
+                let conference = conference |> applyUpdateSeat validatedSeat
+
+                do! updateSeat validatedSeat
+                    |> AsyncResult.ofAsync
+
+                let events = (conference, validatedSeat) |> createEvents
+                return events
+            }

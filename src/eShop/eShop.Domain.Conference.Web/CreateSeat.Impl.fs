@@ -13,7 +13,12 @@ open eShop.Domain.Conference.CreateSeat
 
 // get
 let renderCreateSeatView next ctx =
-    razorHtmlView "CreateSeat" None None None next ctx
+    let form =
+        { Name = ""
+          Description = ""
+          Quantity = 0
+          Price = 0M }
+    razorHtmlView "CreateSeat" (Some form) None None next ctx
 
 // post
 let createSeat next ctx =
@@ -32,10 +37,11 @@ let createSeat next ctx =
             let cmd = unvalidatedSeatType
 
             let readSingleConference = ConferenceDb.Impl.ReadSingleConference.query connection
-            let insertSeatType = ConferenceDb.Impl.InsertSeatType.execute connection
-            let workflow = Impl.createSeat readSingleConference insertSeatType
+            let insertSeat = ConferenceDb.Impl.InsertSeat.execute connection
+            let workflow = Impl.createSeat readSingleConference insertSeat
 
             let! result = workflow cmd
+
             match result with
             | Ok [ SeatCreated e ] ->
                 let dto = SeatTypeDTO.fromDomain e

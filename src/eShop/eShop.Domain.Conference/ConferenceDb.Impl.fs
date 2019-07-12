@@ -274,8 +274,7 @@ module MarkConferenceAsUnpublished =
                 async.Zero()
 
 
-module InsertSeatType =
-
+module SeatTypeDTO =
     [<CLIMutable>]
     type SeatTypeDTO =
         { ConferenceId: Guid
@@ -284,17 +283,19 @@ module InsertSeatType =
           Description: string
           Quantity: int
           Price: decimal }
-    module SeatTypeDTO =
-        let fromDomain (seatType: SeatType) =
-            { ConferenceId = seatType.ConferenceId |> ConferenceId.value
-              Id = seatType.Id |> SeatTypeId.value
-              Name = seatType.Name |> Name.value
-              Description = seatType.Description |> String250.value
-              Quantity = seatType.Quantity |> UnitQuantity.value
-              Price = seatType.Price |> Price.value }
 
-    let execute connection : InsertSeatType =
-        fun (_conference, seatType) ->
+    let fromDomain (seatType: SeatType) =
+        { ConferenceId = seatType.ConferenceId |> ConferenceId.value
+          Id = seatType.Id |> SeatTypeId.value
+          Name = seatType.Name |> Name.value
+          Description = seatType.Description |> String250.value
+          Quantity = seatType.Quantity |> UnitQuantity.value
+          Price = seatType.Price |> Price.value }
+
+module InsertSeat =
+
+    let execute connection : InsertSeat =
+        fun seatType ->
             let sql =
                 """
                 insert into
@@ -316,6 +317,22 @@ module InsertSeatType =
                         @Quantity,
                         @Price
                     )
+                """
+            let dto = SeatTypeDTO.fromDomain seatType
+            Db.parameterizedExecuteAsync connection sql dto
+
+module UpdateSeat =
+
+    let execute connection : UpdateSeat =
+        fun seatType ->
+            let sql =
+                """
+                update cm.seat
+                   set name = @Name,
+                       description = @Description,
+                       quantity = @Quantity,
+                       price = @Price
+                 where id = @Id
                 """
             let dto = SeatTypeDTO.fromDomain seatType
             Db.parameterizedExecuteAsync connection sql dto
