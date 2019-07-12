@@ -70,6 +70,7 @@
     <Content Include="eShop.Domain.Conference.Web\EditConference.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="eShop.Domain.Conference.Web\PublishConference.DTOs.fs" />
     <Compile Include="eShop.Domain.Conference.Web\PublishConference.Impl.fs" />
+    <Compile Include="eShop.Domain.Conference.Web\UnpublishConference.DTOs.fs" />
     <Compile Include="eShop.Domain.Conference.Web\UnpublishConference.Impl.fs" />
     <Compile Include="eShop.Domain.Conference.Web\ConferenceDetails.Impl.fs" />
     <Content Include="eShop.Domain.Conference.Web\ConferenceDetails.cshtml" CopyToOutputDirectory="PreserveNewest" />
@@ -88,8 +89,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="eShop.Domain.Registration.Conference.Integrator\CreateConferenceListener.fs" />
-    <Compile Include="eShop.Domain.Registration.Conference.Integrator\PublishConferenceListener.fs" />
+    <Compile Include="eShop.Domain.Registration.Conference.Integrator\CreateConferenceEventListener.fs" />
+    <Compile Include="eShop.Domain.Registration.Conference.Integrator\PublishConferenceEventListener.fs" />
+    <Compile Include="eShop.Domain.Registration.Conference.Integrator\UnpublishConferenceEventListener.fs" />
     <Compile Include="eShop.Domain.Registration.Conference.Integrator\ConferenceIntegrator.fs" />
   </ItemGroup>
 

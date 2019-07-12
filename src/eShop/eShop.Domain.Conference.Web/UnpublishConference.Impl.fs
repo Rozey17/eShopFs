@@ -4,6 +4,7 @@ open FSharp.Control.Tasks.V2.ContextInsensitive
 open Microsoft.AspNetCore.Http
 open Giraffe
 open Npgsql
+open eShop.Infrastructure.Bus
 open eShop.Domain.Conference
 open eShop.Domain.Conference.Web
 open eShop.Domain.Conference.UnpublishConference
@@ -31,7 +32,12 @@ let unpublishConference next (ctx: HttpContext) =
             let! result = workflow cmd
 
             match result with
-            | Ok [ (ConferenceUnpublished _) ] ->
+            | Ok [ (ConferenceUnpublished e) ] ->
+                // to registration context
+                let dto = ConferenceUnpublishedDTO.fromDomain e
+                do! Bus.Publish dto
+
+                // web response
                 let url = sprintf "/conferences/details?slug=%s&access_code=%s" slug accessCode
                 return! redirectTo false url next ctx
 
